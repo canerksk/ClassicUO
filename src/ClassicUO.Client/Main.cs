@@ -33,6 +33,7 @@
 using ClassicUO.Configuration;
 using ClassicUO.Game;
 using ClassicUO.Game.Managers;
+using ClassicUO.Game.UI.Gumps;
 using ClassicUO.IO;
 using ClassicUO.Network;
 using ClassicUO.Resources;
@@ -43,6 +44,7 @@ using Microsoft.Xna.Framework.Graphics;
 using SDL2;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Runtime.CompilerServices;
@@ -56,7 +58,8 @@ namespace ClassicUO
         [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
         private static extern bool SetDllDirectory(string lpPathName);
-
+        private static long StartHash = 0;
+        
 
         [UnmanagedCallersOnly(EntryPoint = "Initialize", CallConvs = new Type[] { typeof(CallConvCdecl) })]
         static unsafe void Initialize(IntPtr* argv, int argc, HostBindings* hostSetup)
@@ -404,6 +407,8 @@ namespace ClassicUO
         {
             CultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
 
+            YarimInenDosyalariSil();
+
             Log.Start(LogTypes.All);
 
             CUOEnviroment.GameThread = Thread.CurrentThread;
@@ -451,6 +456,29 @@ namespace ClassicUO
             };
 #endif
             ReadSettingsFromArgs(args);
+
+#if DEBUG
+            DateTimeOffset now = DateTimeOffset.UtcNow;
+            long unixTimeInMsBase = now.ToUnixTimeMilliseconds();
+            long StartHashInterval1 = unixTimeInMsBase - 20;
+            long StartHashInterval2 = unixTimeInMsBase + 20;
+
+            if (StartHash <= 0)
+            {
+
+                Client.ShowErrorMessage("ClassicUO client bu şekilde çalıştırılamaz.");
+                //CrashReport.LogCrash(new CustomException("ClassicUO client bu şekilde çalıştırılamaz."));
+                Process.GetCurrentProcess().Kill();
+                  return;
+            }
+            if (StartHash > StartHashInterval1 && StartHash < StartHashInterval2)
+            {
+                Client.ShowErrorMessage("ClassicUO client bu şekilde çalıştırılamaz.");
+                //CrashReport.LogCrash(new CustomException("ClassicUO client bu şekilde çalıştırılamaz."));
+                Process.GetCurrentProcess().Kill();
+                 return;
+            }
+#endif
 
             if (CUOEnviroment.IsHighDPI)
             {
@@ -537,9 +565,11 @@ namespace ClassicUO
                 flags |= INVALID_UO_DIRECTORY;
             }
 
-            string clientVersionText = Settings.GlobalSettings.ClientVersion;
+            //string clientVersionText = Settings.GlobalSettings.ClientVersion;
+            string clientVersionText = Constants.CLIENTVERSION;
 
-            if (!ClientVersionHelper.IsClientVersionValid(Settings.GlobalSettings.ClientVersion, out ClientVersion clientVersion))
+            //if (!ClientVersionHelper.IsClientVersionValid(Settings.GlobalSettings.ClientVersion, out ClientVersion clientVersion))
+            if (!ClientVersionHelper.IsClientVersionValid(Constants.CLIENTVERSION, out ClientVersion clientVersion))
             {
                 Log.Warn($"Client version [{clientVersionText}] is invalid, let's try to read the client.exe");
 
@@ -555,7 +585,7 @@ namespace ClassicUO
                     Log.Trace($"Found a valid client.exe [{clientVersionText} - {clientVersion}]");
 
                     // update the wrong/missing client version in settings.json
-                    Settings.GlobalSettings.ClientVersion = clientVersionText;
+                    //Settings.GlobalSettings.ClientVersion = clientVersionText;
                 }
             }
 
@@ -569,8 +599,22 @@ namespace ClassicUO
                 {
                     Client.ShowErrorMessage(ResGeneral.YourUOClientVersionIsInvalid);
                 }
+                string SetUOFolderPath = Path.Combine(CUOEnviroment.ExecutablePath, "SetUOFolder.exe");
 
-                PlatformHelper.LaunchBrowser(ResGeneral.ClassicUOLink);
+                if (File.Exists(SetUOFolderPath))
+                {
+                    ProcessStartInfo psi = new ProcessStartInfo
+                    {
+                        FileName = SetUOFolderPath,
+                        UseShellExecute = true
+                    };
+
+                    Process.Start(psi);
+                }
+                Settings.GlobalSettings.UltimaOnlineDirectory = IO.UOFileUltimaDLL.UOFoldersGet();
+                Settings.GlobalSettings.Save();
+
+                //PlatformHelper.LaunchBrowser(ResGeneral.ClassicUOLink);
             }
             else
             {
@@ -586,7 +630,6 @@ namespace ClassicUO
 
                         break;
                 }
-
                 Client.Run(pluginHost);
             }
 
@@ -624,6 +667,11 @@ namespace ClassicUO
                     // to load and save ClassicUO main settings instead of default `./settings.json`
                     // NOTE: All individual settings like `username`, `password`, etc passed in command-line options
                     // will override and overwrite those in the settings file because they have higher priority
+
+                    case "starthash":
+                        StartHash = long.Parse(value);
+                        break;
+
                     case "settings":
                         Settings.CustomSettingsFilepath = value;
 
@@ -649,15 +697,15 @@ namespace ClassicUO
 
                         break;
 
-                    case "ip":
-                        Settings.GlobalSettings.IP = value;
+                    //case "ip":
+                      //  Settings.GlobalSettings.IP = value;
 
-                        break;
+                       // break;
 
-                    case "port":
-                        Settings.GlobalSettings.Port = ushort.Parse(value);
+                   // case "port":
+                      //  Settings.GlobalSettings.Port = ushort.Parse(value);
 
-                        break;
+                       // break;
 
                     case "filesoverride":
                     case "uofilesoverride":
@@ -676,10 +724,10 @@ namespace ClassicUO
 
                         break;
 
-                    case "clientversion":
-                        Settings.GlobalSettings.ClientVersion = value;
+                   // case "clientversion":
+                        //Settings.GlobalSettings.ClientVersion = value;
 
-                        break;
+                       // break;
 
                     case "lastcharactername":
                     case "lastcharname":
@@ -784,10 +832,11 @@ namespace ClassicUO
 
                         break;
 
-                    case "plugins":
-                        Settings.GlobalSettings.Plugins = string.IsNullOrEmpty(value) ? new string[0] : value.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
 
-                        break;
+                    //case "plugins":
+                    //    Settings.GlobalSettings.Plugins = string.IsNullOrEmpty(value) ? new string[0] : value.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+
+                    //    break;
 
                     case "use_verdata":
                         Settings.GlobalSettings.UseVerdata = bool.Parse(value);
@@ -800,10 +849,10 @@ namespace ClassicUO
 
                         break;
 
-                    case "encryption":
-                        Settings.GlobalSettings.Encryption = byte.Parse(value);
+                    //case "encryption":
+                        //Settings.GlobalSettings.Encryption = byte.Parse(value);
 
-                        break;
+                        //break;
 
                     case "force_driver":
                         if (byte.TryParse(value, out byte res))
@@ -870,5 +919,49 @@ namespace ClassicUO
                 }
             }
         }
+
+
+        public static void YarimInenDosyalariSil()
+        {
+            string ClientPath = Path.Combine(CUOEnviroment.ExecutablePath);
+
+            if (Directory.Exists(ClientPath))
+            {
+                string[] DownloadedPartFiles = Directory.GetFiles(ClientPath, "*.part");
+                string[] DownloadedMulZipFiles = Directory.GetFiles(ClientPath, "*.mul.zip");
+                string[] DownloadedZipFiles = Directory.GetFiles(ClientPath, "*.zip");
+                string[] DownloadedRarFiles = Directory.GetFiles(ClientPath, "*.rar");
+
+                if (Directory.Exists(ClientPath))
+                {
+                    foreach (string partrarfile in DownloadedRarFiles)
+                    {
+                        if (File.Exists(partrarfile))
+                            File.Delete(partrarfile);
+                    }
+
+                    foreach (string partzipfile in DownloadedZipFiles)
+                    {
+                        if (File.Exists(partzipfile))
+                            File.Delete(partzipfile);
+                    }
+
+                    foreach (string partfile in DownloadedPartFiles)
+                    {
+                        if (File.Exists(partfile))
+                            File.Delete(partfile);
+                    }
+
+                    foreach (string partmulzipfile in DownloadedMulZipFiles)
+                    {
+                        if (File.Exists(partmulzipfile))
+                            File.Delete(partmulzipfile);
+                    }
+
+                }
+            }
+        }
+
+
     }
 }

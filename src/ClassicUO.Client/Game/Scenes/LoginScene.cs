@@ -66,7 +66,7 @@ namespace ClassicUO.Game.Scenes
         EnteringBritania,
         CharacterCreation,
         CharacterCreationDone,
-        PopUpMessage
+        PopUpMessage,
     }
 
     internal sealed class LoginScene : Scene
@@ -83,7 +83,10 @@ namespace ClassicUO.Game.Scenes
 
 
         public bool Reconnect { get; set; }
+
+
         public LoginSteps CurrentLoginStep { get; set; } = LoginSteps.Main;
+
         public ServerListEntry[] Servers { get; private set; }
         public CityInfo[] Cities { get; set; }
         public string[] Characters { get; private set; }
@@ -103,7 +106,8 @@ namespace ClassicUO.Game.Scenes
             _autoLogin = Settings.GlobalSettings.AutoLogin;
 
             UIManager.Add(new LoginBackground(_world));
-            UIManager.Add(_currentGump = new LoginGump(_world, this));
+            //UIManager.Add(_currentGump = new LoginGump(_world, this));
+            UIManager.Add(_currentGump = new LoginGumpCustom(_world, this));
 
             Client.Game.Audio.PlayMusic(Client.Game.Audio.LoginMusicIndex, false, true);
 
@@ -222,7 +226,8 @@ namespace ClassicUO.Game.Scenes
                 case LoginSteps.Main:
                     PopupMessage = null;
 
-                    return new LoginGump(_world,this);
+                    //return new LoginGump(_world,this);
+                    return new LoginGumpCustom(_world,this);
 
                 case LoginSteps.Connecting:
                 case LoginSteps.VerifyingAccount:
@@ -327,7 +332,7 @@ namespace ClassicUO.Game.Scenes
                 Settings.GlobalSettings.Save();
             }
 
-            Log.Trace($"Start login to: {Settings.GlobalSettings.IP},{Settings.GlobalSettings.Port}");
+            //Log.Trace($"Start login to: {Settings.GlobalSettings.IP},{Settings.GlobalSettings.Port}");
 
 
             if (!Reconnect)
@@ -345,7 +350,8 @@ namespace ClassicUO.Game.Scenes
             NetClient.Socket.Disconnected -= OnNetClientDisconnected;
             NetClient.Socket.Connected += OnNetClientConnected;
             NetClient.Socket.Disconnected += OnNetClientDisconnected;
-            NetClient.Socket.Connect(Settings.GlobalSettings.IP, Settings.GlobalSettings.Port);
+            //NetClient.Socket.Connect(Settings.GlobalSettings.IP, Settings.GlobalSettings.Port);
+            NetClient.Socket.Connect(Constants.SPHERE_IP, Constants.SPHERE_PORT);
         }
 
 
@@ -522,7 +528,8 @@ namespace ClassicUO.Game.Scenes
 
             uint address = NetClient.Socket.LocalIP;
 
-            EncryptionHelper.Initialize(true, address, (ENCRYPTION_TYPE)Settings.GlobalSettings.Encryption);
+            //EncryptionHelper.Initialize(true, address, (ENCRYPTION_TYPE)Settings.GlobalSettings.Encryption);
+            EncryptionHelper.Initialize(true, address, (ENCRYPTION_TYPE)Constants.CLIENTENCRYPTION);
 
             if (Client.Game.UO.Version >= ClientVersion.CV_6040)
             {
@@ -685,7 +692,8 @@ namespace ClassicUO.Game.Scenes
             NetClient.Socket.Disconnect();
             // NOTE: i don't think i need to create a new socket wrapper anymore
             //NetClient.Socket = new NetClient();
-            EncryptionHelper.Initialize(false, seed, (ENCRYPTION_TYPE) Settings.GlobalSettings.Encryption);
+            //EncryptionHelper.Initialize(false, seed, (ENCRYPTION_TYPE) Settings.GlobalSettings.Encryption);
+            EncryptionHelper.Initialize(false, seed, (ENCRYPTION_TYPE) Constants.CLIENTENCRYPTION);
 
             NetClient.Socket.Connect(new IPAddress(ip).ToString(), port);
 

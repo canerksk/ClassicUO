@@ -1872,7 +1872,7 @@ namespace ClassicUO.Game.Managers
             Name = name;
         }
 
-        public string Name { get; }
+        public string Name { get; set; }
 
         public SDL.SDL_Keycode Key { get; set; }
         public MouseButtonType MouseButton { get; set; }

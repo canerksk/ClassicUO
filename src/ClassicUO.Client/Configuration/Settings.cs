@@ -35,6 +35,7 @@ using System.IO;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using ClassicUO.Configuration.Json;
+using ClassicUO.Game;
 using Microsoft.Xna.Framework;
 
 namespace ClassicUO.Configuration
@@ -63,26 +64,36 @@ namespace ClassicUO.Configuration
 
         [JsonPropertyName("password")] public string Password { get; set; } = string.Empty;
 
-        [JsonPropertyName("ip")] public string IP { get; set; } = "127.0.0.1";
+        //[JsonPropertyName("ip")] public string IP { get; set; } = "127.0.0.1";
 
-        [JsonPropertyName("port"), JsonNumberHandling(JsonNumberHandling.AllowReadingFromString)] public ushort Port { get; set; } = 2593;
+        //[JsonPropertyName("port"), JsonNumberHandling(JsonNumberHandling.AllowReadingFromString)] public ushort Port { get; set; } = 2593;
 
         [JsonPropertyName("ultimaonlinedirectory")] public string UltimaOnlineDirectory { get; set; } = "";
 
         [JsonPropertyName("profilespath")] public string ProfilesPath { get; set; } = string.Empty;
 
-        [JsonPropertyName("clientversion")] public string ClientVersion { get; set; } = string.Empty;
+        //[JsonPropertyName("clientversion")] public string ClientVersion { get; set; } = string.Empty;
         
-        [JsonPropertyName("lang")] public string Language { get; set; } = "";
+        [JsonPropertyName("lang")] public string Language { get; set; } = "ENU";
 
         [JsonPropertyName("lastservernum")] public ushort LastServerNum { get; set; } = 1;
 
         [JsonPropertyName("last_server_name")] public string LastServerName { get; set; } = string.Empty;
 
-        [JsonPropertyName("fps")] public int FPS { get; set; } = 60;
+        [JsonPropertyName("fps")] public int FPS { get; set; } = Constants.DEFAULT_FPS;
 
-        [JsonConverter(typeof(NullablePoint2Converter))] [JsonPropertyName("window_position")] public Point? WindowPosition { get; set; }
-        [JsonConverter(typeof(NullablePoint2Converter))] [JsonPropertyName("window_size")] public Point? WindowSize { get; set; }
+        [JsonConverter(typeof(NullablePoint2Converter))] [JsonPropertyName("window_position")]
+        //public Point? WindowPosition { get; set; }
+        public Point? WindowPosition { get; set; } = new Point(Constants.CLIENT_START_POSX, Constants.CLIENT_START_POSY);
+
+
+
+        [JsonConverter(typeof(NullablePoint2Converter))] [JsonPropertyName("window_size")]
+        // public Point? WindowSize { get; set; }
+        public Point? WindowSize { get; set; } = new Point(Constants.CLIENT_DEF_SIZE_WIDTH, Constants.CLIENT_DEF_SIZE_HEIGHT);
+
+
+
 
         [JsonPropertyName("is_win_maximized")] public bool IsWindowMaximized { get; set; } = true;
 
@@ -111,9 +122,9 @@ namespace ClassicUO.Configuration
 
         [JsonPropertyName("maps_layouts")] public string MapsLayouts { get; set; }
 
-        [JsonPropertyName("encryption")] public byte Encryption { get; set; }
+        //[JsonPropertyName("encryption")] public byte Encryption { get; set; }
 
-        [JsonPropertyName("plugins")] public string[] Plugins { get; set; } = { @"./Assistant/Razor.dll" };
+        //[JsonPropertyName("plugins")] public string[] Plugins { get; set; } = { @"./Assistant/Razor.dll" };
 
         public static string GetSettingsFilepath()
         {

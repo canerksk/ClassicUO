@@ -384,19 +384,13 @@ Hue: {1}</value>
     <value>You have been banned from this conference.</value>
   </data>
   <data name="YourUODirectoryIsInvalid" xml:space="preserve">
-    <value>Your Ultima Online directory seems to be invalid.
-Download the official Launcher to setup and run your game.
-
-Link: classicuo.eu</value>
+    <value>Ultima Online dizininiz geçersiz görünüyor.</value>
   </data>
   <data name="YourUOClientVersionIsInvalid" xml:space="preserve">
-    <value>Your Ultima Online client version seems to be invalid.
-Download the official Launcher to setup and run your game.
-
-Link: classicuo.eu</value>
+    <value>Ultima Online istemci sürümünüz geçersiz görünüyor.</value>
   </data>
   <data name="ClassicUOLink" xml:space="preserve">
-    <value>https://classicuo.eu</value>
+    <value>https://uo.com</value>
   </data>
   <data name="ItBeginsToRain" xml:space="preserve">
     <value>It begins to rain.</value>

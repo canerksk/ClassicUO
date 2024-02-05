@@ -48,7 +48,9 @@ namespace ClassicUO.Game.UI.Gumps
 {
     internal class NameOverheadGump : Gump
     {
-        private AlphaBlendControl _background;
+        //private AlphaBlendControl _background;
+        private ResizePic _background;
+
         private Point _lockedPosition,
             _lastLeftMousePositionDown;
         private bool _positionLocked,
@@ -146,12 +148,15 @@ namespace ClassicUO.Game.UI.Gumps
                 }
 
                 _renderedText.MaxWidth = width;
-                _renderedText.Text = t;
+                //_renderedText.Text = t;
+                _renderedText.Text = t.Replace("%", ""); ;
 
                 FontsLoader.Instance.RecalculateWidthByInfo = false;
                 FontsLoader.Instance.SetUseHTML(false);
 
-                Width = _background.Width = Math.Max(60, _renderedText.Width) + 4;
+                //Width = _background.Width = Math.Max(60, _renderedText.Width) + 4;
+                //Height = _background.Height = Constants.OBJECT_HANDLES_GUMP_HEIGHT + 4;
+                Width = _background.Width;
                 Height = _background.Height = Constants.OBJECT_HANDLES_GUMP_HEIGHT + 4;
 
                 WantUpdateSize = false;
@@ -181,9 +186,13 @@ namespace ClassicUO.Game.UI.Gumps
 
                 _renderedText.MaxWidth = width;
 
-                _renderedText.Text = t;
+                //_renderedText.Text = t;
+                _renderedText.Text = t.Replace("%", "");
 
-                Width = _background.Width = Math.Max(60, _renderedText.Width) + 4;
+                //Width = _background.Width = Math.Max(60, _renderedText.Width) + 4;
+                //Height = _background.Height = Constants.OBJECT_HANDLES_GUMP_HEIGHT + 4;
+
+                Width = _background.Width;
                 Height = _background.Height = Constants.OBJECT_HANDLES_GUMP_HEIGHT + 4;
 
                 WantUpdateSize = false;
@@ -205,6 +214,7 @@ namespace ClassicUO.Game.UI.Gumps
                 return;
             }
 
+            /*
             Add(
                 _background = new AlphaBlendControl(.7f)
                 {
@@ -212,6 +222,20 @@ namespace ClassicUO.Game.UI.Gumps
                     Hue = entity is Mobile m ? Notoriety.GetHue(m.NotorietyFlag) : (ushort)0x0481
                 }
             );
+            */
+
+
+            Add
+            (
+                _background = new ResizePic(0x24b8)
+                {
+                    WantUpdateSize = false,
+                    Width = Constants.OBJECT_HANDLES_GUMP_WIDTH,
+                    Height = Constants.OBJECT_HANDLES_GUMP_HEIGHT,
+                }
+            );
+
+
         }
 
         protected override void CloseWithRightClick()
@@ -561,17 +585,14 @@ namespace ClassicUO.Game.UI.Gumps
             {
                 if (entity == World.TargetManager.LastTargetInfo.Serial)
                 {
-                    _borderColor = SolidColorTextureCache.GetTexture(Color.Red);
-                    _background.Hue = _renderedText.Hue = entity is Mobile m
-                        ? Notoriety.GetHue(m.NotorietyFlag)
-                        : (ushort)0x0481;
+                    //_borderColor = SolidColorTextureCache.GetTexture(Color.Red);
+                    //_background.Hue = _renderedText.Hue = entity is Mobile m ? Notoriety.GetHue(m.NotorietyFlag) : (ushort)0x0481;
                 }
                 else
                 {
-                    _borderColor = SolidColorTextureCache.GetTexture(Color.Black);
-                    _background.Hue = _renderedText.Hue = entity is Mobile m
-                        ? Notoriety.GetHue(m.NotorietyFlag)
-                        : (ushort)0x0481;
+                    _borderColor = SolidColorTextureCache.GetTexture(Color.Transparent);
+                    //_borderColor = SolidColorTextureCache.GetTexture(Color.Black);
+                    //_background.Hue = _renderedText.Hue = entity is Mobile m ? Notoriety.GetHue(m.NotorietyFlag) : (ushort)0x0481;
                 }
             }
         }

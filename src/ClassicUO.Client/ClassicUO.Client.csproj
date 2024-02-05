@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
-    <ApplicationIcon>cuoicon.ico</ApplicationIcon>
+    <OutputType>WinExe</OutputType>
+    <ApplicationIcon>UO_108.ico</ApplicationIcon>
     <AssemblyName>cuo</AssemblyName>
     <RootNamespace>ClassicUO</RootNamespace>
   </PropertyGroup>
@@ -88,6 +88,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="UO_108.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Reference Include="cuoapi">
       <HintPath>..\..\external\cuoapi\cuoapi.dll</HintPath>
     </Reference>
@@ -97,6 +101,8 @@
     <_IsWindows Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Windows)))' == 'true'">true</_IsWindows>
     <_IsMacOS Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::OSX)))' == 'true'">true</_IsMacOS>
     <_IsLinux Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' == 'true'">true</_IsLinux>
+    <UseWindowsForms>False</UseWindowsForms>
+    <TargetFramework>net8.0</TargetFramework>
   </PropertyGroup>
 
   <Target Name="CopyExternalDeps_build" AfterTargets="Build">

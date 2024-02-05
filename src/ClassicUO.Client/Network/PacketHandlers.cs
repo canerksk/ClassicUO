@@ -554,7 +554,8 @@ namespace ClassicUO.Network
                             !string.IsNullOrEmpty(world.Player.Name) && oldName != world.Player.Name
                         )
                         {
-                            Client.Game.SetWindowTitle(world.Player.Name);
+                            Client.Game.SetWindowTitle(world.Player.Name + " (" + world.ServerName + ")");
+                            // Client.Game.SetWindowTitle(world.Player.Name);
                         }
 
                         ushort str = p.ReadUInt16BE();
@@ -956,7 +957,8 @@ namespace ClassicUO.Network
                 NetClient.Socket.Send_Language(Settings.GlobalSettings.Language);
             }
 
-            NetClient.Socket.Send_ClientVersion(Settings.GlobalSettings.ClientVersion);
+            //NetClient.Socket.Send_ClientVersion(Settings.GlobalSettings.ClientVersion);
+            NetClient.Socket.Send_ClientVersion(Constants.CLIENTVERSION);
 
             GameActions.SingleClick(world, world.Player);
             NetClient.Socket.Send_SkillsRequest(world.Player.Serial);
@@ -4121,7 +4123,8 @@ namespace ClassicUO.Network
 
         private static void ClientVersion(World world, ref StackDataReader p)
         {
-            NetClient.Socket.Send_ClientVersion(Settings.GlobalSettings.ClientVersion);
+            //NetClient.Socket.Send_ClientVersion(Settings.GlobalSettings.ClientVersion);
+            NetClient.Socket.Send_ClientVersion(Constants.CLIENTVERSION);
         }
 
         private static void AssistVersion(World world, ref StackDataReader p)

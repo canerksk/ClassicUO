@@ -30,13 +30,54 @@
 
 #endregion
 
+#define MythicPVP
+
+using System;
+
 namespace ClassicUO.Game
 {
     internal static class Constants
     {
+
+        public const int CLIENTENCRYPTION = 5;
+        // Server Config
+#if MythicPVP
+        public const string CLIENTVERSION = "7.0.15";
+        public const string SERVER_NAME = "Mythic";
+        public static string SPHERE_IP { get; set; } = "89.107.227.186";
+        public static ushort SPHERE_PORT { get; set; } = 2599;
+        public const string ADMIN_EMAIL = "root@mythic.gen.tr";
+        public const string WEB_MAIN_URL = "https://mythic.gen.tr";
+#endif
+
+        public static Uri WEB_UPDATER_PATH_URL = new Uri(WEB_MAIN_URL + "conn/updates/muls/");
+        public static Uri AUTOUPDATER_XML_URL = new Uri(WEB_MAIN_URL + "conn/updates/app/Updater.xml");
+        //public static Uri LAUNCHER_DAT_URL = new Uri(WEB_MAIN_URL + "Conn/control/launcher.dat");
+        //public static Uri FPS_DAT_URL = new Uri(WEB_MAIN_URL + "Conn/control/fps.dat");
+
+        //
+        public const bool USE_OLD_OPTIONGUMP = true;
+        public const bool USE_AGAC_PATH = false;
+        public const bool USE_PLUGINS = false;
+        public const bool USE_VERDATA = false;
+
+        //
+        public const int GAME_SCREEN_SIZE_WIDTH = 1024;
+        public const int GAME_SCREEN_SIZE_HEIGHT = 768;
+
+        public const int CLIENT_START_POSX = 0;
+        public const int CLIENT_START_POSY = 0;
+
+        public const int CLIENT_DEF_SIZE_WIDTH = 800;
+        public const int CLIENT_DEF_SIZE_HEIGHT = 600;
+
+        public const int CLIENT_MIN_SIZE_WIDTH = 640;
+        public const int CLIENT_MIN_SIZE_HEIGHT = 480;
+
         public const string WIKI_LINK = "https://github.com/ClassicUO/ClassicUO/wiki";
 
         public const int MIN_FPS = 12;
+        public const int DEFAULT_FPS = 30;
         public const int MAX_FPS = 250;
         public const int LOGIN_SCREEN_FPS = 60;
 

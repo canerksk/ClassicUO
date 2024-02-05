@@ -44,7 +44,7 @@ using SDL2;
 
 namespace ClassicUO.Game.UI.Gumps.Login
 {
-    internal class LoginGump : Gump
+    internal class LoginGumpCustom : Gump
     {
         private readonly ushort _buttonNormal;
         private readonly ushort _buttonOver;
@@ -56,7 +56,7 @@ namespace ClassicUO.Game.UI.Gumps.Login
 
         private float _time;
 
-        public LoginGump(World world, LoginScene scene) : base(world, 0, 0)
+        public LoginGumpCustom(World world, LoginScene scene) : base(world, 0, 0)
         {
             CanCloseWithRightClick = false;
 
@@ -108,16 +108,6 @@ namespace ClassicUO.Game.UI.Gumps.Login
                     Add(new GumpPic(286, 45, 0x058A, 0));
                 }
 
-                // Credits
-                Add
-                (
-                    new Button((int)Buttons.Credits, 0x1583, 0x1585, 0x1584)
-                    {
-                        X = 60,
-                        Y = 385,
-                        ButtonAction = ButtonAction.Activate
-                    }
-                );
 
                 Add
                 (
@@ -161,24 +151,6 @@ namespace ClassicUO.Game.UI.Gumps.Login
                 offsetX = 328;
                 offsetY = 343;
                 offtextY = 40;
-
-                Add
-                (
-                    new Label($"UO Version {Constants.CLIENTVERSION}.", false, 0x034E, font: 9)
-                    {
-                        X = 286,
-                        Y = 453
-                    }
-                );
-
-                Add
-                (
-                    new Label(string.Format(ResGumps.CUOVersion0, CUOEnviroment.Version), false, 0x034E, font: 9)
-                    {
-                        X = 286,
-                        Y = 465
-                    }
-                );
 
 
                 Add
@@ -261,25 +233,6 @@ namespace ClassicUO.Game.UI.Gumps.Login
                 offsetX = 218;
                 offsetY = 283;
                 offtextY = 50;
-
-
-                Add
-                (
-                    new Label($"UO Version {Constants.CLIENTVERSION}.", false, 0x0481, font: 9)
-                    {
-                        X = 286,
-                        Y = 453
-                    }
-                );
-
-                Add
-                (
-                    new Label(string.Format(ResGumps.CUOVersion0, CUOEnviroment.Version), false, 0x0481, font: 9)
-                    {
-                        X = 286,
-                        Y = 465
-                    }
-                );
 
 
                 Add
@@ -394,65 +347,6 @@ namespace ClassicUO.Game.UI.Gumps.Login
 
             int htmlX = 130;
             int htmlY = 442;
-
-
-            Add
-            (
-                new HtmlControl
-                (
-                    htmlX,
-                    htmlY,
-                    150,
-                    15,
-                    false,
-                    false,
-                    false,
-                    "<body link=\"#FF00FF00\" vlink=\"#FF00FF00\" ><a href=\"https://www.classicuo.eu/support.php\">Support ClassicUO!",
-                    0x32,
-                    true,
-                    isunicode: true,
-                    style: FontStyle.BlackBorder
-                )
-            );
-
-
-            Add
-            (
-                new HtmlControl
-                (
-                    505,
-                    htmlY,
-                    100,
-                    15,
-                    false,
-                    false,
-                    false,
-                    "<body link=\"#FF00FF00\" vlink=\"#FF00FF00\" ><a href=\"https://www.classicuo.eu\">Website",
-                    0x32,
-                    true,
-                    isunicode: true,
-                    style: FontStyle.BlackBorder
-                )
-            );
-
-            Add
-            (
-                new HtmlControl
-                (
-                    505,
-                    htmlY + 19,
-                    100,
-                    15,
-                    false,
-                    false,
-                    false,
-                    "<body link=\"#FF00FF00\" vlink=\"#FF00FF00\" ><a href=\"https://discord.gg/VdyCpjQ\">Join Discord",
-                    0x32,
-                    true,
-                    isunicode: true,
-                    style: FontStyle.BlackBorder
-                )
-            );
 
 
             Checkbox loginmusic_checkbox = new Checkbox

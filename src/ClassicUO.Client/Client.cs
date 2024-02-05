@@ -165,13 +165,16 @@ namespace ClassicUO
 
             Log.Trace("Loading files...");
 
+            /*
             if (!string.IsNullOrWhiteSpace(Settings.GlobalSettings.ClientVersion))
             {
                 // sanitize client version
                 Settings.GlobalSettings.ClientVersion = Settings.GlobalSettings.ClientVersion.Replace(",", ".").Replace(" ", "").ToLower();
             }
+            */
 
-            string clientVersionText = Settings.GlobalSettings.ClientVersion;
+            //string clientVersionText = Settings.GlobalSettings.ClientVersion;
+            string clientVersionText = Constants.CLIENTVERSION;
 
             // check if directory is good
             if (!Directory.Exists(clientPath))
@@ -199,7 +202,7 @@ namespace ClassicUO
                 Log.Trace($"Found a valid client.exe [{clientVersionText} - {clientVersion}]");
 
                 // update the wrong/missing client version in settings.json
-                Settings.GlobalSettings.ClientVersion = clientVersionText;
+                //Settings.GlobalSettings.ClientVersion = clientVersionText;
             }
 
             Version = clientVersion;
@@ -253,16 +256,16 @@ namespace ClassicUO
             UltimaLive.Enable();
             PacketsTable.AdjustPacketSizeByVersion(Version);
 
-            if (Settings.GlobalSettings.Encryption != 0)
+            if (Constants.CLIENTENCRYPTION != 0)
             {
                 Log.Trace("Calculating encryption by client version...");
                 EncryptionHelper.CalculateEncryption(Version);
                 Log.Trace($"encryption: {EncryptionHelper.Type}");
 
-                if (EncryptionHelper.Type != (ENCRYPTION_TYPE) Settings.GlobalSettings.Encryption)
+                if (EncryptionHelper.Type != (ENCRYPTION_TYPE) Constants.CLIENTENCRYPTION)
                 {
                     Log.Warn($"Encryption found: {EncryptionHelper.Type}");
-                    Settings.GlobalSettings.Encryption = (byte) EncryptionHelper.Type;
+                    //Settings.GlobalSettings.Encryption = (byte) EncryptionHelper.Type;
                 }
             }
         }
@@ -298,7 +301,7 @@ namespace ClassicUO
 
         public static void ShowErrorMessage(string msg)
         {
-            SDL.SDL_ShowSimpleMessageBox(SDL.SDL_MessageBoxFlags.SDL_MESSAGEBOX_ERROR, "ERROR", msg, IntPtr.Zero);
+            SDL.SDL_ShowSimpleMessageBox(SDL.SDL_MessageBoxFlags.SDL_MESSAGEBOX_ERROR, "HATA", msg, IntPtr.Zero);
         }
     }
 }

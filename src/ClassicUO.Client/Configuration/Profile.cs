@@ -131,7 +131,8 @@ namespace ClassicUO.Configuration
         public bool EnabledBeneficialCriminalActionQuery { get; set; } = false;
         public bool EnableStatReport { get; set; } = true;
         public bool EnableSkillReport { get; set; } = true;
-        public bool UseOldStatusGump { get; set; }
+        public bool UseOldStatusGump { get; set; } = true;
+
         public int BackpackStyle { get; set; }
         public bool HighlightGameObjects { get; set; }
         public bool HighlightMobilesByParalize { get; set; } = true;
@@ -144,7 +145,7 @@ namespace ClassicUO.Configuration
         public bool TreeToStumps { get; set; }
         public bool EnableCaveBorder { get; set; }
         public bool HideVegetation { get; set; }
-        public int FieldsType { get; set; } // 0 = normal, 1 = static, 2 = tile
+        public int FieldsType { get; set; } = 0; // 0 = normal, 1 = static, 2 = tile
         public bool NoColorObjectsOutOfRange { get; set; }
         public bool UseCircleOfTransparency { get; set; }
         public int CircleOfTransparencyRadius { get; set; } = Constants.MAX_CIRCLE_OF_TRANSPARENCY_RADIUS / 2;
@@ -178,15 +179,27 @@ namespace ClassicUO.Configuration
 
         // general
         [JsonConverter(typeof(Point2Converter))] public Point WindowClientBounds { get; set; } = new Point(600, 480);
+
+
         [JsonConverter(typeof(Point2Converter))] public Point ContainerDefaultPosition { get; set; } = new Point(24, 24);
-        [JsonConverter(typeof(Point2Converter))] public Point GameWindowPosition { get; set; } = new Point(10, 10);
+
+
+        //[JsonConverter(typeof(Point2Converter))] public Point GameWindowPosition { get; set; } = new Point(10, 10);
+        [JsonConverter(typeof(Point2Converter))] public Point GameWindowPosition { get; set; } = new Point(0, 0);
+
+
         public bool GameWindowLock { get; set; }
         public bool GameWindowFullSize { get; set; }
         public bool WindowBorderless { get; set; } = false;
         [JsonConverter(typeof(Point2Converter))] public Point GameWindowSize { get; set; } = new Point(600, 480);
+
         [JsonConverter(typeof(Point2Converter))] public Point TopbarGumpPosition { get; set; } = new Point(0, 0);
-        public bool TopbarGumpIsMinimized { get; set; }
+
+
+        public bool TopbarGumpIsMinimized { get; set; } = true;
+
         public bool TopbarGumpIsDisabled { get; set; }
+
         public bool UseAlternativeLights { get; set; }
         public bool UseCustomLightLevel { get; set; }
         public byte LightLevel { get; set; }
@@ -267,7 +280,7 @@ namespace ClassicUO.Configuration
 
         public bool UseXBR { get; set; } = true;
 
-        public bool HideChatGradient { get; set; } = false;
+        public bool HideChatGradient { get; set; } = true;
 
         public bool StandardSkillsGump { get; set; } = true;
 
@@ -334,6 +347,9 @@ namespace ClassicUO.Configuration
         public string WorldMapHiddenZoneFiles { get; set; } = string.Empty;
         public bool WorldMapShowGridIfZoomed { get; set; } = true;
         public bool WorldMapAllowPositionalTarget { get; set; } = false;
+
+        public bool ClientNotifyBalloonActive { get; set; } = true;
+
 
 
         public static uint GumpsVersion { get; private set; }
