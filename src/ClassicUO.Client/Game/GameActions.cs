@@ -104,25 +104,49 @@ namespace ClassicUO.Game
 
         public static void OpenSettings(World world, int page = 0)
         {
-            OptionsGump opt = UIManager.GetGump<OptionsGump>();
-
-            if (opt == null)
+            if (Constants.USE_OLD_OPTIONGUMP)
             {
-                OptionsGump optionsGump = new OptionsGump(world)
+                OptionsGumpOld opt = UIManager.GetGump<OptionsGumpOld>();
+                if (opt == null)
                 {
-                    X = (Client.Game.Window.ClientBounds.Width >> 1) - 300,
-                    Y = (Client.Game.Window.ClientBounds.Height >> 1) - 250
-                };
+                    OptionsGumpOld optionsGump = new OptionsGumpOld(world)
+                    {
+                        X = (Client.Game.Window.ClientBounds.Width >> 1) - 450,
+                        Y = (Client.Game.Window.ClientBounds.Height >> 1) - 300
+                    };
 
-                UIManager.Add(optionsGump);
-                optionsGump.ChangePage(page);
-                optionsGump.SetInScreen();
+                    UIManager.Add(optionsGump);
+                    optionsGump.ChangePage(page);
+                    optionsGump.SetInScreen();
+                }
+                else
+                {
+                    opt.SetInScreen();
+                    opt.BringOnTop();
+                }
             }
             else
             {
-                opt.SetInScreen();
-                opt.BringOnTop();
+                OptionsGump opt = UIManager.GetGump<OptionsGump>();
+                if (opt == null)
+                {
+                    OptionsGump optionsGump = new OptionsGump(world)
+                    {
+                        X = (Client.Game.Window.ClientBounds.Width >> 1) - 300,
+                        Y = (Client.Game.Window.ClientBounds.Height >> 1) - 250
+                    };
+
+                    UIManager.Add(optionsGump);
+                    optionsGump.ChangePage(page);
+                    optionsGump.SetInScreen();
+                }
+                else
+                {
+                    opt.SetInScreen();
+                    opt.BringOnTop();
+                }
             }
+
         }
 
         public static void OpenStatusBar(World world)

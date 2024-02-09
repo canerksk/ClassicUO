@@ -37,7 +37,7 @@ using System.Threading;
 
 namespace ClassicUO
 {
-    internal static class CUOEnviroment
+    public static class CUOEnviroment
     {
         public static Thread GameThread;
         public static float DPIScaleFactor = 1.0f;
@@ -54,6 +54,9 @@ namespace ClassicUO
         public static readonly bool IsUnix = Environment.OSVersion.Platform != PlatformID.Win32NT && Environment.OSVersion.Platform != PlatformID.Win32Windows && Environment.OSVersion.Platform != PlatformID.Win32S && Environment.OSVersion.Platform != PlatformID.WinCE;
 
         public static readonly string Version = Assembly.GetExecutingAssembly()?.GetName()?.Version?.ToString() ?? "0.0.0.0";
+        public static readonly string AppName = Assembly.GetExecutingAssembly().GetName().Name;
+
+
         public static readonly string ExecutablePath =
 #if NETFRAMEWORK
            AppContext.BaseDirectory; // Path.GetDirectoryName(Assembly.GetEntryAssembly()?.Location);

@@ -85,14 +85,14 @@ namespace ClassicUO.Configuration
         // sounds
         public bool EnableSound { get; set; } = true;
         public int SoundVolume { get; set; } = 100;
-        public bool EnableMusic { get; set; } = true;
+        public bool EnableMusic { get; set; } = false;
         public int MusicVolume { get; set; } = 100;
         public bool EnableFootstepsSound { get; set; } = true;
         public bool EnableCombatMusic { get; set; } = true;
         public bool ReproduceSoundsInBackground { get; set; }
 
         // fonts and speech
-        public byte ChatFont { get; set; } = 1;
+        public byte ChatFont { get; set; } = 0;
         public int SpeechDelay { get; set; } = 100;
         public bool ScaleSpeechDelay { get; set; } = true;
         public bool SaveJournalToFile { get; set; } = true;
@@ -127,7 +127,7 @@ namespace ClassicUO.Configuration
         public ushort InvulnerableHue { get; set; } = 0x0030;
 
         // visual
-        public bool EnabledCriminalActionQuery { get; set; } = true;
+        public bool EnabledCriminalActionQuery { get; set; } = false;
         public bool EnabledBeneficialCriminalActionQuery { get; set; } = false;
         public bool EnableStatReport { get; set; } = true;
         public bool EnableSkillReport { get; set; } = true;
@@ -135,9 +135,9 @@ namespace ClassicUO.Configuration
 
         public int BackpackStyle { get; set; }
         public bool HighlightGameObjects { get; set; }
-        public bool HighlightMobilesByParalize { get; set; } = true;
-        public bool HighlightMobilesByPoisoned { get; set; } = true;
-        public bool HighlightMobilesByInvul { get; set; } = true;
+        public bool HighlightMobilesByParalize { get; set; } = false;
+        public bool HighlightMobilesByPoisoned { get; set; } = false;
+        public bool HighlightMobilesByInvul { get; set; } = false;
         public bool ShowMobilesHP { get; set; }
         public int MobileHPType { get; set; }     // 0 = %, 1 = line, 2 = both
         public int MobileHPShowWhen { get; set; } // 0 = Always, 1 - <100%
@@ -150,12 +150,13 @@ namespace ClassicUO.Configuration
         public bool UseCircleOfTransparency { get; set; }
         public int CircleOfTransparencyRadius { get; set; } = Constants.MAX_CIRCLE_OF_TRANSPARENCY_RADIUS / 2;
         public int CircleOfTransparencyType { get; set; } // 0 = normal, 1 = like original client
-        public int VendorGumpHeight { get; set; } = 60;   //original vendor gump size
+        public int VendorGumpHeight { get; set; } = 200;   //original vendor gump size
         public float DefaultScale { get; set; } = 1.0f;
-        public bool EnableMousewheelScaleZoom { get; set; }
+        public bool EnableMousewheelScaleZoom { get; set; } = true;
         public bool SaveScaleAfterClose { get; set; }
         public bool RestoreScaleAfterUnpressCtrl { get; set; }
         public bool BandageSelfOld { get; set; } = true;
+
         public bool EnableDeathScreen { get; set; } = true;
         public bool EnableBlackWhiteEffect { get; set; } = true;
 
@@ -170,7 +171,8 @@ namespace ClassicUO.Configuration
         // movements
         public bool EnablePathfind { get; set; }
         public bool UseShiftToPathfind { get; set; }
-        public bool AlwaysRun { get; set; }
+        public bool AlwaysRun { get; set; } = true;
+
         public bool AlwaysRunUnlessHidden { get; set; }
         public bool SmoothMovements { get; set; } = true;
         public bool HoldDownKeyTab { get; set; } = true;
@@ -191,7 +193,7 @@ namespace ClassicUO.Configuration
         public bool GameWindowLock { get; set; }
         public bool GameWindowFullSize { get; set; }
         public bool WindowBorderless { get; set; } = false;
-        [JsonConverter(typeof(Point2Converter))] public Point GameWindowSize { get; set; } = new Point(600, 480);
+        [JsonConverter(typeof(Point2Converter))] public Point GameWindowSize { get; set; } = new Point(Constants.GAME_SCREEN_SIZE_WIDTH, Constants.GAME_SCREEN_SIZE_HEIGHT);
 
         [JsonConverter(typeof(Point2Converter))] public Point TopbarGumpPosition { get; set; } = new Point(0, 0);
 
@@ -210,7 +212,7 @@ namespace ClassicUO.Configuration
         public bool ActivateChatAfterEnter { get; set; }
         public bool ActivateChatAdditionalButtons { get; set; } = true;
         public bool ActivateChatShiftEnterSupport { get; set; } = true;
-        public bool UseObjectsFading { get; set; } = true;
+        public bool UseObjectsFading { get; set; } = false;
         public bool HoldDownKeyAltToCloseAnchored { get; set; } = true;
         public bool CloseAllAnchoredGumpsInGroupWithRightClick { get; set; } = false;
         public bool HoldAltToMoveGumps { get; set; }
@@ -273,7 +275,8 @@ namespace ClassicUO.Configuration
         public bool ShadowsStatics { get; set; } = true;
         public int TerrainShadowsLevel { get; set; } = 15;
         public int AuraUnderFeetType { get; set; } // 0 = NO, 1 = in warmode, 2 = ctrl+shift, 3 = always
-        public bool AuraOnMouse { get; set; } = true;
+
+        public bool AuraOnMouse { get; set; } = false;
         public bool AnimatedWaterEffect { get; set; } = false;
 
         public bool PartyAura { get; set; }
@@ -291,7 +294,7 @@ namespace ClassicUO.Configuration
 
         public int GridLootType { get; set; } // 0 = none, 1 = only grid, 2 = both
 
-        public bool ReduceFPSWhenInactive { get; set; } = true;
+        public bool ReduceFPSWhenInactive { get; set; } = false;
 
         public bool OverrideAllFonts { get; set; }
         public bool OverrideAllFontsIsUnicode { get; set; } = true;
@@ -314,7 +317,7 @@ namespace ClassicUO.Configuration
 
         public bool ShowHouseContent { get; set; }
         public bool SaveHealthbars { get; set; }
-        public bool TextFading { get; set; } = true;
+        public bool TextFading { get; set; } = false;
 
         public bool UseSmoothBoatMovement { get; set; } = false;
 

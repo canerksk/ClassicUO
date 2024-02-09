@@ -1323,8 +1323,9 @@ namespace ClassicUO.Game.GameObjects
                         && robe.Graphic != 0x9986
                         && robe.Graphic != 0xA412;
 
-                case Layer.Helmet:
+                //case Layer.Helmet: // kafaligi en onde tut.
                 case Layer.Hair:
+                    
                     robe = mobile.FindItemByLayer(Layer.Robe);
 
                     if (robe != null)
@@ -1354,7 +1355,7 @@ namespace ClassicUO.Game.GameObjects
                             }
                         }
                     }
-
+                    
                     break;
 
                 /*case Layer.Skirt:

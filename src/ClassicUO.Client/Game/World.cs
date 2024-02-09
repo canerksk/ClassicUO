@@ -747,10 +747,11 @@ namespace ClassicUO.Game
                 IEnumerable<Mobile> mobiles = reverse ? Mobiles.Values.Reverse() : Mobiles.Values;
                 foreach (Mobile mobile in mobiles)
                 {
-                    if (mobile.IsDestroyed || mobile == Player)
-                    {
-                        continue;
-                    }
+                    // TargetNext'in kendine gelmeme olayı buradan
+                    //if (mobile.IsDestroyed || mobile == Player)
+                    //{
+                        //continue;
+                    //}
 
                     switch (scanType)
                     {

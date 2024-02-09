@@ -97,6 +97,8 @@ namespace ClassicUO.Assets
 
             IsUOPInstallation = Version >= ClientVersion.CV_7000 && File.Exists(GetUOFilePath("MainMisc.uop"));
 
+            Log.Trace("UOP? " + (IsUOPInstallation ? "Yes" : "No"));
+
             List<Task> tasks = new List<Task>
             {
                 AnimationsLoader.Instance.Load(),

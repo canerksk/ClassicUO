@@ -45,6 +45,7 @@ using ClassicUO.Utility;
 using Microsoft.Xna.Framework;
 using SDL2;
 using MathHelper = ClassicUO.Utility.MathHelper;
+using System.Runtime.InteropServices;
 
 namespace ClassicUO.Game.Scenes
 {
@@ -1360,6 +1361,7 @@ namespace ClassicUO.Game.Scenes
                 }
                 else
                 {
+                    /*
                     if (string.IsNullOrEmpty(UIManager.SystemChat.TextBoxControl.Text))
                     {
                         switch (e.keysym.sym)
@@ -1384,10 +1386,97 @@ namespace ClassicUO.Game.Scenes
 
                                 break;
                         }
+                    } */
+
+                    if ((GetKeyState(0x90) & 1) == 0)
+                    {
+                        //Console.WriteLine("NumLock:OFF");
+                        switch (e.keysym.sym)
+                        {
+
+                            case SDL.SDL_Keycode.SDLK_KP_8: // up
+                                _flags[0] = true;
+                                break;
+
+                            case SDL.SDL_Keycode.SDLK_KP_4:
+                                _flags[1] = true;
+                                break;
+                            case SDL.SDL_Keycode.SDLK_KP_7:
+                                _flags[0] = true;
+                                _flags[1] = true;
+                                break;
+
+                            case SDL.SDL_Keycode.SDLK_KP_3:
+                                _flags[3] = true;
+                                _flags[2] = true;
+                                break;
+
+                            case SDL.SDL_Keycode.SDLK_KP_1:
+                                _flags[1] = true;
+                                _flags[2] = true;
+                                break;
+
+                            case SDL.SDL_Keycode.SDLK_KP_9:
+                                _flags[0] = true;
+                                _flags[3] = true;
+                                break;
+
+                            case SDL.SDL_Keycode.SDLK_KP_2:
+                                _flags[2] = true;
+                                break;
+                            case SDL.SDL_Keycode.SDLK_KP_6:
+                                _flags[3] = true;
+                                break;
+
+                        }
+
                     }
+
+                    switch (e.keysym.sym)
+                    {
+                        case SDL.SDL_Keycode.SDLK_UP:
+                            _flags[0] = true;
+
+                            break;
+
+                        case SDL.SDL_Keycode.SDLK_PAGEUP:
+
+                            _flags[0] = true;
+                            _flags[3] = true;
+                            break;
+
+                        case SDL.SDL_Keycode.SDLK_LEFT:
+                            _flags[1] = true;
+
+                            break;
+
+                        case SDL.SDL_Keycode.SDLK_DOWN:
+                            _flags[2] = true;
+
+                            break;
+
+                        case SDL.SDL_Keycode.SDLK_PAGEDOWN:
+
+                            _flags[1] = true;
+                            _flags[2] = true;
+
+                            break;
+
+                        case SDL.SDL_Keycode.SDLK_RIGHT:
+
+                            _flags[3] = true;
+
+                            break;
+                    }
+
+
                 }
             }
         }
+
+
+        [DllImport("user32.dll")]
+        public static extern short GetKeyState(int nVirtKey);
 
         internal override void OnKeyUp(SDL.SDL_KeyboardEvent e)
         {
@@ -1515,6 +1604,43 @@ namespace ClassicUO.Game.Scenes
                 case SDL.SDL_Keycode.SDLK_RIGHT:
                     _flags[3] = false;
 
+                    break;
+                // num keypad
+                case SDL.SDL_Keycode.SDLK_KP_8:
+
+                    _flags[0] = false;
+
+                    break;
+                case SDL.SDL_Keycode.SDLK_KP_4:
+                    _flags[1] = false;
+                    break;
+
+                case SDL.SDL_Keycode.SDLK_KP_7:
+                    _flags[0] = false;
+                    _flags[1] = false;
+                    break;
+
+                case SDL.SDL_Keycode.SDLK_KP_3:
+                    _flags[3] = false;
+                    _flags[2] = false;
+                    break;
+
+                case SDL.SDL_Keycode.SDLK_KP_1:
+                    _flags[1] = false;
+                    _flags[2] = false;
+                    break;
+
+                case SDL.SDL_Keycode.SDLK_KP_9:
+                    _flags[0] = false;
+                    _flags[3] = false;
+                    break;
+
+                case SDL.SDL_Keycode.SDLK_KP_2:
+                    _flags[2] = false;
+                    break;
+
+                case SDL.SDL_Keycode.SDLK_KP_6:
+                    _flags[3] = false;
                     break;
             }
 

@@ -153,7 +153,7 @@ namespace ClassicUO.IO
             }
         }
 
-        private static string[] m_Files = new string[]
+        public static string[] m_Files = new string[]
         {
             "anim.idx",
             "anim.mul",
@@ -405,6 +405,8 @@ namespace ClassicUO.IO
                 return null;
             }
         }
+
+
     }
 
 }

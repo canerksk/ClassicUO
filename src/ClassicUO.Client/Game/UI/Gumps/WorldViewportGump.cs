@@ -86,7 +86,14 @@ namespace ClassicUO.Game.UI.Gumps
                 {
                     Point n = ResizeGameWindow(_lastSize);
 
-                    UIManager.GetGump<OptionsGump>()?.UpdateVideo();
+                    if (Constants.USE_OLD_OPTIONGUMP)
+                    {
+                        UIManager.GetGump<OptionsGumpOld>()?.UpdateVideo();
+                    }
+                    else
+                    {
+                        UIManager.GetGump<OptionsGump>()?.UpdateVideo();
+                    }
 
                     if (Client.Game.UO.Version >= ClientVersion.CV_200)
                     {
@@ -105,7 +112,16 @@ namespace ClassicUO.Game.UI.Gumps
 
             _borderControl.DragEnd += (sender, e) =>
             {
-                UIManager.GetGump<OptionsGump>()?.UpdateVideo();
+
+                if (Constants.USE_OLD_OPTIONGUMP)
+                {
+                    UIManager.GetGump<OptionsGumpOld>()?.UpdateVideo();
+                }
+                else
+                {
+                    UIManager.GetGump<OptionsGump>()?.UpdateVideo();
+                }
+
             };
 
             UIManager.SystemChat = _systemChatControl = new SystemChatControl(
@@ -211,7 +227,15 @@ namespace ClassicUO.Game.UI.Gumps
             _scene.Camera.Bounds.X = position.X + BORDER_WIDTH;
             _scene.Camera.Bounds.Y = position.Y + BORDER_WIDTH;
 
-            UIManager.GetGump<OptionsGump>()?.UpdateVideo();
+            if (Constants.USE_OLD_OPTIONGUMP)
+            {
+                UIManager.GetGump<OptionsGumpOld>()?.UpdateVideo();
+            }
+            else
+            {
+                UIManager.GetGump<OptionsGump>()?.UpdateVideo();
+            }
+
             UpdateGameWindowPos();
         }
 

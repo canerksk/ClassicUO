@@ -53,34 +53,54 @@ namespace ClassicUO.Configuration
             });
     }
 
-    internal sealed class Settings
+    public sealed class Settings
     {
         public const string SETTINGS_FILENAME = "settings.json";
         public static Settings GlobalSettings = new Settings();
         public static string CustomSettingsFilepath = null;
 
 
-        [JsonPropertyName("username")] public string Username { get; set; } = string.Empty;
+        [JsonPropertyName("username")] 
+        public string Username { get; set; } = string.Empty;
 
-        [JsonPropertyName("password")] public string Password { get; set; } = string.Empty;
+        [JsonPropertyName("password")] 
+        public string Password { get; set; } = string.Empty;
 
-        //[JsonPropertyName("ip")] public string IP { get; set; } = "127.0.0.1";
+        //[JsonPropertyName("ip")]
+        // public string IP { get; set; } = "127.0.0.1";
 
-        //[JsonPropertyName("port"), JsonNumberHandling(JsonNumberHandling.AllowReadingFromString)] public ushort Port { get; set; } = 2593;
+        //[JsonPropertyName("port"), JsonNumberHandling(JsonNumberHandling.AllowReadingFromString)]
+        // public ushort Port { get; set; } = 2593;
 
-        [JsonPropertyName("ultimaonlinedirectory")] public string UltimaOnlineDirectory { get; set; } = "";
 
-        [JsonPropertyName("profilespath")] public string ProfilesPath { get; set; } = string.Empty;
+        [JsonPropertyName("ultimaonlinedirectory")] 
+        public string UltimaOnlineDirectory { get; set; } = "";
 
-        //[JsonPropertyName("clientversion")] public string ClientVersion { get; set; } = string.Empty;
+
+        [JsonPropertyName("profilespath")] 
+        public string ProfilesPath { get; set; } = string.Empty;
+
+
+        //[JsonPropertyName("clientversion")]
+        //public string ClientVersion { get; set; } = string.Empty;
         
-        [JsonPropertyName("lang")] public string Language { get; set; } = "ENU";
 
-        [JsonPropertyName("lastservernum")] public ushort LastServerNum { get; set; } = 1;
+        [JsonPropertyName("lang")] 
+        public string Language { get; set; } = "ENU";
 
-        [JsonPropertyName("last_server_name")] public string LastServerName { get; set; } = string.Empty;
 
-        [JsonPropertyName("fps")] public int FPS { get; set; } = Constants.DEFAULT_FPS;
+        [JsonPropertyName("lastservernum")] 
+        public ushort LastServerNum { get; set; } = 1;
+
+
+        [JsonPropertyName("last_server_name")] 
+        public string LastServerName { get; set; } = string.Empty;
+
+
+        [JsonPropertyName("fps")] 
+        public int FPS { get; set; } = Constants.DEFAULT_FPS;
+
+
 
         [JsonConverter(typeof(NullablePoint2Converter))] [JsonPropertyName("window_position")]
         //public Point? WindowPosition { get; set; }
@@ -93,34 +113,66 @@ namespace ClassicUO.Configuration
         public Point? WindowSize { get; set; } = new Point(Constants.CLIENT_DEF_SIZE_WIDTH, Constants.CLIENT_DEF_SIZE_HEIGHT);
 
 
+        [JsonPropertyName("last_hardware_info")] 
+        public DateTime LastHardwareInfo { get; set; } = DateTime.MinValue;
 
 
-        [JsonPropertyName("is_win_maximized")] public bool IsWindowMaximized { get; set; } = true;
+        [JsonPropertyName("is_win_maximized")] 
+        public bool IsWindowMaximized { get; set; } = true;
 
-        [JsonPropertyName("saveaccount")] public bool SaveAccount { get; set; }
 
-        [JsonPropertyName("autologin")] public bool AutoLogin { get; set; }
+        [JsonPropertyName("saveaccount")]
+        public bool SaveAccount { get; set; } = true;
 
-        [JsonPropertyName("reconnect")] public bool Reconnect { get; set; }
 
-        [JsonPropertyName("reconnect_time")] public int ReconnectTime { get; set; } = 1;
 
-        [JsonPropertyName("login_music")] public bool LoginMusic { get; set; } = true;
+        [JsonPropertyName("autologin")] 
+        public bool AutoLogin { get; set; }
 
-        [JsonPropertyName("login_music_volume")] public int LoginMusicVolume { get; set; } = 70;
 
-        [JsonPropertyName("shard_type")] public int ShardType { get; set; } // 0 = normal (no customization), 1 = old, 2 = outlands??
+        [JsonPropertyName("reconnect")] 
+        public bool Reconnect { get; set; }
 
-        [JsonPropertyName("fixed_time_step")] public bool FixedTimeStep { get; set; } = true;
+
+        [JsonPropertyName("reconnect_time")]
+        public int ReconnectTime { get; set; } = 1;
+
+
+        [JsonPropertyName("login_music")] 
+        public bool LoginMusic { get; set; } = true;
+
+
+        [JsonPropertyName("login_music_volume")] 
+        public int LoginMusicVolume { get; set; } = 70;
+
+
+        [JsonPropertyName("shard_type")] 
+        public int ShardType { get; set; } // 0 = normal (no customization), 1 = old, 2 = outlands??
+
+
+        [JsonPropertyName("fixed_time_step")] 
+        public bool FixedTimeStep { get; set; } = true;
+
 
         [JsonPropertyName("run_mouse_in_separate_thread")]
         public bool RunMouseInASeparateThread { get; set; } = true;
 
-        [JsonPropertyName("force_driver")] public byte ForceDriver { get; set; }
 
-        [JsonPropertyName("use_verdata")] public bool UseVerdata { get; set; }
+        [JsonPropertyName("force_driver")] 
+        public byte ForceDriver { get; set; }
 
-        [JsonPropertyName("maps_layouts")] public string MapsLayouts { get; set; }
+
+        [JsonPropertyName("use_verdata")] 
+        public bool UseVerdata { get; set; }
+
+
+        [JsonPropertyName("maps_layouts")] 
+        public string MapsLayouts { get; set; }
+
+
+        [JsonPropertyName("high_dpi")] 
+        public bool HighDPI { get; set; } = false;
+
 
         //[JsonPropertyName("encryption")] public byte Encryption { get; set; }
 

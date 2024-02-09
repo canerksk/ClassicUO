@@ -3912,7 +3912,7 @@ namespace ClassicUO.Game.UI.Gumps
                 {
                     if (vp != null)
                     {
-                        n = vp.ResizeGameWindow(new Point(600, 480));
+                        n = vp.ResizeGameWindow(new Point(Constants.GAME_SCREEN_SIZE_WIDTH, Constants.GAME_SCREEN_SIZE_HEIGHT));
                         vp.SetGameWindowPosition(new Point(20, 20));
                         _currentProfile.GameWindowPosition = vp.Location;
                     }

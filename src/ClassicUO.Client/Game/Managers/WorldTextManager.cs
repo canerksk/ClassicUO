@@ -130,7 +130,7 @@ namespace ClassicUO.Game.Managers
         }
 
 
-        internal void AddDamage(uint obj, int dmg)
+        internal void AddDamage(uint obj, int dmg, ushort color)
         {
             if (!_damages.TryGetValue(obj, out OverheadDamage dm) || dm == null)
             {
@@ -138,7 +138,7 @@ namespace ClassicUO.Game.Managers
                 _damages[obj] = dm;
             }
 
-            dm.Add(dmg);
+            dm.Add(dmg,color);
         }
 
         public override void Clear()

@@ -33,6 +33,7 @@
 using ClassicUO.Configuration;
 using ClassicUO.Game;
 using ClassicUO.Game.Managers;
+using ClassicUO.Game.UI.Controls;
 using ClassicUO.Game.UI.Gumps;
 using ClassicUO.IO;
 using ClassicUO.Network;
@@ -43,12 +44,18 @@ using ClassicUO.Utility.Platforms;
 using SDL2;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
+using System.Linq;
+using System.Management;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Text;
 using System.Threading;
+
 
 namespace ClassicUO
 {
@@ -58,7 +65,11 @@ namespace ClassicUO
         [return: MarshalAs(UnmanagedType.Bool)]
         private static extern bool SetDllDirectory(string lpPathName);
         private static long StartHash = 0;
-        
+        public static System.Timers.Timer WindowTitleRestoreTimer;
+        public static System.Timers.Timer ProgramCloseTimer;
+        private static World _world;
+        public static string RootDiskDrive = Path.GetPathRoot(Environment.SystemDirectory);
+
 
         [UnmanagedCallersOnly(EntryPoint = "Initialize", CallConvs = new Type[] { typeof(CallConvCdecl) })]
         static unsafe void Initialize(IntPtr* argv, int argc, HostBindings* hostSetup)
@@ -76,13 +87,75 @@ namespace ClassicUO
 
         [STAThread]
         public static void Main(string[] args) => Boot(null, args);
-       
+
 
         public static void Boot(UnmanagedAssistantHost pluginHost, string[] args)
         {
-            CultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
+            // multi check
+            if (Process.GetProcessesByName(Process.GetCurrentProcess().ProcessName).Length >= 3)
+            {
+                Client.ShowErrorMessage("Bu uygulamayı üst üste en fazla 3 kere başlatabilirsiniz.");
+                Process.GetCurrentProcess().Kill();
+                return;
+            }
 
-            YarimInenDosyalariSil();
+            // name check
+            if (Process.GetCurrentProcess().ProcessName != Assembly.GetExecutingAssembly().GetName().Name)
+            {
+                Client.ShowErrorMessage("1. Client bulunamadı!");
+                Process.GetCurrentProcess().Kill();
+                return;
+            }
+            if (Process.GetCurrentProcess().ProcessName != "cuo" && Assembly.GetExecutingAssembly().GetName().Name != "cuo")
+            {
+                Client.ShowErrorMessage("2. Client bulunamadı!");
+                Process.GetCurrentProcess().Kill();
+                return;
+            }
+
+            // on process check
+            bool isRunningInVirtualBox = CheckIfRunningInVirtualBox();
+            if (isRunningInVirtualBox)
+            {
+                Client.ShowErrorMessage("Uygulama sanal makinede çalışıyor. Çalıştırma işlemi iptal ediliyor.");
+                Process.GetCurrentProcess().Kill();
+                return;
+            }
+            bool isRunningInSandboxie = CheckIfRunningInSandboxie();
+            if (isRunningInSandboxie)
+            {
+                Client.ShowErrorMessage("Bu uygulama sanal uygulama üzerinde çalışamaz.");
+                Process.GetCurrentProcess().Kill();
+                return;
+            }
+            if (GetModuleHandle("SbieDll.dll").ToInt32() != 0)
+            {
+                Client.ShowErrorMessage("Bu uygulama sanal uygulama üzerinde çalışamaz.");
+                Process.GetCurrentProcess().Kill();
+                return;
+            }
+
+            // on process check
+            Process[] ProcessList = Process.GetProcesses();
+            foreach (Process proc in ProcessList)
+            {
+                if (proc.MainWindowTitle.Equals("The Wireshark Network Analyzer"))
+                {
+                    Client.ShowErrorMessage("Bu uygulama sanal uygulama üzerinde çalışamaz.");
+                    Process.GetCurrentProcess().Kill();
+                    return;
+                }
+                if (proc.MainWindowTitle.Equals("WPE PRO"))
+                {
+                    Client.ShowErrorMessage("Bu uygulama sanal uygulama üzerinde çalışamaz.");
+                    Process.GetCurrentProcess().Kill();
+                    return;
+                }
+            }
+
+
+
+            CultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
 
             Log.Start(LogTypes.All);
 
@@ -95,21 +168,20 @@ namespace ClassicUO
                 sb.AppendLine("######################## [START LOG] ########################");
 
 #if DEV_BUILD
-                sb.AppendLine($"ClassicUO [DEV_BUILD] - {CUOEnviroment.Version} - {DateTime.Now}");
+                sb.AppendLine($"Ultima Online [DEV_BUILD] - {CUOEnviroment.Version} - {DateTime.Now}");
 #else
-                sb.AppendLine($"ClassicUO [STANDARD_BUILD] - {CUOEnviroment.Version} - {DateTime.Now}");
+                sb.AppendLine($"Ultima Online [STANDARD_BUILD] - {CUOEnviroment.Version} - {DateTime.Now}");
 #endif
 
-                sb.AppendLine
-                    ($"OS: {Environment.OSVersion.Platform} {(Environment.Is64BitOperatingSystem ? "x64" : "x86")}");
+                sb.AppendLine($"OS: {Environment.OSVersion.Platform} {(Environment.Is64BitOperatingSystem ? "x64" : "x86")}");
 
                 sb.AppendLine($"Thread: {Thread.CurrentThread.Name}");
                 sb.AppendLine();
 
                 if (Settings.GlobalSettings != null)
                 {
-                    sb.AppendLine($"Shard: {Settings.GlobalSettings.IP}");
-                    sb.AppendLine($"ClientVersion: {Settings.GlobalSettings.ClientVersion}");
+                    sb.AppendLine($"Shard: {Constants.SPHERE_IP}");
+                    sb.AppendLine($"ClientVersion: {Constants.CLIENTVERSION}");
                     sb.AppendLine();
                 }
 
@@ -130,30 +202,12 @@ namespace ClassicUO
                 }
             };
 #endif
+
+            // Initialize HardwareInfo for Send_ packet 0xD9
+            //HardwareInfo.Initialize();
+
             ReadSettingsFromArgs(args);
 
-#if DEBUG
-            DateTimeOffset now = DateTimeOffset.UtcNow;
-            long unixTimeInMsBase = now.ToUnixTimeMilliseconds();
-            long StartHashInterval1 = unixTimeInMsBase - 20;
-            long StartHashInterval2 = unixTimeInMsBase + 20;
-
-            if (StartHash <= 0)
-            {
-
-                Client.ShowErrorMessage("ClassicUO client bu şekilde çalıştırılamaz.");
-                //CrashReport.LogCrash(new CustomException("ClassicUO client bu şekilde çalıştırılamaz."));
-                Process.GetCurrentProcess().Kill();
-                  return;
-            }
-            if (StartHash > StartHashInterval1 && StartHash < StartHashInterval2)
-            {
-                Client.ShowErrorMessage("ClassicUO client bu şekilde çalıştırılamaz.");
-                //CrashReport.LogCrash(new CustomException("ClassicUO client bu şekilde çalıştırılamaz."));
-                Process.GetCurrentProcess().Kill();
-                 return;
-            }
-#endif
 
             if (CUOEnviroment.IsHighDPI)
             {
@@ -264,6 +318,29 @@ namespace ClassicUO
                 }
             }
 
+
+            DateTimeOffset now = DateTimeOffset.UtcNow;
+            long unixTimeInMsBase = now.ToUnixTimeMilliseconds();
+            long StartHashInterval1 = unixTimeInMsBase - 20;
+            long StartHashInterval2 = unixTimeInMsBase + 20;
+
+            if (StartHash <= 0)
+            {
+
+                Client.ShowErrorMessage("Client bu şekilde çalıştırılamaz.");
+                //CrashReport.LogCrash(new CustomException("ClassicUO client bu şekilde çalıştırılamaz."));
+                Process.GetCurrentProcess().Kill();
+                return;
+            }
+            if (StartHash > StartHashInterval1 && StartHash < StartHashInterval2)
+            {
+                Client.ShowErrorMessage("Client bu şekilde çalıştırılamaz.");
+                //CrashReport.LogCrash(new CustomException("ClassicUO client bu şekilde çalıştırılamaz."));
+                Process.GetCurrentProcess().Kill();
+                return;
+            }
+
+
             if (flags != 0)
             {
                 if ((flags & INVALID_UO_DIRECTORY) != 0)
@@ -305,6 +382,7 @@ namespace ClassicUO
 
                         break;
                 }
+                StartTimers();
                 Client.Run(pluginHost);
             }
 
@@ -353,8 +431,8 @@ namespace ClassicUO
                         break;
 
                     case "highdpi":
-                        CUOEnviroment.IsHighDPI = true;
-
+                        //CUOEnviroment.IsHighDPI = true;
+                        Settings.GlobalSettings.HighDPI = bool.Parse(value);
                         break;
 
                     case "username":
@@ -373,14 +451,14 @@ namespace ClassicUO
                         break;
 
                     //case "ip":
-                      //  Settings.GlobalSettings.IP = value;
+                    //  Settings.GlobalSettings.IP = value;
 
-                       // break;
+                    // break;
 
-                   // case "port":
-                      //  Settings.GlobalSettings.Port = ushort.Parse(value);
+                    // case "port":
+                    //  Settings.GlobalSettings.Port = ushort.Parse(value);
 
-                       // break;
+                    // break;
 
                     case "filesoverride":
                     case "uofilesoverride":
@@ -399,10 +477,10 @@ namespace ClassicUO
 
                         break;
 
-                   // case "clientversion":
-                        //Settings.GlobalSettings.ClientVersion = value;
+                    // case "clientversion":
+                    //Settings.GlobalSettings.ClientVersion = value;
 
-                       // break;
+                    // break;
 
                     case "lastcharactername":
                     case "lastcharname":
@@ -525,9 +603,9 @@ namespace ClassicUO
                         break;
 
                     //case "encryption":
-                        //Settings.GlobalSettings.Encryption = byte.Parse(value);
+                    //Settings.GlobalSettings.Encryption = byte.Parse(value);
 
-                        //break;
+                    //break;
 
                     case "force_driver":
                         if (byte.TryParse(value, out byte res))
@@ -595,47 +673,85 @@ namespace ClassicUO
             }
         }
 
-
-        public static void YarimInenDosyalariSil()
+        public static void StartTimers()
         {
-            string ClientPath = Path.Combine(CUOEnviroment.ExecutablePath);
+            //Console.WriteLine("Start Timer");
+            Log.Trace("Start Timer");
 
-            if (Directory.Exists(ClientPath))
+            Random random = new Random();
+
+            ProgramCloseTimer = new System.Timers.Timer(random.Next(7000, 10000));
+            //ProgramCloseTimer = new System.Timers.Timer(5000);
+            ProgramCloseTimer.Elapsed += OnTimedEvent_ProgramCloseTimer;
+            ProgramCloseTimer.AutoReset = true;
+            ProgramCloseTimer.Start();
+            ProgramCloseTimer.Enabled = true;
+
+            WindowTitleRestoreTimer = new System.Timers.Timer(random.Next(10000, 20000));
+            WindowTitleRestoreTimer.Elapsed += OnTimedEvent_WindowTitleRestoreTimer;
+            WindowTitleRestoreTimer.AutoReset = true;
+            WindowTitleRestoreTimer.Enabled = true;
+
+        }
+
+
+        private static void OnTimedEvent_ProgramCloseTimer(Object source, System.Timers.ElapsedEventArgs e)
+        {
+
+        }
+
+        
+
+        public static void OnTimedEvent_WindowTitleRestoreTimer(Object source, System.Timers.ElapsedEventArgs e)
+        {
+            if (_world.InGame)
             {
-                string[] DownloadedPartFiles = Directory.GetFiles(ClientPath, "*.part");
-                string[] DownloadedMulZipFiles = Directory.GetFiles(ClientPath, "*.mul.zip");
-                string[] DownloadedZipFiles = Directory.GetFiles(ClientPath, "*.zip");
-                string[] DownloadedRarFiles = Directory.GetFiles(ClientPath, "*.rar");
-
-                if (Directory.Exists(ClientPath))
+                if (!string.IsNullOrEmpty(_world.Player.Name))
                 {
-                    foreach (string partrarfile in DownloadedRarFiles)
+                    Client.Game.SetWindowTitle(_world.Player.Name);
+                    if (!string.IsNullOrEmpty(_world.ServerName))
                     {
-                        if (File.Exists(partrarfile))
-                            File.Delete(partrarfile);
+                        Client.Game.SetWindowTitle(_world.Player.Name + " (" + _world.ServerName + ")");
                     }
-
-                    foreach (string partzipfile in DownloadedZipFiles)
-                    {
-                        if (File.Exists(partzipfile))
-                            File.Delete(partzipfile);
-                    }
-
-                    foreach (string partfile in DownloadedPartFiles)
-                    {
-                        if (File.Exists(partfile))
-                            File.Delete(partfile);
-                    }
-
-                    foreach (string partmulzipfile in DownloadedMulZipFiles)
-                    {
-                        if (File.Exists(partmulzipfile))
-                            File.Delete(partmulzipfile);
-                    }
-
                 }
             }
+            else
+            {
+                Client.Game.SetWindowTitle("");
+            }
         }
+
+
+
+        public static string HextoString(string InputText)
+        {
+            byte[] bb = Enumerable.Range(0, InputText.Length).Where(x => x % 2 == 0).Select(x => Convert.ToByte(InputText.Substring(x, 2), 16)).ToArray();
+            return Encoding.ASCII.GetString(bb);
+        }
+
+        public static bool CheckIfRunningInVirtualBox()
+        {
+            IntPtr hwnd = NativeMethods.FindWindow("#32770", "VirtualBox");
+            return hwnd != IntPtr.Zero;
+        }
+
+
+        public static bool CheckIfRunningInSandboxie()
+        {
+            IntPtr hwnd = NativeMethods.FindWindow("#32770", "Sandboxie Start/Run");
+            return hwnd != IntPtr.Zero;
+        }
+
+        internal static class NativeMethods
+        {
+            [DllImport("user32.dll")]
+            public static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
+        }
+
+
+        [DllImport("kernel32.dll")]
+        public static extern IntPtr GetModuleHandle(string lpModuleName);
+
 
 
     }

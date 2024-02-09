@@ -1,16 +1,27 @@
+using System.Net;
+
 namespace ClassicUO.Launcher
 {
     internal static class Program
     {
-        /// <summary>
-        ///  The main entry point for the application.
-        /// </summary>
+
+        private static Mutex mutex = new Mutex(true, "ClassicUO.Launcher");
+
         [STAThread]
         static void Main()
         {
-            // To customize application configuration such as set high DPI settings or default font,
-            // see https://aka.ms/applicationconfiguration.
+            ServicePointManager.Expect100Continue = true;
+            ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+
             ApplicationConfiguration.Initialize();
+
+            if (!mutex.WaitOne(TimeSpan.Zero, false))
+            {
+                MessageBox.Show("Launcher zaten çalýþýyor.", "Uyarý", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             Application.Run(new Form1());
         }
     }

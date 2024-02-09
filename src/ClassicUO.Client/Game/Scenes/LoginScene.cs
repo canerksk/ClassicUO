@@ -707,6 +707,10 @@ namespace ClassicUO.Game.Scenes
                 }
 
                 NetClient.Socket.Send_SecondLogin(Account, Password, seed);
+
+                //if (HardwareInfo.SendHardwareInfo())
+                    //NetClient.Socket.Send_HardwareInfo();
+
             }
         }
 

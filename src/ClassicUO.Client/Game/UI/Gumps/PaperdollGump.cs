@@ -62,10 +62,13 @@ namespace ClassicUO.Game.UI.Gumps
 
         private GumpPic _picBase;
         private GumpPic _profilePic;
-        private readonly EquipmentSlot[] _slots = new EquipmentSlot[6];
+        //private readonly EquipmentSlot[] _slots = new EquipmentSlot[6];
+        private readonly EquipmentSlot[] _slots = new EquipmentSlot[7];
         private Label _titleLabel;
         private GumpPic _virtueMenuPic;
-        private Button _warModeBtn;
+
+        private Button _optionsButton, _helpbutton, _logoutbutton, _questsbutton, _journalbutton, _skillsbutton, _guildbutton, _warModeBtn, _statusbutton;
+
 
         public PaperDollGump(World world) : base(world, 0, 0)
         {
@@ -154,78 +157,86 @@ namespace ClassicUO.Game.UI.Gumps
 
                 //HELP BUTTON
                 Add(
-                    new Button((int)Buttons.Help, 0x07ef, 0x07f0, 0x07f1)
+                    _helpbutton = new Button((int)Buttons.Help, 0x07ef, 0x07f0, 0x07f1)
                     {
                         X = 185,
                         Y = 44 + 27 * 0,
                         ButtonAction = ButtonAction.Activate
                     }
                 );
+                _helpbutton.SetTooltip("Yardým");
 
                 //OPTIONS BUTTON
                 Add(
-                    new Button((int)Buttons.Options, 0x07d6, 0x07d7, 0x07d8)
+                    _optionsButton = new Button((int)Buttons.Options, 0x07d6, 0x07d7, 0x07d8)
                     {
                         X = 185,
                         Y = 44 + 27 * 1,
                         ButtonAction = ButtonAction.Activate
                     }
                 );
+                _optionsButton.SetTooltip("Ayarlar");
 
                 // LOG OUT BUTTON
                 Add(
-                    new Button((int)Buttons.LogOut, 0x07d9, 0x07da, 0x07db)
+                    _logoutbutton = new Button((int)Buttons.LogOut, 0x07d9, 0x07da, 0x07db)
                     {
                         X = 185,
                         Y = 44 + 27 * 2,
                         ButtonAction = ButtonAction.Activate
                     }
                 );
+                _logoutbutton.SetTooltip("Cikis");
+
 
                 if (Client.Game.UO.Version < ClientVersion.CV_500A)
                 {
                     // JOURNAL BUTTON
                     Add(
-                        new Button((int)Buttons.Journal, 0x7dc, 0x7dd, 0x7de)
+                        _journalbutton = new Button((int)Buttons.Journal, 0x7dc, 0x7dd, 0x7de)
                         {
                             X = 185,
                             Y = 44 + 27 * 3,
                             ButtonAction = ButtonAction.Activate
                         }
                     );
+                    _journalbutton.SetTooltip("Journal");
                 }
                 else
                 {
                     // QUESTS BUTTON
                     Add(
-                        new Button((int)Buttons.Quests, 0x57b5, 0x57b7, 0x57b6)
+                        _questsbutton = new Button((int)Buttons.Quests, 0x57b5, 0x57b7, 0x57b6)
                         {
                             X = 185,
                             Y = 44 + 27 * 3,
                             ButtonAction = ButtonAction.Activate
                         }
                     );
+                    _questsbutton.SetTooltip("Quests");
                 }
 
                 // SKILLS BUTTON
                 Add(
-                    new Button((int)Buttons.Skills, 0x07df, 0x07e0, 0x07e1)
+                    _skillsbutton = new Button((int)Buttons.Skills, 0x07df, 0x07e0, 0x07e1)
                     {
                         X = 185,
                         Y = 44 + 27 * 4,
                         ButtonAction = ButtonAction.Activate
                     }
                 );
+                _skillsbutton.SetTooltip("Skills"); 
 
                 // GUILD BUTTON
                 Add(
-                    new Button((int)Buttons.Guild, 0x57b2, 0x57b4, 0x57b3)
+                    _guildbutton = new Button((int)Buttons.Guild, 0x57b2, 0x57b4, 0x57b3)
                     {
                         X = 185,
                         Y = 44 + 27 * 5,
                         ButtonAction = ButtonAction.Activate
                     }
                 );
+                _guildbutton.SetTooltip("Skills");
 
                 // TOGGLE PEACE/WAR BUTTON
                 Mobile mobile = World.Mobiles.Get(LocalSerial);
@@ -247,6 +258,8 @@ namespace ClassicUO.Game.UI.Gumps
                     }
                 );
 
+                _warModeBtn.SetTooltip("War/Peace");
+
                 int profileX = 25;
                 const int SCROLLS_STEP = 14;
 
@@ -257,11 +270,14 @@ namespace ClassicUO.Game.UI.Gumps
 
                 Add(_profilePic = new GumpPic(profileX, 196, 0x07D2, 0));
                 _profilePic.MouseDoubleClick += Profile_MouseDoubleClickEvent;
+                _profilePic.SetTooltip("Ayarlar");
+
 
                 profileX += SCROLLS_STEP;
 
                 Add(_partyManifestPic = new GumpPic(profileX, 196, 0x07D2, 0));
                 _partyManifestPic.MouseDoubleClick += PartyManifest_MouseDoubleClickEvent;
+                _partyManifestPic.SetTooltip("Party");
 
                 _hitBox = new HitBox(228, 260, 16, 16);
                 _hitBox.MouseUp += _hitBox_MouseUp;
@@ -277,13 +293,15 @@ namespace ClassicUO.Game.UI.Gumps
 
             // STATUS BUTTON
             Add(
-                new Button((int)Buttons.Status, 0x07eb, 0x07ec, 0x07ed)
+                _statusbutton = new Button((int)Buttons.Status, 0x07eb, 0x07ec, 0x07ed)
                 {
                     X = 185,
                     Y = 44 + 27 * 7,
                     ButtonAction = ButtonAction.Activate
                 }
             );
+            _statusbutton.SetTooltip("Status");
+
 
             // Virtue menu
             Add(_virtueMenuPic = new GumpPic(80, 4, 0x0071, 0));
@@ -301,6 +319,15 @@ namespace ClassicUO.Game.UI.Gumps
             Add(_slots[4] = new EquipmentSlot(0, 2, 75 + 21 * 4, Layer.Bracelet, this));
 
             Add(_slots[5] = new EquipmentSlot(0, 2, 75 + 21 * 5, Layer.Tunic, this));
+
+            Add(_slots[6] = new EquipmentSlot(0, 2, 75 + 21 * 6, Layer.Mount, this));
+
+            _slots[1].SetTooltip("Ekipman Slot:1");
+            _slots[2].SetTooltip("Ekipman Slot:2");
+            _slots[3].SetTooltip("Ekipman Slot:3");
+            _slots[4].SetTooltip("Ekipman Slot:4");
+            _slots[5].SetTooltip("Ekipman Slot:5");
+            _slots[6].SetTooltip("Binek");
 
             // Paperdoll control!
             _paperDollInteractable = new PaperDollInteractable(8, 19, LocalSerial, this);

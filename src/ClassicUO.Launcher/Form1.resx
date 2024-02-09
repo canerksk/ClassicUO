@@ -117,4 +117,25 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <metadata name="UpdaterBackgroundWorker.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
+  </metadata>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        AAABAAEAICAQAAEABADoAgAAFgAAACgAAAAgAAAAQAAAAAEABAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAACAAACAAAAAgIAAgAAAAIAAgACAgAAAwMDAAICAgAAAAP8AAP8AAAD//wD/AAAA/wD/AP//
+        AAD///8AAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAC7sAAAAAAAAAAAAAAAAAD/S0dwAAAAAAAAAAAAAABH
+        hEtEiEAAAAAAAAAAAAAEhEiLOESEAAAAAAAAAAAASEi7t7uzSEAAAAAAAAAABISLAAsAC4SEAAAAAAAA
+        AIiIsAAAAAC4SIAAAAAAAAB4QwAAAAAAA0jwAAAAAAAAdIsAAAAAAAuEcAAAAAAAC0Q7AAAAAAALNEsA
+        AAAAADe7t7AAAAAAt7u3MAAAAAALRDsAAAAAAAs0SwAAAAAAAPSLAAAAAAALhIAAAAAAAAD4QwAAAAAA
+        A0hwAAAAAAAAD0iwAAAAALhIAAAAAAAAAAeEiwAHAAuEjwAAAAAAAAAA+Ei7S0uzSPAAAAAAAAAAAAeE
+        RLi0RH8AAAAAAAAAAAAACEc0i0gAAAAAAAAAAAAAAI/0uLhLgAAAAAAAAAAAAP94+AsI9H9AAAAAAAAA
+        AAR4+AAAAAhI9AAAAAAAAAD3j4AAAAAAhI9AAAAAAAAH+EgAAAAAAAhI9wAAAAAACESAAAAAAAAAhEgA
+        AAAAAAu7sAAAAAAAALu7AAAAAAAIhIAAAAAAAACESAAAAAAAAEhAAAAAAAAASPAAAAAAAAAHhAAAAAAA
+        BIgAAAAAAAAAdP9wAAAAAP/3cAAAAAAAAAAAAAAAAAAAAAAAAAD//H////Af///AB///gAP//wAB//4A
+        AP/8AAB/+A7gP/gf8D/4H/A/8B/wH+AP4A/wH/Af+B/wP/gf8D/8DuB//AAAf/4AAP//AAH//4AD//8A
+        Af/+AAD//AKAf/gP4D/wH/Af8D/4H/A/+B/wP/gf+D/4P/wf8H/4D+A//B/wfw==
+</value>
+  </data>
 </root>

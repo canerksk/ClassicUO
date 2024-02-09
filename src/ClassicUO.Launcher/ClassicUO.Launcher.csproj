@@ -4,9 +4,12 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>net8.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
-    <UseWindowsForms>true</UseWindowsForms>
+    <UseWindowsForms>True</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
     <Authors />
+    <ApplicationIcon>UO_108.ico</ApplicationIcon>
+    <AssemblyVersion>1.1.0.1</AssemblyVersion>
+    <FileVersion>1.1.0.1</FileVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)'=='Release'">
@@ -19,5 +22,18 @@
     <OutputPath>$(ProjectDir)..\..\bin\Debug\</OutputPath>
     <DefineConstants>$(DefineConstants)TRACE</DefineConstants>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="UO_108.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Autoupdater.NET.Official" Version="1.8.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ClassicUO.Client\ClassicUO.Client.csproj" />
+    <ProjectReference Include="..\ClassicUO.IO\ClassicUO.IO.csproj" />
+  </ItemGroup>
 
 </Project>

@@ -36,22 +36,26 @@ using System;
 
 namespace ClassicUO.Game
 {
-    internal static class Constants
+    public static class Constants
     {
 
         public const int CLIENTENCRYPTION = 5;
         // Server Config
 #if MythicPVP
-        public const string CLIENTVERSION = "7.0.15";
+        public const string CLIENTVERSION = "7.0.15.1";
         public const string SERVER_NAME = "Mythic";
+        public const string EXTCMDKEY = "MythicUO";
+        public const string TIMEHASHKEY = "MytH";
+
         public static string SPHERE_IP { get; set; } = "89.107.227.186";
         public static ushort SPHERE_PORT { get; set; } = 2599;
         public const string ADMIN_EMAIL = "root@mythic.gen.tr";
-        public const string WEB_MAIN_URL = "https://mythic.gen.tr";
+        public const string WEB_MAIN_URL = "https://mythic.gen.tr/";
 #endif
 
+        public static string AUTOUPDATER_XML_URL = WEB_MAIN_URL + "conn/updates/app/Updater.xml";
         public static Uri WEB_UPDATER_PATH_URL = new Uri(WEB_MAIN_URL + "conn/updates/muls/");
-        public static Uri AUTOUPDATER_XML_URL = new Uri(WEB_MAIN_URL + "conn/updates/app/Updater.xml");
+        //public static Uri AUTOUPDATER_XML_URL = new Uri(WEB_MAIN_URL + "conn/updates/app/Updater.xml");
         //public static Uri LAUNCHER_DAT_URL = new Uri(WEB_MAIN_URL + "Conn/control/launcher.dat");
         //public static Uri FPS_DAT_URL = new Uri(WEB_MAIN_URL + "Conn/control/fps.dat");
 
@@ -85,9 +89,15 @@ namespace ClassicUO.Game
         public const int ITEM_EFFECT_ANIMATION_DELAY = 50;
 
         public const int MAX_STEP_COUNT = 5;
-        public const int TURN_DELAY = 100; // original client 12.5 fps = 80ms delay. Edit --> it causes throttling
+
+        //public const int TURN_DELAY = 100; // original client 12.5 fps = 80ms delay. Edit --> it causes throttling
+        public const int TURN_DELAY = 80; // original client 12.5 fps = 80ms delay. Edit --> it causes throttling
+        
         public const int TURN_DELAY_FAST = 45;
-        public const int WALKING_DELAY = 150; // 750
+
+        //public const int WALKING_DELAY = 150; // 750
+        public const int WALKING_DELAY = 750; // 750
+
         public const int PLAYER_WALKING_DELAY = 150;
         public const int DEFAULT_CHARACTER_HEIGHT = 16;
         public const int DEFAULT_BLOCK_HEIGHT = 16;

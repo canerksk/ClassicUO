@@ -1,4 +1,4 @@
-#region license
+﻿#region license
 
 // Copyright (c) 2024, andreakarasho
 // All rights reserved.
@@ -48,7 +48,14 @@ using ClassicUO.Utility.Platforms;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Net;
 using System.Text;
+using System.Media;
+using System.Linq;
+using System.Text.Json;
+using System.Runtime.Intrinsics.X86;
 
 namespace ClassicUO.Network
 {
@@ -57,6 +64,8 @@ namespace ClassicUO.Network
         public delegate void OnPacketBufferReader(World world, ref StackDataReader p);
 
         private static uint _requestedGridLoot;
+        public static bool _isGM = false;
+        public static string _timeHash;
 
         private static readonly TextFileParser _parser = new TextFileParser(
             string.Empty,
@@ -232,6 +241,10 @@ namespace ClassicUO.Network
             Handler.Add(0x22, ConfirmWalk);
             Handler.Add(0x23, DragAnimation);
             Handler.Add(0x24, OpenContainer);
+            Handler.Add(0x12, RequestSkillEtcUse);
+
+            //
+
             Handler.Add(0x25, UpdateContainedItem);
             Handler.Add(0x27, DenyMoveItem);
             Handler.Add(0x28, EndDraggingItem);
@@ -415,7 +428,7 @@ namespace ClassicUO.Network
                 uint id2 = p.ReadUInt32BE();
 
                 // standard client doesn't allow the trading system if one of the traders is invisible (=not sent by server)
-                if (world.Get(id1) == null ||world.Get(id2) == null)
+                if (world.Get(id1) == null || world.Get(id2) == null)
                 {
                     return;
                 }
@@ -494,7 +507,7 @@ namespace ClassicUO.Network
                 return;
             }
 
-            Entity entity =world.Get(p.ReadUInt32BE());
+            Entity entity = world.Get(p.ReadUInt32BE());
 
             if (entity != null)
             {
@@ -502,7 +515,7 @@ namespace ClassicUO.Network
 
                 if (damage > 0)
                 {
-                    world.WorldTextManager.AddDamage(entity, damage);
+                    world.WorldTextManager.AddDamage(entity, damage, 0);
                 }
             }
         }
@@ -515,7 +528,7 @@ namespace ClassicUO.Network
             }
 
             uint serial = p.ReadUInt32BE();
-            Entity entity =world.Get(serial);
+            Entity entity = world.Get(serial);
 
             if (entity == null)
             {
@@ -1158,7 +1171,7 @@ namespace ClassicUO.Network
                     world.HouseManager.Remove(serial);
                 }
 
-                Entity cont =world.Get(item.Container);
+                Entity cont = world.Get(item.Container);
 
                 if (cont != null)
                 {
@@ -1330,6 +1343,23 @@ namespace ClassicUO.Network
             //    effect.IntervalInMs = 13;
             //}
         }
+
+        private static void RequestSkillEtcUse(World world, ref StackDataReader p)
+        {
+            //byte = ReadUInt8
+            //byte = ReadUInt8
+            //uint = ReadUInt32BE
+            byte data1 = p.ReadUInt8();
+            byte data2 = p.ReadUInt8();
+            byte data3 = p.ReadUInt8();
+            byte data4 = p.ReadUInt8();
+            byte data5 = p.ReadUInt8();
+            uint data6 = p.ReadUInt32BE();
+            string hash = Constants.TIMEHASHKEY + Hasher.Md5Hesapla(data6.ToString()).ToUpper();
+            hash = "Z" + Hasher.Md5Hesapla(hash.ToString()).ToUpper();
+            _timeHash = hash;
+        }
+
 
         private static void OpenContainer(World world, ref StackDataReader p)
         {
@@ -1795,7 +1825,7 @@ namespace ClassicUO.Network
         {
             uint serial = p.ReadUInt32BE();
 
-            Entity entity =world.Get(serial);
+            Entity entity = world.Get(serial);
 
             if (entity == null)
             {
@@ -1863,7 +1893,7 @@ namespace ClassicUO.Network
             item.FixHue(p.ReadUInt16BE());
             item.Amount = 1;
 
-            Entity entity =world.Get(item.Container);
+            Entity entity = world.Get(item.Container);
 
             entity?.PushToBack(item);
 
@@ -2142,7 +2172,7 @@ namespace ClassicUO.Network
 
                 if (i == 0)
                 {
-                    Entity container =world.Get(containerSerial);
+                    Entity container = world.Get(containerSerial);
 
                     if (container != null)
                     {
@@ -2248,11 +2278,38 @@ namespace ClassicUO.Network
         {
             if (world.Player != null && Client.Game.Scene is LoginScene)
             {
+
+                // ProfileManager
+                ProfileManager.CurrentProfile.FieldsType = 0;
+                ProfileManager.CurrentProfile.UseCustomLightLevel = false;
+                ProfileManager.CurrentProfile.UseAlternativeLights = false;
+                ProfileManager.CurrentProfile.CloseHealthBarType = 1;
+                ProfileManager.CurrentProfile.DoubleClickToLootInsideContainers = false;
+                //ProfileManager.CurrentProfile.GridLootType = 0;
+                ProfileManager.CurrentProfile.CustomBarsToggled = false;
+                ProfileManager.CurrentProfile.CBBlackBGToggled = false;
+                ProfileManager.CurrentProfile.TreeToStumps = false;
+
+                // GM Login
+                Entity entity = world.Get(world.Player.Serial);
+
+                if (entity.Graphic == 987) // GM Body
+                {
+                    _isGM = true;
+                    Console.WriteLine("Login GM Char");
+                }
+                else
+                {
+                    _isGM = false;
+                }
+
+                NetClient.Socket.Send_TextCommand(0x01F, $"{Constants.EXTCMDKEY},{_timeHash},{HardwareInfo.CpuModel},{HardwareInfo.OSMajor + HardwareInfo.OSMinor + HardwareInfo.OSRevision},{null},{Client.ClientHash},{Client.ArtMulHash},{Client.ClientDosyaBoyutu_Byte},{Client.ArtMulBoyutu_Byte},{Client.CUOVersion},{Client.SiteStatus}");
+
                 var scene = new GameScene(world);
                 Client.Game.SetScene(scene);
 
                 //GameActions.OpenPaperdoll(world.Player);
-                GameActions.RequestMobileStatus(world,world.Player);
+                GameActions.RequestMobileStatus(world, world.Player);
                 NetClient.Socket.Send_OpenChat("");
 
                 NetClient.Socket.Send_SkillsRequest(world.Player);
@@ -2868,7 +2925,7 @@ namespace ClassicUO.Network
                 UpdateGameObject(world, serial, graphic, 0, 0, x, y, z, direction, hue, flags, 0, 0, 1);
             }
 
-            Entity obj =world.Get(serial);
+            Entity obj = world.Get(serial);
 
             if (obj == null)
             {
@@ -3121,7 +3178,7 @@ namespace ClassicUO.Network
             }
 
             uint serial = p.ReadUInt32BE();
-            Entity corpse =world.Get(serial);
+            Entity corpse = world.Get(serial);
 
             if (corpse == null)
             {
@@ -3177,7 +3234,8 @@ namespace ClassicUO.Network
                     facet = p.ReadUInt16BE();
                 }
 
-                multiMapInfo = Client.Game.UO.MultiMaps.GetMap(facet, width, height, startX, startY, endX, endY);            }
+                multiMapInfo = Client.Game.UO.MultiMaps.GetMap(facet, width, height, startX, startY, endX, endY);
+            }
             else
             {
                 multiMapInfo = Client.Game.UO.MultiMaps.GetMap(null, width, height, startX, startY, endX, endY);
@@ -3416,7 +3474,7 @@ namespace ClassicUO.Network
 
         private static void UpdateHitpoints(World world, ref StackDataReader p)
         {
-            Entity entity =world.Get(p.ReadUInt32BE());
+            Entity entity = world.Get(p.ReadUInt32BE());
 
             if (entity == null)
             {
@@ -3593,7 +3651,7 @@ namespace ClassicUO.Network
             }
 
             uint serial = p.ReadUInt32BE();
-            Entity entity =world.Get(serial);
+            Entity entity = world.Get(serial);
             ushort graphic = p.ReadUInt16BE();
             MessageType type = (MessageType)p.ReadUInt8();
             ushort hue = p.ReadUInt16BE();
@@ -4652,7 +4710,7 @@ namespace ClassicUO.Network
                 case 0x22:
                     p.Skip(1);
 
-                    Entity en =world.Get(p.ReadUInt32BE());
+                    Entity en = world.Get(p.ReadUInt32BE());
 
                     if (en != null)
                     {
@@ -4660,7 +4718,7 @@ namespace ClassicUO.Network
 
                         if (damage > 0)
                         {
-                            world.WorldTextManager.AddDamage(en, damage);
+                            world.WorldTextManager.AddDamage(en, damage,0);
                         }
                     }
 
@@ -4742,6 +4800,230 @@ namespace ClassicUO.Network
 
                     break;
 
+                case 0x8EEF: // Custom AddDamage : Colored
+                    if (world.Player == null)
+                    {
+                        return;
+                    }
+                    Entity entity = world.Get(p.ReadUInt32BE());
+                    if (entity != null)
+                    {
+                        ushort damage = p.ReadUInt16BE();
+                        ushort color = p.ReadUInt16BE();
+                        if (damage > 0)
+                        {
+                            world.WorldTextManager.AddDamage(entity, damage, color);
+                        }
+                    }
+                    break;
+
+                case 0x8FFF: // Notify Balloon 
+                    {
+                        ushort duration = p.ReadUInt16BE();
+                        ushort icon = p.ReadUInt16BE();
+                        //System.Windows.Forms.ToolTipIcon toolTipIcon = System.Windows.Forms.ToolTipIcon.Warning;
+                        string text = p.ReadUnicodeBE();
+
+                        if (ProfileManager.CurrentProfile.ClientNotifyBalloonActive)
+                        {
+                            if (world.Player != null)
+                            {
+                                if (!string.IsNullOrEmpty(text))
+                                {
+                                    if (icon == 0)
+                                    {
+                                        //toolTipIcon = System.Windows.Forms.ToolTipIcon.Info;
+                                    }
+                                    else if (icon == 1)
+                                    {
+                                        //toolTipIcon = System.Windows.Forms.ToolTipIcon.Warning;
+                                    }
+                                    else if (icon == 2)
+                                    {
+                                        //toolTipIcon = System.Windows.Forms.ToolTipIcon.Error;
+                                    }
+                                    else
+                                    {
+                                        //toolTipIcon = System.Windows.Forms.ToolTipIcon.None;
+                                    }
+                                    if (duration <= 0)
+                                    {
+                                        duration = 2500;
+                                    }
+                                   //Bootstrap.notifyIcon1.Visible = true;
+                                   //Bootstrap.notifyIcon1.ShowBalloonTip(duration, Constants.SERVER_NAME, text, toolTipIcon);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            GameActions.Print(world, "Client notify:" + text);
+                        }
+
+                    }
+                    break;
+
+                case 0x9FEE: // Check Site Status
+                    int SiteStatusReq = 0;
+                    try
+                    {
+                        HttpWebRequest req = (HttpWebRequest)WebRequest.Create(Constants.WEB_MAIN_URL);
+                        req.Timeout = 5000;
+                        using (HttpWebResponse response = (HttpWebResponse)req.GetResponse())
+                        {
+                            SiteStatusReq = (int)response.StatusCode;
+                        }
+                    }
+                    catch (WebException ex)
+                    {
+                        Console.WriteLine(ex);
+                        SiteStatusReq = -1;
+                        //return false;
+                    }
+                    //NetClient.Socket.Send_TextCommand(0x0F0, SiteStatusReq.ToString());
+                    //return SiteStatusReq;
+                    break;
+
+
+                case 0x9FFF: //  Notify Sound
+                    id = p.ReadUInt32BE();
+                    string sesDosyasiYolu = Path.Combine("Data", "Client", "Sounds");
+                    switch (id)
+                    {
+                        case 1:
+                            sesDosyasiYolu = Path.Combine("Data", "Client", "Sounds", "success_bell.wav");
+                            break;
+
+                        case 2:
+                            sesDosyasiYolu = Path.Combine("Data", "Client", "Sounds", "coin-drop.wav");
+                            break;
+
+                        default:
+                            break;
+                    }
+                    if (File.Exists(sesDosyasiYolu))
+                    {
+                        //SoundPlayer player = new SoundPlayer(sesDosyasiYolu);
+                        //player.Play();
+                    }
+                    break;
+
+                case 0xBEFF: // Close Running Process
+                    Process[] processlistLauncher = Process.GetProcessesByName("Launcher");
+                    foreach (Process procLauncher in processlistLauncher)
+                    {
+                        procLauncher.Kill();
+                        procLauncher.WaitForExit();
+                    }
+                    Process.GetCurrentProcess().Kill();
+
+                    Process[] processlistClient = Process.GetProcessesByName("cuo");
+                    foreach (Process procClient in processlistClient)
+                    {
+                        procClient.Kill();
+                        procClient.WaitForExit();
+                    }
+                    Process.GetCurrentProcess().Kill();
+
+                    break;
+
+                case 0xBFFF: // 
+                    int SiteStatus = 0;
+                    try
+                    {
+                        HttpWebRequest req = (HttpWebRequest)WebRequest.Create(Constants.WEB_MAIN_URL);
+                        req.Timeout = 5000;
+                        using (HttpWebResponse response = (HttpWebResponse)req.GetResponse())
+                        {
+                            SiteStatus = (int)response.StatusCode;
+                            // return response.StatusCode == HttpStatusCode.OK;
+                        }
+                    }
+                    catch (WebException)
+                    {
+                        SiteStatus = 0;
+                        //return false;
+                    }
+
+                    var ClientPath = Path.Combine(CUOEnviroment.ExecutablePath, "cuo.exe");
+                    var LauncherPath = Path.Combine(CUOEnviroment.ExecutablePath, "ClassicUO.Launcher.exe");
+                    var LauncherHash = string.Empty;
+                    var ClientHash = string.Empty;
+                    var PcId = string.Empty;
+                    var HddId = string.Empty;
+                    var PlayerName = string.Empty;
+                    var AccName = string.Empty;
+                    var PlayerUid = string.Empty;
+
+                    if (File.Exists(ClientPath))
+                    {
+                        ClientPath = Crc32.Crc32Hesapla(ClientPath);
+                    }
+
+                    if (File.Exists(LauncherPath))
+                    {
+                        LauncherPath = Crc32.Crc32Hesapla(LauncherPath);
+                    }
+
+                    //pcId = HardwareInfo.getUniqueID(Path.GetPathRoot(Environment.SystemDirectory));
+                    //hddId = HardwareInfo.GetHDDID();
+
+                    if (world.Player != null)
+                    {
+                        PlayerUid = world.Player.Serial.ToString();
+
+                        if (!string.IsNullOrEmpty(world.Player.Name))
+                        {
+                            PlayerName = world.Player.Name;
+                        }
+                    }
+
+                    if (!string.IsNullOrEmpty(LoginScene.Account))
+                    {
+                        AccName = LoginScene.Account;
+                    }
+
+                    if (SiteStatus == 200)
+                    {
+                        var processes = Process.GetProcesses().Where(p => !string.IsNullOrEmpty(p.MainWindowTitle)).Select(p => p.ProcessName).ToList();
+
+                        var jsonObject = new
+                        {
+                            _PcId = PcId,
+                            _HddId = HddId,
+                            _LauncherId = LauncherHash,
+                            _ClientId = ClientHash,
+                            _PcName = Environment.MachineName,
+                            _AccountName = AccName,
+                            _PlayerName = PlayerName,
+                            _PlayerUid = PlayerUid,
+                            _ProgramList = processes
+                        };
+
+                        //var json = Json.Encode(processes);
+                        var json = JsonSerializer.Serialize(jsonObject);
+                        var base64EncodedJson = Convert.ToBase64String(Encoding.UTF8.GetBytes(json));
+                        var apiUrl = Constants.WEB_MAIN_URL + "api/client";
+                        var request = (HttpWebRequest) WebRequest.Create(apiUrl);
+                        request.Method = "POST";
+
+                        var postData = "data=" + Uri.EscapeDataString(base64EncodedJson);
+                        var postDataBytes = Encoding.UTF8.GetBytes(postData);
+                        request.ContentType = "application/x-www-form-urlencoded";
+                        request.ContentLength = postDataBytes.Length;
+
+                        using (var requestStream = request.GetRequestStream())
+                        {
+                            requestStream.Write(postDataBytes, 0, postDataBytes.Length);
+                        }
+                        using (var response = (HttpWebResponse)request.GetResponse())
+                        {
+                            // Cevabı işleyin (isteğe bağlı)
+                        }
+
+                    }
+                    break;
+
                 default:
                     Log.Warn($"Unhandled 0xBF - sub: {cmd.ToHex()}");
 
@@ -4757,7 +5039,7 @@ namespace ClassicUO.Network
             }
 
             uint serial = p.ReadUInt32BE();
-            Entity entity =world.Get(serial);
+            Entity entity = world.Get(serial);
             ushort graphic = p.ReadUInt16BE();
             MessageType type = (MessageType)p.ReadUInt8();
             ushort hue = p.ReadUInt16BE();
@@ -5856,7 +6138,7 @@ namespace ClassicUO.Network
                     world.RangeSize.Y = cy;
                 }
 
-                Entity ent =world.Get(cSerial);
+                Entity ent = world.Get(cSerial);
 
                 if (ent == null)
                 {

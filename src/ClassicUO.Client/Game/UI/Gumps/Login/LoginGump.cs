@@ -51,7 +51,7 @@ namespace ClassicUO.Game.UI.Gumps.Login
         private readonly Checkbox _checkboxAutologin;
         private readonly Checkbox _checkboxSaveAccount;
         private readonly Button _nextArrow0;
-        private readonly PasswordStbTextBox _passwordFake;
+        private static PasswordStbTextBox _passwordFake;
         private readonly StbTextBox _textboxAccount;
 
         private float _time;
@@ -197,6 +197,7 @@ namespace ClassicUO.Game.UI.Gumps.Login
                         Y = 417
                     }
                 );
+                _checkboxAutologin.SetTooltip("Otomatik/Hızlı giriş");
 
                 Add
                 (
@@ -214,6 +215,7 @@ namespace ClassicUO.Game.UI.Gumps.Login
                         Y = 417
                     }
                 );
+                _checkboxSaveAccount.SetTooltip("Beni hatırla");
 
                 font = 1;
                 hue = 0x0386;
@@ -257,6 +259,8 @@ namespace ClassicUO.Game.UI.Gumps.Login
                         ButtonAction = ButtonAction.Activate
                     }
                 );
+
+                _nextArrow0.SetTooltip("Sonraki sayfa");
 
                 offsetX = 218;
                 offsetY = 283;
@@ -693,6 +697,12 @@ namespace ClassicUO.Game.UI.Gumps.Login
             protected override void OnKeyDown(SDL.SDL_Keycode key, SDL.SDL_Keymod mod)
             {
                 base.OnKeyDown(key, mod);
+
+                if (key == SDL.SDL_Keycode.SDLK_ESCAPE)
+                {
+                    _passwordFake.RealText = string.Empty;
+                }
+
                 UpdateCaretScreenPosition();
             }
 

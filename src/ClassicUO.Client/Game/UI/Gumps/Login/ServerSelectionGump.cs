@@ -101,6 +101,8 @@ namespace ClassicUO.Game.UI.Gumps.Login
                     ); // "Packet Loss:"
                 }
 
+
+                /*
                 Add
                 (
                     new Label(ClilocLoader.Instance.GetString(1044580), true, textColor, font: 1)
@@ -108,6 +110,8 @@ namespace ClassicUO.Game.UI.Gumps.Login
                         X = 153, Y = 368
                     }
                 ); // "Sort by:"
+                */
+
             }
             else
             {
@@ -137,6 +141,7 @@ namespace ClassicUO.Game.UI.Gumps.Login
                     }
                 );
 
+                /*
                 Add
                 (
                     new Label(ResGumps.SortBy, false, textColor, font: 9)
@@ -144,6 +149,7 @@ namespace ClassicUO.Game.UI.Gumps.Login
                         X = 153, Y = 368
                     }
                 );
+                */
             }
 
             Add

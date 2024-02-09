@@ -1,4 +1,4 @@
-#region license
+﻿#region license
 
 // Copyright (c) 2024, andreakarasho
 // All rights reserved.
@@ -56,6 +56,14 @@ namespace ClassicUO.Game.Managers
         private readonly uint[] _itemsInHand = new uint[2];
         private MacroObject _lastMacro;
         private long _nextTimer;
+
+        private long _opendoordelay;
+        private long _warmodedelay;
+        private long _disarmdelay;
+        private uint _itemInLeftHand;
+        private uint _itemInRightHand;
+        private long _lastobjectdelay;
+
         private readonly World _world;
 
         private readonly byte[] _skillTable =
@@ -157,6 +165,7 @@ namespace ClassicUO.Game.Managers
 
         private void CreateDefaultMacros()
         {
+            /*
             PushToBack
             (
                 new Macro
@@ -282,6 +291,8 @@ namespace ClassicUO.Game.Managers
                     }
                 }
             );
+            */
+
         }
 
 
@@ -484,6 +495,7 @@ namespace ClassicUO.Game.Managers
                     break;
 
                 case MacroType.Walk:
+                    /*
                     byte dt = (byte) Direction.Up;
 
                     if (macro.SubCode != MacroSubType.NW)
@@ -500,10 +512,19 @@ namespace ClassicUO.Game.Managers
                     {
                         _world.Player.Walk((Direction) dt, false);
                     }
-
+                    */
+                    GameActions.Print(_world, "Bu macro devredisi.");
                     break;
 
                 case MacroType.WarPeace:
+
+                    if (_warmodedelay > Time.Ticks)
+                    {
+                        //GameActions.Print(_world, "You must wait to perform another action.", 946, MessageType.Regular, 3, false);
+                        break;
+                    }
+                    _warmodedelay = Time.Ticks + 200;
+
                     GameActions.ToggleWarMode(_world.Player);
 
                     break;
@@ -683,7 +704,16 @@ namespace ClassicUO.Game.Managers
 
                                     if (macro.Code == MacroType.Close)
                                     {
-                                        UIManager.GetGump<OptionsGump>()?.Dispose();
+                                        if (Constants.USE_OLD_OPTIONGUMP)
+                                        {
+                                            UIManager.GetGump<OptionsGumpOld>()?.Dispose();
+                                        }
+                                        else
+                                        {
+                                            UIManager.GetGump<OptionsGump>()?.Dispose();
+                                        }
+
+                                        //UIManager.GetGump<OptionsGump>()?.Dispose();
                                     }
 
                                     break;
@@ -919,6 +949,13 @@ namespace ClassicUO.Game.Managers
                     break;
 
                 case MacroType.OpenDoor:
+                    if (_opendoordelay > Time.Ticks)
+                    {
+                        GameActions.Print(_world, "You must wait to perform another action.", 946, MessageType.Regular, 3, false);
+                        break;
+                    }
+                    _opendoordelay = Time.Ticks + 400;
+
                     GameActions.OpenDoor();
 
                     break;
@@ -1009,16 +1046,41 @@ namespace ClassicUO.Game.Managers
 
                     break;
 
-                case MacroType.LastObject:
+                /*
+            case MacroType.LastObject:
 
+                if (_world.Get(_world.LastObject) != null)
+                {
+                    GameActions.DoubleClick(_world, _world.LastObject);
+                }
+
+                break;
+                */
+
+                case MacroType.LastObject:
+                    if (_lastobjectdelay > Time.Ticks)
+                    {
+                        //GameActions.Print("You must wait to perform another action.", 946, MessageType.Regular, 3, false);
+                        break;
+                    }
                     if (_world.Get(_world.LastObject) != null)
                     {
-                        GameActions.DoubleClick(_world, _world.LastObject);
-                    }
 
+                        if (SerialHelper.IsMobile(_world.Get(_world.LastObject)))
+                        {
+                            string uid = _world.LastObject.ToString();
+                            GameActions.Print(_world, "Macro ile varlik hedef alinamaz.", 0x20, MessageType.System);
+                            break;
+                        }
+
+                        GameActions.DoubleClick(_world, _world.LastObject);
+                        _lastobjectdelay = Time.Ticks + 300;
+                    }
                     break;
 
+
                 case MacroType.UseItemInHand:
+                    /*
                     Item itemInLeftHand = _world.Player.FindItemByLayer(Layer.OneHanded);
 
                     if (itemInLeftHand != null)
@@ -1034,7 +1096,7 @@ namespace ClassicUO.Game.Managers
                             GameActions.DoubleClick(_world, itemInRightHand.Serial);
                         }
                     }
-
+                    */
                     break;
 
                 case MacroType.LastTarget:
@@ -1050,11 +1112,16 @@ namespace ClassicUO.Game.Managers
                         //}
                         //else
 
+
+                        // Bir zemine iki kere üst üste hedef alamama olayı buradan
+                        /*
                         if (_world.TargetManager.TargetingState != CursorTarget.Object && !_world.TargetManager.LastTargetInfo.IsEntity)
                         {
                             _world.TargetManager.TargetLast();
                         }
-                        else if (_world.TargetManager.LastTargetInfo.IsEntity)
+                        */
+
+                        if (_world.TargetManager.LastTargetInfo.IsEntity)
                         {
                             _world.TargetManager.Target(_world.TargetManager.LastTargetInfo.Serial);
                         }
@@ -1097,6 +1164,58 @@ namespace ClassicUO.Game.Managers
 
                     break;
 
+                /*
+            case MacroType.ArmDisarm:
+
+                int handIndex = 1 - (macro.SubCode - MacroSubType.LeftHand);
+                GameScene gs = Client.Game.GetScene<GameScene>();
+
+                if (handIndex < 0 || handIndex > 1 || Client.Game.UO.GameCursor.ItemHold.Enabled)
+                {
+                    break;
+                }
+
+                if (_itemsInHand[handIndex] != 0)
+                {
+                    GameActions.PickUp(_world, _itemsInHand[handIndex], 0, 0, 1);
+                    GameActions.Equip(_world);
+
+                    _itemsInHand[handIndex] = 0;
+                    _nextTimer = Time.Ticks + 1000;
+                }
+                else
+                {
+                    Item backpack = _world.Player.FindItemByLayer(Layer.Backpack);
+
+                    if (backpack == null)
+                    {
+                        break;
+                    }
+
+                    Item item = _world.Player.FindItemByLayer(Layer.OneHanded + (byte) handIndex);
+
+                    if (item != null)
+                    {
+                        _itemsInHand[handIndex] = item.Serial;
+
+                        GameActions.PickUp(_world, item, 0, 0, 1);
+
+                        GameActions.DropItem
+                        (
+                            Client.Game.UO.GameCursor.ItemHold.Serial,
+                            0xFFFF,
+                            0xFFFF,
+                            0,
+                            backpack.Serial
+                        );
+
+                        _nextTimer = Time.Ticks + 1000;
+                    }
+                }
+
+                break;
+                */
+
                 case MacroType.ArmDisarm:
                     int handIndex = 1 - (macro.SubCode - MacroSubType.LeftHand);
                     GameScene gs = Client.Game.GetScene<GameScene>();
@@ -1106,44 +1225,49 @@ namespace ClassicUO.Game.Managers
                         break;
                     }
 
-                    if (_itemsInHand[handIndex] != 0)
+                    if (_disarmdelay > Time.Ticks)
                     {
-                        GameActions.PickUp(_world, _itemsInHand[handIndex], 0, 0, 1);
-                        GameActions.Equip(_world);
+                        GameActions.Print(_world, "You must wait to perform another action.", 946, MessageType.Regular, 3, false);
+                        break;
+                    }
 
-                        _itemsInHand[handIndex] = 0;
-                        _nextTimer = Time.Ticks + 1000;
+                    Item item = _world.Player.FindItemByLayer(Layer.OneHanded + (byte)handIndex);
+
+                    if (item == null)
+                    {
+                        if (handIndex == 0)
+                        {
+                            if (_itemInRightHand != 0)
+                            {
+                                GameActions.PickUp(_world, _itemInRightHand, 0, 0, 1);
+                                GameActions.Equip(_world);
+                                _disarmdelay = Time.Ticks + 1500;
+                            }
+                        } // Sa� El
+                        else if (handIndex == 1)
+                        {
+                            if (_itemInLeftHand != 0)
+                            {
+                                GameActions.PickUp(_world, _itemInLeftHand, 0, 0, 1);
+                                GameActions.Equip(_world);
+                                _disarmdelay = Time.Ticks + 1500;
+                            }
+                        } // Sol El
                     }
                     else
                     {
+                        if (handIndex == 0)// Sa� El
+                            _itemInRightHand = item.Serial;
+                        if (handIndex == 1) // Sol El
+                            _itemInLeftHand = item.Serial;
+
                         Item backpack = _world.Player.FindItemByLayer(Layer.Backpack);
+                        if (backpack == null) break;
+                        GameActions.PickUp(_world,item, 0, 0, 1);
 
-                        if (backpack == null)
-                        {
-                            break;
-                        }
-
-                        Item item = _world.Player.FindItemByLayer(Layer.OneHanded + (byte) handIndex);
-
-                        if (item != null)
-                        {
-                            _itemsInHand[handIndex] = item.Serial;
-
-                            GameActions.PickUp(_world, item, 0, 0, 1);
-
-                            GameActions.DropItem
-                            (
-                                Client.Game.UO.GameCursor.ItemHold.Serial,
-                                0xFFFF,
-                                0xFFFF,
-                                0,
-                                backpack.Serial
-                            );
-
-                            _nextTimer = Time.Ticks + 1000;
-                        }
+                        _disarmdelay = Time.Ticks + 1500;
+                        GameActions.DropItem(Client.Game.UO.GameCursor.ItemHold.Serial, 0xFFFF, 0xFFFF, 0, backpack.Serial);
                     }
-
                     break;
 
                 case MacroType.WaitForTarget:
@@ -1171,7 +1295,7 @@ namespace ClassicUO.Game.Managers
                     if (SerialHelper.IsValid(sel_obj))
                     {
                         _world.TargetManager.LastTargetInfo.SetEntity(sel_obj);
-                        _world.TargetManager.LastAttack = sel_obj;
+                       // _world.TargetManager.LastAttack = sel_obj;
                     }
 
                     break;
@@ -1431,11 +1555,11 @@ namespace ClassicUO.Game.Managers
 
                     if (scanRange == ScanModeObject.Nearest)
                     {
-                        SetLastTarget(_world.FindNearest(scantype));
+                        //SetLastTarget(_world.FindNearest(scantype));
                     }
                     else
                     {
-                        SetLastTarget(_world.FindNext(scantype, _world.TargetManager.SelectedTarget, scanRange == ScanModeObject.Previous));
+                        //SetLastTarget(_world.FindNext(scantype, _world.TargetManager.SelectedTarget, scanRange == ScanModeObject.Previous));
                     }
 
                     break;
@@ -1461,12 +1585,12 @@ namespace ClassicUO.Game.Managers
                     break;
 
                 case MacroType.PrimaryAbility:
-                    GameActions.UsePrimaryAbility(_world);
+                   // GameActions.UsePrimaryAbility(_world);
 
                     break;
 
                 case MacroType.SecondaryAbility:
-                    GameActions.UseSecondaryAbility(_world);
+                    //GameActions.UseSecondaryAbility(_world);
 
                     break;
 
@@ -1526,14 +1650,14 @@ namespace ClassicUO.Game.Managers
                     break;
 
                 case MacroType.Grab:
-                    GameActions.Print(_world, ResGeneral.TargetAnItemToGrabIt);
-                    _world.TargetManager.SetTargeting(CursorTarget.Grab, 0, TargetType.Neutral);
+                    //GameActions.Print(_world, ResGeneral.TargetAnItemToGrabIt);
+                    //_world.TargetManager.SetTargeting(CursorTarget.Grab, 0, TargetType.Neutral);
 
                     break;
 
                 case MacroType.SetGrabBag:
-                    GameActions.Print(_world, ResGumps.TargetContainerToGrabItemsInto);
-                    _world.TargetManager.SetTargeting(CursorTarget.SetGrabBag, 0, TargetType.Neutral);
+                    //GameActions.Print(_world, ResGumps.TargetContainerToGrabItemsInto);
+                   // _world.TargetManager.SetTargeting(CursorTarget.SetGrabBag, 0, TargetType.Neutral);
 
                     break;
 
@@ -1557,6 +1681,7 @@ namespace ClassicUO.Game.Managers
                     break;
 
                 case MacroType.UseObject:
+                    /*
                     Item obj;
 
                     switch (macro.SubCode)
@@ -1717,6 +1842,7 @@ namespace ClassicUO.Game.Managers
 
                             break;
                     }
+                    */
 
                     break;
 
@@ -1774,24 +1900,24 @@ namespace ClassicUO.Game.Managers
                     break;
 
                 case MacroType.ToggleDrawRoofs:
-                    ProfileManager.CurrentProfile.DrawRoofs = !ProfileManager.CurrentProfile.DrawRoofs;
+                    //ProfileManager.CurrentProfile.DrawRoofs = !ProfileManager.CurrentProfile.DrawRoofs;
 
                     break;
 
                 case MacroType.ToggleTreeStumps:
-                    StaticFilters.CleanTreeTextures();
-                    ProfileManager.CurrentProfile.TreeToStumps = !ProfileManager.CurrentProfile.TreeToStumps;
+                    //StaticFilters.CleanTreeTextures();
+                    //ProfileManager.CurrentProfile.TreeToStumps = !ProfileManager.CurrentProfile.TreeToStumps;
 
                     break;
 
                 case MacroType.ToggleVegetation:
-                    ProfileManager.CurrentProfile.HideVegetation = !ProfileManager.CurrentProfile.HideVegetation;
+                    //ProfileManager.CurrentProfile.HideVegetation = !ProfileManager.CurrentProfile.HideVegetation;
 
                     break;
 
                 case MacroType.ToggleCaveTiles:
-                    StaticFilters.CleanCaveTextures();
-                    ProfileManager.CurrentProfile.EnableCaveBorder = !ProfileManager.CurrentProfile.EnableCaveBorder;
+                    //StaticFilters.CleanCaveTextures();
+                    //ProfileManager.CurrentProfile.EnableCaveBorder = !ProfileManager.CurrentProfile.EnableCaveBorder;
 
                     break;
 

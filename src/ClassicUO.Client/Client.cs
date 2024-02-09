@@ -34,6 +34,7 @@ using ClassicUO.Assets;
 using ClassicUO.Configuration;
 using ClassicUO.Game;
 using ClassicUO.Game.Data;
+using ClassicUO.Game.UI.Controls;
 using ClassicUO.IO;
 using ClassicUO.Network;
 using ClassicUO.Network.Encryption;
@@ -46,6 +47,7 @@ using SDL2;
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Net;
 
 namespace ClassicUO
 {
@@ -160,8 +162,10 @@ namespace ClassicUO
 
         private void LoadUOFiles()
         {
-            string clientPath = Settings.GlobalSettings.UltimaOnlineDirectory;
-            Log.Trace($"Ultima Online installation folder: {clientPath}");
+            string uoPath = Settings.GlobalSettings.UltimaOnlineDirectory;
+            string clientPath = CUOEnviroment.ExecutablePath;
+
+            Log.Trace($"Ultima Online path: {uoPath}");
 
             Log.Trace("Loading files...");
 
@@ -177,12 +181,12 @@ namespace ClassicUO
             string clientVersionText = Constants.CLIENTVERSION;
 
             // check if directory is good
-            if (!Directory.Exists(clientPath))
+            if (!Directory.Exists(uoPath))
             {
-                Log.Error("Invalid client directory: " + clientPath);
-                Client.ShowErrorMessage(string.Format(ResErrorMessages.ClientPathIsNotAValidUODirectory, clientPath));
+                Log.Error("Invalid UO directory: " + uoPath);
+                Client.ShowErrorMessage(string.Format(ResErrorMessages.ClientPathIsNotAValidUODirectory, uoPath));
 
-                throw new InvalidClientDirectory($"'{clientPath}' is not a valid directory");
+                throw new InvalidClientDirectory($"'{uoPath}' is not a valid directory");
             }
 
             // try to load the client version
@@ -191,7 +195,7 @@ namespace ClassicUO
                 Log.Warn($"Client version [{clientVersionText}] is invalid, let's try to read the client.exe");
 
                 // mmm something bad happened, try to load from client.exe
-                if (!ClientVersionHelper.TryParseFromFile(Path.Combine(clientPath, "client.exe"), out clientVersionText) || !ClientVersionHelper.IsClientVersionValid(clientVersionText, out clientVersion))
+                if (!ClientVersionHelper.TryParseFromFile(Path.Combine(uoPath, "client.exe"), out clientVersionText) || !ClientVersionHelper.IsClientVersionValid(clientVersionText, out clientVersion))
                 {
                     Log.Error("Invalid client version: " + clientVersionText);
                     Client.ShowErrorMessage(string.Format(ResGumps.ImpossibleToDefineTheClientVersion0, clientVersionText));
@@ -206,7 +210,7 @@ namespace ClassicUO
             }
 
             Version = clientVersion;
-            ClientPath = clientPath;
+            ClientPath = uoPath;
 
             Protocol = ClientFlags.CF_T2A;
 
@@ -241,6 +245,7 @@ namespace ClassicUO
             }
 
             Log.Trace($"Client path: '{clientPath}'");
+            //Log.Trace($"Client version: {clientVersion}");
             Log.Trace($"Client version: {clientVersion}");
             Log.Trace($"Protocol: {Protocol}");
 
@@ -277,11 +282,50 @@ namespace ClassicUO
         public static GameController Game { get; private set; }
 
 
+        public static string ArtMulPath = UOFileManager.GetUOFilePath("art.mul");
+        public static string ClientExePath = System.Reflection.Assembly.GetExecutingAssembly().Location;
+        public static string ClientHash;
+        public static string ArtMulHash;
+        public static string CUOVersion = CUOEnviroment.Version.ToString();
+        public static FileInfo ArtMulFileInfo = new FileInfo(ArtMulPath);
+        public static long ArtMulBoyutu_Byte = ArtMulFileInfo.Length;
+        public static FileInfo ClientFileInfo = new FileInfo(ClientExePath);
+        public static long ClientDosyaBoyutu_Byte = ClientFileInfo.Length;
+        public static int SiteStatus;
+
+
         public static void Run(IPluginHost pluginHost)
         {
             Debug.Assert(Game == null);
 
             Log.Trace("Running game...");
+
+            // client.exe dosyası varsa hashını al
+            if (File.Exists(ClientExePath))
+            {
+                ClientHash = Crc32.Crc32Hesapla(ClientExePath);
+            }
+            // art.mul dosyası varsa hashını al
+            if (File.Exists(ArtMulPath))
+            {
+                ArtMulHash = Crc32.Crc32Hesapla(ArtMulPath);
+            }
+
+            // Site bağlantısını kontrol Et
+            try
+            {
+                // HTTP isteği oluştur
+                HttpWebRequest req = (HttpWebRequest)WebRequest.Create(Constants.WEB_MAIN_URL);
+                req.Timeout = 5000; // İstek zaman aşımı süresi (ms) ayarlayabilirsiniz
+                using (HttpWebResponse response = (HttpWebResponse)req.GetResponse())
+                {
+                    SiteStatus = (int)response.StatusCode;
+                }
+            }
+            catch (WebException)
+            {
+                SiteStatus = -1;
+            }
 
             using (Game = new GameController(pluginHost))
             {
@@ -303,5 +347,6 @@ namespace ClassicUO
         {
             SDL.SDL_ShowSimpleMessageBox(SDL.SDL_MessageBoxFlags.SDL_MESSAGEBOX_ERROR, "HATA", msg, IntPtr.Zero);
         }
+
     }
 }
