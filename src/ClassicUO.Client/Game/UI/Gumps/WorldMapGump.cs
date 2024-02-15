@@ -2312,6 +2312,7 @@ namespace ClassicUO.Game.UI.Gumps
                 );
             }
 
+            /*
             if (_showMobiles)
             {
                 foreach (Mobile mob in World.Mobiles.Values)
@@ -2387,6 +2388,7 @@ namespace ClassicUO.Game.UI.Gumps
                     }
                 }
             }
+            */
 
             foreach (WMapEntity wme in World.WMapManager.Entities.Values)
             {

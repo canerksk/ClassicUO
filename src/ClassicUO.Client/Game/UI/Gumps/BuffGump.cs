@@ -262,9 +262,9 @@ namespace ClassicUO.Game.UI.Gumps
                 _gText = RenderedText.Create(
                     "",
                     0xFFFF,
-                    2,
+                    1,
                     true,
-                    FontStyle.Fixed | FontStyle.BlackBorder,
+                    FontStyle.BlackBorder,
                     TEXT_ALIGN_TYPE.TS_CENTER,
                     Width
                 );
@@ -363,10 +363,7 @@ namespace ClassicUO.Game.UI.Gumps
                 {
                     batcher.Draw(gumpInfo.Texture, new Vector2(x, y), gumpInfo.UV, hueVector);
 
-                    if (
-                        ProfileManager.CurrentProfile != null
-                        && ProfileManager.CurrentProfile.BuffBarTime
-                    )
+                    if (ProfileManager.CurrentProfile != null&& ProfileManager.CurrentProfile.BuffBarTime)
                     {
                         _gText.Draw(batcher, x - 3, y + gumpInfo.UV.Height / 2 - 3, hueVector.Z);
                     }

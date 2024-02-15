@@ -819,6 +819,8 @@ namespace ClassicUO.Game.GameObjects
                             {
                                 // oUCH!!!!
                                 AddMessage(MessageType.Label, ResGeneral.Ouch, TextType.CLIENT);
+                                if (!IsHidden)
+                                    Client.Game.Audio.PlaySound(0x014b);
                             }
 
                             if (

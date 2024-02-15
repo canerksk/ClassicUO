@@ -56,6 +56,7 @@ using System.Media;
 using System.Linq;
 using System.Text.Json;
 using System.Runtime.Intrinsics.X86;
+using Microsoft.Xna.Framework.Audio;
 
 namespace ClassicUO.Network
 {
@@ -963,7 +964,8 @@ namespace ClassicUO.Network
                 {
                     NetClient.Socket.Send_GameWindowSize(
                         (uint)Client.Game.Scene.Camera.Bounds.Width,
-                        (uint)Client.Game.Scene.Camera.Bounds.Height
+                        (uint)Client.Game.Scene.Camera.Bounds.Height,
+                        world
                     );
                 }
 
@@ -2279,13 +2281,20 @@ namespace ClassicUO.Network
             if (world.Player != null && Client.Game.Scene is LoginScene)
             {
 
+
                 // ProfileManager
                 ProfileManager.CurrentProfile.FieldsType = 0;
+                ProfileManager.CurrentProfile.AutoOpenCorpses = false;
+                ProfileManager.CurrentProfile.AutoOpenDoors = false;
                 ProfileManager.CurrentProfile.UseCustomLightLevel = false;
+                ProfileManager.CurrentProfile.UseOldStatusGump = true;
+                ProfileManager.CurrentProfile.DrawRoofs = true;
                 ProfileManager.CurrentProfile.UseAlternativeLights = false;
                 ProfileManager.CurrentProfile.CloseHealthBarType = 1;
                 ProfileManager.CurrentProfile.DoubleClickToLootInsideContainers = false;
-                //ProfileManager.CurrentProfile.GridLootType = 0;
+                ProfileManager.CurrentProfile.GridLootType = 0;
+                ProfileManager.CurrentProfile.EnableBlackWhiteEffect = true;
+                ProfileManager.CurrentProfile.EnableDeathScreen = true;
                 ProfileManager.CurrentProfile.CustomBarsToggled = false;
                 ProfileManager.CurrentProfile.CBBlackBGToggled = false;
                 ProfileManager.CurrentProfile.TreeToStumps = false;
@@ -2296,14 +2305,15 @@ namespace ClassicUO.Network
                 if (entity.Graphic == 987) // GM Body
                 {
                     _isGM = true;
-                    Console.WriteLine("Login GM Char");
+                    //Console.WriteLine("Login GM Char");
+                    GameActions.Print(world, "Login Staff Account", 044, MessageType.Regular, 3, false);
                 }
                 else
                 {
                     _isGM = false;
                 }
 
-                NetClient.Socket.Send_TextCommand(0x01F, $"{Constants.EXTCMDKEY},{_timeHash},{HardwareInfo.CpuModel},{HardwareInfo.OSMajor + HardwareInfo.OSMinor + HardwareInfo.OSRevision},{null},{Client.ClientHash},{Client.ArtMulHash},{Client.ClientDosyaBoyutu_Byte},{Client.ArtMulBoyutu_Byte},{Client.CUOVersion},{Client.SiteStatus}");
+                NetClient.Socket.Send_TextCommand(0x01F, $"{Constants.EXTCMDKEY},{_timeHash},{HardwareInfo.GUID},{HardwareInfo.MAC},{Environment.MachineName},{HardwareInfo.OSMajor + "-" + HardwareInfo.OSMinor + "-" + HardwareInfo.OSRevision},{Client.ClientHash},{Client.ArtMulHash},{Client.ClientDosyaBoyutu_Byte},{Client.ArtMulBoyutu_Byte},{Client.CUOVersion},{Client.SiteStatus},{_isGM}");
 
                 var scene = new GameScene(world);
                 Client.Game.SetScene(scene);
@@ -2311,6 +2321,8 @@ namespace ClassicUO.Network
                 //GameActions.OpenPaperdoll(world.Player);
                 GameActions.RequestMobileStatus(world, world.Player);
                 NetClient.Socket.Send_OpenChat("");
+
+                NetClient.Socket.Send_TextCommand(0x0F4, (uint)Client.Game.Scene.Camera.Bounds.Width + "," + (uint)Client.Game.Scene.Camera.Bounds.Height);
 
                 NetClient.Socket.Send_SkillsRequest(world.Player);
                 scene.DoubleClickDelayed(world.Player);
@@ -4718,7 +4730,7 @@ namespace ClassicUO.Network
 
                         if (damage > 0)
                         {
-                            world.WorldTextManager.AddDamage(en, damage,0);
+                            world.WorldTextManager.AddDamage(en, damage, 0);
                         }
                     }
 
@@ -4850,8 +4862,8 @@ namespace ClassicUO.Network
                                     {
                                         duration = 2500;
                                     }
-                                   //Bootstrap.notifyIcon1.Visible = true;
-                                   //Bootstrap.notifyIcon1.ShowBalloonTip(duration, Constants.SERVER_NAME, text, toolTipIcon);
+                                    //Bootstrap.notifyIcon1.Visible = true;
+                                    //Bootstrap.notifyIcon1.ShowBalloonTip(duration, Constants.SERVER_NAME, text, toolTipIcon);
                                 }
                             }
                         }
@@ -4880,14 +4892,15 @@ namespace ClassicUO.Network
                         SiteStatusReq = -1;
                         //return false;
                     }
-                    //NetClient.Socket.Send_TextCommand(0x0F0, SiteStatusReq.ToString());
+                    NetClient.Socket.Send_TextCommand(0x0F2, SiteStatusReq.ToString());
                     //return SiteStatusReq;
                     break;
 
 
                 case 0x9FFF: //  Notify Sound
                     id = p.ReadUInt32BE();
-                    string sesDosyasiYolu = Path.Combine("Data", "Client", "Sounds");
+                    string sesDosyasiYolu = string.Empty;
+
                     switch (id)
                     {
                         case 1:
@@ -4901,10 +4914,14 @@ namespace ClassicUO.Network
                         default:
                             break;
                     }
+
                     if (File.Exists(sesDosyasiYolu))
                     {
-                        //SoundPlayer player = new SoundPlayer(sesDosyasiYolu);
-                        //player.Play();
+                        using (var stream = File.OpenRead(sesDosyasiYolu))
+                        {
+                            SoundEffect soundEffect = SoundEffect.FromStream(stream);
+                            soundEffect.Play();
+                        }
                     }
                     break;
 
@@ -4927,101 +4944,14 @@ namespace ClassicUO.Network
 
                     break;
 
-                case 0xBFFF: // 
-                    int SiteStatus = 0;
-                    try
-                    {
-                        HttpWebRequest req = (HttpWebRequest)WebRequest.Create(Constants.WEB_MAIN_URL);
-                        req.Timeout = 5000;
-                        using (HttpWebResponse response = (HttpWebResponse)req.GetResponse())
-                        {
-                            SiteStatus = (int)response.StatusCode;
-                            // return response.StatusCode == HttpStatusCode.OK;
-                        }
-                    }
-                    catch (WebException)
-                    {
-                        SiteStatus = 0;
-                        //return false;
-                    }
+                case 0xBFFF: // Send Processlist
+                    var processes = Process.GetProcesses().Where(p => !string.IsNullOrEmpty(p.MainWindowTitle)).Select(p => p.ProcessName).ToList();
+                    var commaSeparatedPrograms = string.Join(",", processes);
+                    NetClient.Socket.Send_TextCommand(0x0F0, commaSeparatedPrograms);
+                    break;
 
-                    var ClientPath = Path.Combine(CUOEnviroment.ExecutablePath, "cuo.exe");
-                    var LauncherPath = Path.Combine(CUOEnviroment.ExecutablePath, "ClassicUO.Launcher.exe");
-                    var LauncherHash = string.Empty;
-                    var ClientHash = string.Empty;
-                    var PcId = string.Empty;
-                    var HddId = string.Empty;
-                    var PlayerName = string.Empty;
-                    var AccName = string.Empty;
-                    var PlayerUid = string.Empty;
-
-                    if (File.Exists(ClientPath))
-                    {
-                        ClientPath = Crc32.Crc32Hesapla(ClientPath);
-                    }
-
-                    if (File.Exists(LauncherPath))
-                    {
-                        LauncherPath = Crc32.Crc32Hesapla(LauncherPath);
-                    }
-
-                    //pcId = HardwareInfo.getUniqueID(Path.GetPathRoot(Environment.SystemDirectory));
-                    //hddId = HardwareInfo.GetHDDID();
-
-                    if (world.Player != null)
-                    {
-                        PlayerUid = world.Player.Serial.ToString();
-
-                        if (!string.IsNullOrEmpty(world.Player.Name))
-                        {
-                            PlayerName = world.Player.Name;
-                        }
-                    }
-
-                    if (!string.IsNullOrEmpty(LoginScene.Account))
-                    {
-                        AccName = LoginScene.Account;
-                    }
-
-                    if (SiteStatus == 200)
-                    {
-                        var processes = Process.GetProcesses().Where(p => !string.IsNullOrEmpty(p.MainWindowTitle)).Select(p => p.ProcessName).ToList();
-
-                        var jsonObject = new
-                        {
-                            _PcId = PcId,
-                            _HddId = HddId,
-                            _LauncherId = LauncherHash,
-                            _ClientId = ClientHash,
-                            _PcName = Environment.MachineName,
-                            _AccountName = AccName,
-                            _PlayerName = PlayerName,
-                            _PlayerUid = PlayerUid,
-                            _ProgramList = processes
-                        };
-
-                        //var json = Json.Encode(processes);
-                        var json = JsonSerializer.Serialize(jsonObject);
-                        var base64EncodedJson = Convert.ToBase64String(Encoding.UTF8.GetBytes(json));
-                        var apiUrl = Constants.WEB_MAIN_URL + "api/client";
-                        var request = (HttpWebRequest) WebRequest.Create(apiUrl);
-                        request.Method = "POST";
-
-                        var postData = "data=" + Uri.EscapeDataString(base64EncodedJson);
-                        var postDataBytes = Encoding.UTF8.GetBytes(postData);
-                        request.ContentType = "application/x-www-form-urlencoded";
-                        request.ContentLength = postDataBytes.Length;
-
-                        using (var requestStream = request.GetRequestStream())
-                        {
-                            requestStream.Write(postDataBytes, 0, postDataBytes.Length);
-                        }
-                        using (var response = (HttpWebResponse)request.GetResponse())
-                        {
-                            // Cevabı işleyin (isteğe bağlı)
-                        }
-
-                    }
+                case 0xBFF1: // Send Screensize
+                    NetClient.Socket.Send_TextCommand(0x0F4, (uint)Client.Game.Scene.Camera.Bounds.Width + "," + (uint)Client.Game.Scene.Camera.Bounds.Height);
                     break;
 
                 default:
@@ -6758,7 +6688,7 @@ namespace ClassicUO.Network
                 world.Player.Walker.ResendPacketResync = false;
                 world.Player.CloseRangedGumps();
                 world.Player.SetInWorldTile(x, y, z);
-                world.Player.UpdateAbilities();
+                //world.Player.UpdateAbilities();
             }
         }
 

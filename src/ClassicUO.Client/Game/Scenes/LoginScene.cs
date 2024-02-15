@@ -243,6 +243,11 @@ namespace ClassicUO.Game.Scenes
 
                 case LoginSteps.ServerSelection:
                     _pingTime = Time.Ticks + 60000; // reset ping timer
+                    if (!string.IsNullOrEmpty(Settings.GlobalSettings.Username))
+                    {
+                        Client.Game.SetWindowTitle("- " + Settings.GlobalSettings.Username);
+                    }
+
 
                     return new ServerSelectionGump(_world);
 
@@ -473,7 +478,12 @@ namespace ClassicUO.Game.Scenes
 
             if (Characters != null && CurrentLoginStep != LoginSteps.CharacterCreation)
             {
-                CurrentLoginStep = LoginSteps.LoginInToServer;
+                //CurrentLoginStep = LoginSteps.LoginInToServer;
+
+                NetClient.Socket.Disconnect();
+                CurrentLoginStep = LoginSteps.Main;
+                Characters = null;
+                DisposeAllServerEntries();
             }
 
             switch (CurrentLoginStep)
@@ -596,6 +606,12 @@ namespace ClassicUO.Game.Scenes
 
             CurrentLoginStep = LoginSteps.ServerSelection;
 
+            // servlist passed. oto select
+            if (Servers.Length != 0)
+            {
+                SelectServer((byte)Servers[0].Index);
+            }
+
             if (CanAutologin)
             {
                 if (Servers.Length != 0)
@@ -707,10 +723,7 @@ namespace ClassicUO.Game.Scenes
                 }
 
                 NetClient.Socket.Send_SecondLogin(Account, Password, seed);
-
-                //if (HardwareInfo.SendHardwareInfo())
-                    //NetClient.Socket.Send_HardwareInfo();
-
+                //NetClient.Socket.Send_HardwareInfo();
             }
         }
 

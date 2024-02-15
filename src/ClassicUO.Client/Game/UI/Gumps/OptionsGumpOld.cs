@@ -4243,7 +4243,7 @@ namespace ClassicUO.Game.UI.Gumps
                 _queryBeforAttackCheckbox.IsChecked = true;
                 _queryBeforeBeneficialCheckbox.IsChecked = false;
                 _uiButtonsSingleClick.IsChecked = false;
-                _buffBarTime.IsChecked = false;
+                _buffBarTime.IsChecked = true;
                 _enableFastSpellsAssign.IsChecked = false;
                 _beneficColorPickerBox.Hue = 0x0059;
                 _harmfulColorPickerBox.Hue = 0x0020;
@@ -4582,7 +4582,7 @@ namespace ClassicUO.Game.UI.Gumps
             int.TryParse(_gameWindowHeight.Text, out int gameWindowSizeHeight);
 
             //NetClient.Socket.Send_PacketClientType(0x04);
-            NetClient.Socket.Send_GameWindowSize((uint)gameWindowSizeWidth, (uint)gameWindowSizeHeight);
+            NetClient.Socket.Send_GameWindowSize((uint)gameWindowSizeWidth, (uint)gameWindowSizeHeight, World);
 
             if (gameWindowSizeWidth != Client.Game.Scene.Camera.Bounds.Width || gameWindowSizeHeight != Client.Game.Scene.Camera.Bounds.Height)
             {

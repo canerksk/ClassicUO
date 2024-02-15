@@ -171,6 +171,8 @@ namespace ClassicUO.Game.UI.Gumps
                 int w = Width >> 1;
                 int h = Height >> 1;
 
+                // Etraftaki varliklar
+                /*
                 Texture2D mobilesTextureDot = SolidColorTextureCache.GetTexture(Color.Red);
 
                 foreach (Mobile mob in World.Mobiles.Values)
@@ -196,6 +198,7 @@ namespace ClassicUO.Game.UI.Gumps
                         hueVector
                     );
                 }
+                */
 
                 //DRAW PLAYER DOT
                 hueVector = ShaderHueTranslator.GetHueVector(0);

@@ -50,6 +50,7 @@ namespace ClassicUO.Game
     {
         public static int LastSpellIndex { get; set; } = 1;
         public static int LastSkillIndex { get; set; } = 1;
+        private static long _allnamesdelay;
 
 
         public static void ToggleWarMode(PlayerMobile player)
@@ -754,6 +755,12 @@ namespace ClassicUO.Game
 
         public static void AllNames(World world)
         {
+            if (_allnamesdelay > Time.Ticks)
+            {
+                //Print("You must wait to perform another action.", 946, MessageType.Regular, 3, false);
+                return;
+            }
+            
             foreach (Mobile mobile in world.Mobiles.Values)
             {
                 if (mobile != world.Player)
@@ -769,6 +776,11 @@ namespace ClassicUO.Game
                     Socket.Send_ClickRequest(item.Serial);
                 }
             }
+
+            //_allnamesdelay = Time.Ticks + 350;
+            _allnamesdelay = Time.Ticks + 550;
+
+
         }
 
         public static void OpenDoor()

@@ -112,11 +112,6 @@ namespace ClassicUO.Configuration
         // public Point? WindowSize { get; set; }
         public Point? WindowSize { get; set; } = new Point(Constants.CLIENT_DEF_SIZE_WIDTH, Constants.CLIENT_DEF_SIZE_HEIGHT);
 
-
-        [JsonPropertyName("last_hardware_info")] 
-        public DateTime LastHardwareInfo { get; set; } = DateTime.MinValue;
-
-
         [JsonPropertyName("is_win_maximized")] 
         public bool IsWindowMaximized { get; set; } = true;
 

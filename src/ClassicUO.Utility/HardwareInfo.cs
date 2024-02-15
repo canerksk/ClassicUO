@@ -39,7 +39,12 @@ using System.Management;
 using System.Linq;
 using System.Text;
 using System.Runtime.InteropServices;
-//using ClassicUO.Configuration;
+using System.Threading.Tasks;
+using ClassicUO.Utility.Logging;
+using System.IO;
+using System.Net.NetworkInformation;
+using Microsoft.Win32;
+
 
 namespace ClassicUO.Utility
 {
@@ -55,6 +60,8 @@ namespace ClassicUO.Utility
         private static byte m_DXMajor, m_DXMinor;
         private static int m_VCVendorID, m_VCDeviceID, m_VCMemory;
         private static byte m_Distribution, m_ClientsRunning, m_ClientsInstalled, m_PartialInstalled;
+        private static string m_GUID;
+        private static string m_MAC;
         private static string m_VCDescription;
         private static string m_Language;
         private static string m_Unknown;
@@ -109,50 +116,95 @@ namespace ClassicUO.Utility
 
         public static byte PartialInstalled { get { return m_PartialInstalled; } }
 
-        public static string Unknown { get { return m_Unknown; } }
+        public static string GUID { get { return m_GUID; } }
+        public static string MAC { get { return m_MAC; } }
 
-        public static bool SendHardwareInfo()
-        {   // OSI uses some yet unknown algo for sending HardwareInfo. It does seem to be fairly
-            // regular after a ~day has passed, with something like a 1 in 5 chance to be sent.
-            //if (DateTime.Now > Settings.GlobalSettings.LastHardwareInfo + TimeSpan.FromHours(RandomHelper.GetValue(12, 24)))
-            //{   // once per day'ish
-            //if (RandomHelper.GetValue(0, 4) == 0)
-            //{   // random 1 in 5
-            // Settings.GlobalSettings.LastHardwareInfo = DateTime.Now;
-            //return true;
-            //}
-            //}
-            //return false;
-            return true;
-        }
+
+        public static string Unknown { get { return m_Unknown; } }
 
         public static void Initialize()
         {
             m_Version = 2;                          // 1: <4.0.1a, 2>=4.0.1a
             GetInstanceID(out m_InstanceID);        // Unique Instance ID of UO
             GetOperatingSystemInfo(out m_OSMajor, out m_OSMinor, out m_OSRevision);
-            GetCPUInfo(out m_CpuClockSpeed, out m_CpuFamily, out m_CpuManufacturer, out m_CpuModel, out m_CpuQuantity);
-            GetPhysicalMemory(out m_PhysicalMemory);
-            GetScreenInfo(out m_ScreenWidth, out m_ScreenHeight, out m_ScreenDepth);
-            GetDirectxVersion(out m_DXMajor, out m_DXMinor);
-            GetVideoCardInfo(out m_VCDescription, out m_VCVendorID, out m_VCDeviceID, out m_VCMemory);
+            // GetCPUInfo(out m_CpuClockSpeed, out m_CpuFamily, out m_CpuManufacturer, out m_CpuModel, out m_CpuQuantity);
+            // GetPhysicalMemory(out m_PhysicalMemory);
+            // GetScreenInfo(out m_ScreenWidth, out m_ScreenHeight, out m_ScreenDepth);
+            // GetDirectxVersion(out m_DXMajor, out m_DXMinor);
+            // GetVideoCardInfo(out m_VCDescription, out m_VCVendorID, out m_VCDeviceID, out m_VCMemory);
+
+            //GetCPUID();
+            //GetUniqueID(Path.GetPathRoot(Environment.SystemDirectory));
 
             // always 10. I tried 3 different client versions, all return 10
             m_Distribution = 10;
 
             GetClientsRunning(out m_ClientsRunning);
 
+            //string macAddress = GetMacAddress();
+            //string motherboardSerialNumber = GetMotherboardSerialNumber();
+            //string hardDiskSerialNumber = GetHardDiskSerialNumber();
+            //string windowsProductKey = GetWindowsProductKey();
+            //string guid = Guid.NewGuid().ToString();
+            //Console.WriteLine($"MAC: {macAddress}\nGUID: {guid}");
+
+            string keyPath = "Client";
+            string valueName = "GUID";
+            string defaultValue = string.Empty;
+
+            string computerId = GetRegistryValue(keyPath, valueName, defaultValue);
+
+            if (string.IsNullOrEmpty(computerId))
+            {
+                computerId = Guid.NewGuid().ToString();
+                SetRegistryValue(keyPath, valueName, computerId);
+                m_GUID = computerId;
+            }
+            else
+            {
+                m_GUID = computerId;
+            }
+            m_MAC = GetMacAddress();
+
             m_ClientsInstalled = 1; // Unavailable: we know there is at least one client installed
             m_PartialInstalled = 0; // Unavailable: incomplete installs?
             GetLanguage(out m_Language);
             m_Unknown = string.Empty;
         }
+
+
+        public static string GetRegistryValue(string keyPath, string valueName, string defaultValue)
+        {
+            RegistryKey key = Registry.CurrentUser.OpenSubKey(keyPath, true);
+            if (key == null)
+            {
+                key = Registry.CurrentUser.CreateSubKey(keyPath);
+                key.SetValue(valueName, defaultValue);
+            }
+            string value = key.GetValue(valueName, defaultValue) as string;
+            key.Close();
+            return value;
+        }
+
+        public static void SetRegistryValue(string keyPath, string valueName, string value)
+        {
+            RegistryKey key = Registry.CurrentUser.OpenSubKey(keyPath, true);
+            if (key == null)
+            {
+                key = Registry.CurrentUser.CreateSubKey(keyPath);
+            }
+            key.SetValue(valueName, value);
+            key.Close();
+        }
+
         private static void GetLanguage(out string Language)
         {
             Language = string.Empty;
             CultureInfo ci = CultureInfo.InstalledUICulture;
             Language = ci.ThreeLetterWindowsLanguageName;
+           //Log.Trace("GetLanguage:" + Language);
         }
+
         private static void GetClientsRunning(out byte ClientsRunning)
         {
             ClientsRunning = 0;
@@ -165,7 +217,10 @@ namespace ClassicUO.Utility
                     ClientsRunning += (byte)(p.MainWindowTitle.ToLower().Contains("ultima online") ? 1 : 0);
                 }
             }
+            //Log.Trace("GetClientsRunning:" + ClientsRunning);
         }
+
+
         private static void GetInstanceID(out int InstanceID)
         {
             InstanceID = 0;
@@ -190,7 +245,10 @@ namespace ClassicUO.Utility
             catch
             {
             }
+
+            //Log.Trace("GetInstanceID:" + InstanceID);
         }
+
         private static void GetVideoCardInfo(out string VCDescription, out int VCVendorID, out int VCDeviceID, out int VCMemory)
         {
             VCDescription = string.Empty; VCDeviceID = VCMemory = 0;
@@ -212,6 +270,8 @@ namespace ClassicUO.Utility
             ulong.TryParse(result, out ram);
             VCMemory = (int)(ram / 1024 / 1024);
         }
+
+
         private static void GetDirectxVersion(out byte DXMajor, out byte DXMinor)
         {
             DXMajor = DXMinor = 0;
@@ -240,6 +300,7 @@ namespace ClassicUO.Utility
                 DXMinor = 0;
             }
         }
+
         private static void GetScreenInfo(out int ScreenWidth, out int ScreenHeight, out int ScreenDepth)
         {
             ScreenWidth = ScreenHeight = ScreenDepth = 0;
@@ -257,7 +318,10 @@ namespace ClassicUO.Utility
             ulong depth;
             ulong.TryParse(result, out depth);
             ScreenDepth = (int)(depth);
+
+            //Log.Trace("GetScreenInfo:" + ScreenWidth + "x" + ScreenHeight  + "x" + ScreenDepth);
         }
+
         private static void GetPhysicalMemory(out int PhysicalMemory)
         {
             PhysicalMemory = 0;
@@ -266,10 +330,13 @@ namespace ClassicUO.Utility
             ulong.TryParse(result, out bytes);
             PhysicalMemory = (int)(bytes / 1024 / 1024);
         }
+
         static void GetCPUInfo(out int CpuClockSpeed, out int CpuFamily, out byte CpuManufacturer, out int CpuModel, out byte CpuQuantity)
         {
             CpuClockSpeed = CpuFamily = CpuModel = 0;
             CpuManufacturer = CpuQuantity = 0;
+
+            /*
             var cpu = new ManagementObjectSearcher("select * from Win32_Processor").Get().Cast<ManagementObject>().First();
 
             CpuClockSpeed = GetCpuClockSpeed((string)cpu["Name"]);
@@ -279,7 +346,10 @@ namespace ClassicUO.Utility
             CpuManufacturer = (byte)(((string)cpu["Caption"]).ToLower().Contains("intel") ? 2 : 1);
             CpuModel = GetCpuModel((string)cpu["Caption"]);
             CpuQuantity = (byte)((uint)cpu["NumberOfCores"]);
+            */
         }
+
+
         static int GetCpuModel(string caption)
         {
             if (string.IsNullOrEmpty(caption))
@@ -301,6 +371,7 @@ namespace ClassicUO.Utility
 
             return 0;
         }
+
         static int GetCpuClockSpeed(string name)
         {
             if (string.IsNullOrEmpty(name))
@@ -326,6 +397,7 @@ namespace ClassicUO.Utility
 
             return 0;
         }
+
         static int GetCpuFamily(string caption)
         {
             if (string.IsNullOrEmpty(caption))
@@ -347,8 +419,12 @@ namespace ClassicUO.Utility
 
             return 0;
         }
+
+
+        /*
         static void GetOperatingSystemInfo(out int OSMajor, out int OSMinor, out int OSRevision)
         {
+
             OSMajor = OSMinor = OSRevision = 0;
             var wmi = new ManagementObjectSearcher("select * from Win32_OperatingSystem").Get().Cast<ManagementObject>().First();
             string Version = (string)wmi["Version"];
@@ -357,6 +433,165 @@ namespace ClassicUO.Utility
             int.TryParse(toks[1], out OSMinor);
             int.TryParse(toks[2], out OSRevision);
         }
+        */
+
+        static void GetOperatingSystemInfo(out int OSMajor, out int OSMinor, out int OSRevision)
+        {
+            OSMajor = OSMinor = OSRevision = 0;
+
+            OperatingSystem os = Environment.OSVersion;
+            Version vs = os.Version;
+
+            int.TryParse(vs.Major.ToString(), out OSMajor);
+            int.TryParse(vs.Minor.ToString(), out OSMinor);
+            int.TryParse(vs.Revision.ToString(), out OSRevision);
+
+            //Log.Trace("GetOperatingSystemInfo:" + OSMajor + "," + OSMinor + "," + OSRevision);
+
+        }
+
+
+        public static string GetHDDID()
+        {
+            ManagementObject disk = new ManagementObject("Win32_LogicalDisk.DeviceID='C:'");
+            return disk.GetPropertyValue("VolumeSerialNumber").ToString();
+        }
+
+        public static string GetUniqueID(string drive)
+        {
+            if (drive == string.Empty)
+            {
+                foreach (DriveInfo compDrive in DriveInfo.GetDrives())
+                {
+                    if (compDrive.IsReady)
+                    {
+                        drive = compDrive.RootDirectory.ToString();
+                        break;
+                    }
+                }
+            }
+            if (drive.EndsWith(":\\"))
+            {
+                //C:\ -> C
+                drive = drive.Substring(0, drive.Length - 2);
+            }
+            string volumeSerial = GetVolumeSerial(drive);
+            //string cpuID = GetCPUID();
+            //return cpuID.Substring(13) + cpuID.Substring(1, 4) + volumeSerial + cpuID.Substring(4, 4);
+            return volumeSerial;
+        }
+
+        /*
+        public static string GetVolumeSerial(string drive)
+        {
+            ManagementObject disk = new ManagementObject(@"win32_logicaldisk.deviceid=""" + drive + @":""");
+            disk.Get();
+
+            string volumeSerial = disk["VolumeSerialNumber"].ToString();
+            disk.Dispose();
+
+            return volumeSerial;
+        }
+        */
+
+        public static string GetVolumeSerial(string drive)
+        {
+            using (ManagementObjectSearcher searcher = new ManagementObjectSearcher("root\\CIMV2", "SELECT * FROM Win32_LogicalDisk WHERE DeviceID = '" + drive + ":'"))
+            {
+                using (ManagementObjectCollection objCollection = searcher.Get())
+                {
+                    foreach (ManagementObject obj in objCollection)
+                    {
+                        string volumeSerial = obj["VolumeSerialNumber"].ToString();
+                        return volumeSerial;
+                    }
+                }
+            }
+
+            return null; // Drive not found or error occurred
+        }
+
+        private static string GetCPUID()
+        {
+            string cpuInfo = "";
+            ManagementClass managClass = new ManagementClass("win32_processor");
+            ManagementObjectCollection managCollec = managClass.GetInstances();
+
+            foreach (ManagementObject managObj in managCollec)
+            {
+                if (cpuInfo == "")
+                {
+                    //Get only the first CPU's ID
+                    cpuInfo = managObj.Properties["processorID"].Value.ToString();
+                    break;
+                }
+            }
+
+            return cpuInfo;
+        }
+
+        private static string GetMacAddress()
+        {
+            foreach (NetworkInterface nic in NetworkInterface.GetAllNetworkInterfaces())
+            {
+                if (nic.OperationalStatus == OperationalStatus.Up)
+                {
+                    return nic.GetPhysicalAddress().ToString();
+                }
+            }
+
+            return "";
+        }
+
+        private static string GetMotherboardSerialNumber()
+        {
+            using (ManagementObjectSearcher searcher = new ManagementObjectSearcher("root\\CIMV2", "SELECT * FROM Win32_BaseBoard"))
+            {
+                using (ManagementObjectCollection objCollection = searcher.Get())
+                {
+                    foreach (ManagementObject obj in objCollection)
+                    {
+                        return obj["SerialNumber"].ToString();
+                    }
+                }
+            }
+
+            return "";
+        }
+
+        private static string GetHardDiskSerialNumber()
+        {
+            using (ManagementObjectSearcher searcher = new ManagementObjectSearcher("root\\CIMV2", "SELECT * FROM Win32_DiskDrive"))
+            {
+                using (ManagementObjectCollection objCollection = searcher.Get())
+                {
+                    foreach (ManagementObject obj in objCollection)
+                    {
+                        return obj["SerialNumber"].ToString();
+                    }
+                }
+            }
+
+            return "";
+        }
+
+        private static string GetWindowsProductKey()
+        {
+            using (ManagementObjectSearcher searcher = new ManagementObjectSearcher("root\\CIMV2", "SELECT * FROM Win32_OperatingSystem"))
+            {
+                using (ManagementObjectCollection objCollection = searcher.Get())
+                {
+                    foreach (ManagementObject obj in objCollection)
+                    {
+                        return obj["ProductKey"].ToString();
+                    }
+                }
+            }
+
+            return "";
+        }
+
+
         private static string RunQuery(string TableName, string MethodName)
         {
             ManagementObjectSearcher MOS = new ManagementObjectSearcher("Select * from " + TableName);
@@ -373,6 +608,8 @@ namespace ClassicUO.Utility
             }
             return "";
         }
+
+
         public static int GetStableHashCode(string str)
         {
             unchecked
@@ -391,7 +628,11 @@ namespace ClassicUO.Utility
                 return hash1 + (hash2 * 1566083941);
             }
         }
+
+
     }
+
+
     public static class WOW6432Node
     {
         [DllImport("Advapi32.dll", EntryPoint = "RegOpenKeyExW", CharSet = CharSet.Unicode)]
@@ -487,4 +728,6 @@ namespace ClassicUO.Utility
             }
         }
     }
+
+
 }

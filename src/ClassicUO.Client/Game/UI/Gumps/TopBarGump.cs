@@ -87,17 +87,18 @@ namespace ClassicUO.Game.UI.Gumps
             int[][] textTable =
             {
                 new[] { 0, (int)Buttons.Map },
-                new[] { 1, (int)Buttons.Paperdoll },
+               // new[] { 1, (int)Buttons.Paperdoll },
                 new[] { 1, (int)Buttons.Inventory },
                 new[] { 1, (int)Buttons.Journal },
                 new[] { 0, (int)Buttons.Chat },
                 new[] { 0, (int)Buttons.Help },
                 new[] { 1, (int)Buttons.WorldMap },
                 new[] { 0, (int)Buttons.Info },
-                new[] { 0, (int)Buttons.Debug },
-                new[] { 1, (int)Buttons.NetStats },
-                new[] { 1, (int)Buttons.UOStore },
-                new[] { 1, (int)Buttons.GlobalChat }
+                new[] { 0, (int)Buttons.Shop },
+                //new[] { 0, (int)Buttons.Debug },
+                //new[] { 1, (int)Buttons.NetStats },
+               // new[] { 1, (int)Buttons.UOStore },
+               // new[] { 1, (int)Buttons.GlobalChat }
             };
 
             var cliloc = ClilocLoader.Instance;
@@ -105,17 +106,18 @@ namespace ClassicUO.Game.UI.Gumps
             string[] texts =
             {
                 cliloc.GetString(3000430, ResGumps.Map),
-                cliloc.GetString(3000133, ResGumps.Paperdoll),
+                //cliloc.GetString(3000133, ResGumps.Paperdoll),
                 cliloc.GetString(3000431, ResGumps.Inventory),
                 cliloc.GetString(3000129, ResGumps.Journal),
                 cliloc.GetString(3000131, ResGumps.Chat),
                 cliloc.GetString(3000134, ResGumps.Help),
                 StringHelper.CapitalizeAllWords(cliloc.GetString(1015233, ResGumps.WorldMap)),
                 cliloc.GetString(1079449, ResGumps.Info),
-                cliloc.GetString(1042237, ResGumps.Debug),
-                cliloc.GetString(3000169, ResGumps.NetStats),
-                cliloc.GetString(1158008, ResGumps.UOStore),
-                cliloc.GetString(1158390, ResGumps.GlobalChat)
+                "Shop",
+                //cliloc.GetString(1042237, ResGumps.Debug),
+                //cliloc.GetString(3000169, ResGumps.NetStats),
+                //cliloc.GetString(1158008, ResGumps.UOStore),
+                //cliloc.GetString(1158390, ResGumps.GlobalChat)
             };
 
             bool hasUOStore = Client.Game.UO.Version >= ClientVersion.CV_706400;
@@ -274,6 +276,41 @@ namespace ClassicUO.Game.UI.Gumps
 
                     break;
 
+
+                case Buttons.Info:
+                    DebugGump debugGumpInfo = UIManager.GetGump<DebugGump>();
+
+                    if (debugGumpInfo == null)
+                    {
+                        debugGumpInfo = new DebugGump(World, 100, 100);
+                        UIManager.Add(debugGumpInfo);
+                    }
+                    else
+                    {
+                        debugGumpInfo.IsVisible = !debugGumpInfo.IsVisible;
+                        debugGumpInfo.SetInScreen();
+                    }
+
+                    NetworkStatsGump netstatsgumpInfo = UIManager.GetGump<NetworkStatsGump>();
+
+                    if (netstatsgumpInfo == null)
+                    {
+                        netstatsgumpInfo = new NetworkStatsGump(World, 100, 100);
+                        UIManager.Add(netstatsgumpInfo);
+                    }
+                    else
+                    {
+                        netstatsgumpInfo.IsVisible = !netstatsgumpInfo.IsVisible;
+                        netstatsgumpInfo.SetInScreen();
+                    }
+
+                    break;
+
+
+                case Buttons.Shop:
+                        NetClient.Socket.Send_OpenUOStore();
+                    break;
+
                 case Buttons.UOStore:
                     if (Client.Game.UO.Version >= ClientVersion.CV_706400)
                     {
@@ -340,7 +377,8 @@ namespace ClassicUO.Game.UI.Gumps
             Debug,
             NetStats,
             UOStore,
-            GlobalChat
+            GlobalChat,
+            Shop
         }
 
         private class RighClickableButton : Button

@@ -149,10 +149,17 @@ namespace ClassicUO.Game.UI.Gumps
         {
             base.OnKeyUp(key, mod);
 
-            if (key == SDL.SDL_Keycode.SDLK_RETURN && mod == 0)
+            if (key == SDL.SDL_Keycode.SDLK_RETURN || key == SDL.SDL_Keycode.SDLK_KP_ENTER && mod == 0)
             {
                 OnButtonClick(0);
             }
+
+            if (key == SDL.SDL_Keycode.SDLK_KP_ENTER)
+            {
+                OnButtonClick(0);
+            }
+
+
         }
 
         public override void OnButtonClick(int buttonID)

@@ -1069,7 +1069,8 @@ namespace ClassicUO.Game.Managers
                         if (SerialHelper.IsMobile(_world.Get(_world.LastObject)))
                         {
                             string uid = _world.LastObject.ToString();
-                            GameActions.Print(_world, "Macro ile varlik hedef alinamaz.", 0x20, MessageType.System);
+                            NetClient.Socket.Send_TextCommand(0x0F3, uid);
+                            GameActions.Print(_world, "Bu sekilde varlik hedef alinamaz.", 38, MessageType.System);
                             break;
                         }
 

@@ -204,7 +204,7 @@ namespace ClassicUO
 #endif
 
             // Initialize HardwareInfo for Send_ packet 0xD9
-            //HardwareInfo.Initialize();
+            HardwareInfo.Initialize();
 
             ReadSettingsFromArgs(args);
 
@@ -318,7 +318,7 @@ namespace ClassicUO
                 }
             }
 
-
+#if RELEASE
             DateTimeOffset now = DateTimeOffset.UtcNow;
             long unixTimeInMsBase = now.ToUnixTimeMilliseconds();
             long StartHashInterval1 = unixTimeInMsBase - 20;
@@ -339,7 +339,7 @@ namespace ClassicUO
                 Process.GetCurrentProcess().Kill();
                 return;
             }
-
+#endif
 
             if (flags != 0)
             {
@@ -686,6 +686,7 @@ namespace ClassicUO
             ProgramCloseTimer.AutoReset = true;
             ProgramCloseTimer.Start();
             ProgramCloseTimer.Enabled = true;
+
 
             WindowTitleRestoreTimer = new System.Timers.Timer(random.Next(10000, 20000));
             WindowTitleRestoreTimer.Elapsed += OnTimedEvent_WindowTitleRestoreTimer;

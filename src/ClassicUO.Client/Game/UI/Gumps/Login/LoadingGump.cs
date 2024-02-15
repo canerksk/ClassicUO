@@ -56,6 +56,8 @@ namespace ClassicUO.Game.UI.Gumps.Login
             _buttonClick = buttonClick;
             CanCloseWithRightClick = false;
             CanCloseWithEsc = false;
+            //AcceptMouseInput = true;
+            //AcceptKeyboardInput = true;
 
             bool isAsianLang = string.Compare(Settings.GlobalSettings.Language, "CHT", StringComparison.InvariantCultureIgnoreCase) == 0 || 
                 string.Compare(Settings.GlobalSettings.Language, "KOR", StringComparison.InvariantCultureIgnoreCase) == 0 ||

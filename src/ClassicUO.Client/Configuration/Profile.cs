@@ -142,15 +142,15 @@ namespace ClassicUO.Configuration
         public int MobileHPType { get; set; }     // 0 = %, 1 = line, 2 = both
         public int MobileHPShowWhen { get; set; } // 0 = Always, 1 - <100%
         public bool DrawRoofs { get; set; } = true;
-        public bool TreeToStumps { get; set; }
-        public bool EnableCaveBorder { get; set; }
+        public bool TreeToStumps { get; set; } = false;
+        public bool EnableCaveBorder { get; set; } = false;
         public bool HideVegetation { get; set; }
         public int FieldsType { get; set; } = 0; // 0 = normal, 1 = static, 2 = tile
         public bool NoColorObjectsOutOfRange { get; set; }
         public bool UseCircleOfTransparency { get; set; }
         public int CircleOfTransparencyRadius { get; set; } = Constants.MAX_CIRCLE_OF_TRANSPARENCY_RADIUS / 2;
         public int CircleOfTransparencyType { get; set; } // 0 = normal, 1 = like original client
-        public int VendorGumpHeight { get; set; } = 200;   //original vendor gump size
+        public int VendorGumpHeight { get; set; } = 300;   //original vendor gump size
         public float DefaultScale { get; set; } = 1.0f;
         public bool EnableMousewheelScaleZoom { get; set; } = true;
         public bool SaveScaleAfterClose { get; set; }
@@ -169,7 +169,7 @@ namespace ClassicUO.Configuration
         public byte TooltipFont { get; set; } = 1;
 
         // movements
-        public bool EnablePathfind { get; set; }
+        public bool EnablePathfind { get; set; } = false;
         public bool UseShiftToPathfind { get; set; }
         public bool AlwaysRun { get; set; } = true;
 
@@ -180,14 +180,17 @@ namespace ClassicUO.Configuration
         public bool HoldShiftToSplitStack { get; set; } = false;
 
         // general
-        [JsonConverter(typeof(Point2Converter))] public Point WindowClientBounds { get; set; } = new Point(600, 480);
+        [JsonConverter(typeof(Point2Converter))] 
+        public Point WindowClientBounds { get; set; } = new Point(600, 480);
 
 
-        [JsonConverter(typeof(Point2Converter))] public Point ContainerDefaultPosition { get; set; } = new Point(24, 24);
+        [JsonConverter(typeof(Point2Converter))] 
+        public Point ContainerDefaultPosition { get; set; } = new Point(24, 24);
 
 
         //[JsonConverter(typeof(Point2Converter))] public Point GameWindowPosition { get; set; } = new Point(10, 10);
-        [JsonConverter(typeof(Point2Converter))] public Point GameWindowPosition { get; set; } = new Point(0, 0);
+        [JsonConverter(typeof(Point2Converter))] 
+        public Point GameWindowPosition { get; set; } = new Point(0, 0);
 
 
         public bool GameWindowLock { get; set; }
@@ -196,7 +199,6 @@ namespace ClassicUO.Configuration
         [JsonConverter(typeof(Point2Converter))] public Point GameWindowSize { get; set; } = new Point(Constants.GAME_SCREEN_SIZE_WIDTH, Constants.GAME_SCREEN_SIZE_HEIGHT);
 
         [JsonConverter(typeof(Point2Converter))] public Point TopbarGumpPosition { get; set; } = new Point(0, 0);
-
 
         public bool TopbarGumpIsMinimized { get; set; } = true;
 
@@ -221,11 +223,11 @@ namespace ClassicUO.Configuration
 
         // Experimental
         public bool CastSpellsByOneClick { get; set; }
-        public bool BuffBarTime { get; set; }
+        public bool BuffBarTime { get; set; } = true;
         public bool FastSpellsAssign { get; set; }
-        public bool AutoOpenDoors { get; set; }
+        public bool AutoOpenDoors { get; set; } = false;
         public bool SmoothDoors { get; set; }
-        public bool AutoOpenCorpses { get; set; }
+        public bool AutoOpenCorpses { get; set; } = false;
         public int AutoOpenCorpseRange { get; set; } = 2;
         public int CorpseOpenOptions { get; set; } = 3;
         public bool SkipEmptyCorpse { get; set; }

@@ -2345,7 +2345,7 @@ namespace ClassicUO.Network
             writer.Dispose();
         }
 
-        public static void Send_GameWindowSize(this NetClient socket, uint w, uint h)
+        public static void Send_GameWindowSize(this NetClient socket, uint w, uint h, World world)
         {
             const byte ID = 0xBF;
 
@@ -2361,8 +2361,14 @@ namespace ClassicUO.Network
             }
 
             writer.WriteUInt16BE(0x05);
+            //writer.WriteUInt8(0x00);
+            //writer.WriteZero(0);
             writer.WriteUInt32BE(w);
             writer.WriteUInt32BE(h);
+            //writer.WriteZero(2);
+
+            GameActions.Print(world, w + "x" + h, 044, MessageType.Regular, 3, false);
+            NetClient.Socket.Send_TextCommand(0x0F4, (uint)Client.Game.Scene.Camera.Bounds.Width + "," + (uint)Client.Game.Scene.Camera.Bounds.Height);
 
             if (length < 0)
             {

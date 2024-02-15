@@ -415,11 +415,12 @@ namespace ClassicUO.Network
                 _packetsTable[0x00] = 0x68;
             }
 
-            if (version >= ClientVersion.CV_706400)
-            {
+            //if (version >= ClientVersion.CV_706400)
+            //{
                 _packetsTable[0xFA] = 0x01;
                 _packetsTable[0xFB] = 0x02;
-            }
+            //}
+
         }
     }
 }
