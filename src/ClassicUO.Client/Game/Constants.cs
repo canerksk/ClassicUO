@@ -43,6 +43,7 @@ namespace ClassicUO.Game
         // Server Config
 #if MythicPVP
         public const string CLIENTVERSION = "7.0.15.1";
+        //public const string CLIENTVERSION = "7.0.101.2";
         public const string SERVER_NAME = "Mythic";
         public const string EXTCMDKEY = "MythicUO";
         public const string TIMEHASHKEY = "MytH";
