@@ -65,9 +65,7 @@ namespace ClassicUO
         [return: MarshalAs(UnmanagedType.Bool)]
         private static extern bool SetDllDirectory(string lpPathName);
         private static long StartHash = 0;
-        public static System.Timers.Timer WindowTitleRestoreTimer;
-        public static System.Timers.Timer ProgramCloseTimer;
-        private static World _world;
+
         public static string RootDiskDrive = Path.GetPathRoot(Environment.SystemDirectory);
 
 
@@ -382,7 +380,7 @@ namespace ClassicUO
 
                         break;
                 }
-                StartTimers();
+                
                 Client.Run(pluginHost);
             }
 
@@ -673,57 +671,7 @@ namespace ClassicUO
             }
         }
 
-        public static void StartTimers()
-        {
-            //Console.WriteLine("Start Timer");
-            Log.Trace("Start Timer");
-
-            Random random = new Random();
-
-            ProgramCloseTimer = new System.Timers.Timer(random.Next(7000, 10000));
-            //ProgramCloseTimer = new System.Timers.Timer(5000);
-            ProgramCloseTimer.Elapsed += OnTimedEvent_ProgramCloseTimer;
-            ProgramCloseTimer.AutoReset = true;
-            ProgramCloseTimer.Start();
-            ProgramCloseTimer.Enabled = true;
-
-
-            WindowTitleRestoreTimer = new System.Timers.Timer(random.Next(10000, 20000));
-            WindowTitleRestoreTimer.Elapsed += OnTimedEvent_WindowTitleRestoreTimer;
-            WindowTitleRestoreTimer.AutoReset = true;
-            WindowTitleRestoreTimer.Enabled = true;
-
-        }
-
-
-        private static void OnTimedEvent_ProgramCloseTimer(Object source, System.Timers.ElapsedEventArgs e)
-        {
-
-        }
-
         
-
-        public static void OnTimedEvent_WindowTitleRestoreTimer(Object source, System.Timers.ElapsedEventArgs e)
-        {
-            if (_world.InGame)
-            {
-                if (!string.IsNullOrEmpty(_world.Player.Name))
-                {
-                    Client.Game.SetWindowTitle(_world.Player.Name);
-                    if (!string.IsNullOrEmpty(_world.ServerName))
-                    {
-                        Client.Game.SetWindowTitle(_world.Player.Name + " (" + _world.ServerName + ")");
-                    }
-                }
-            }
-            else
-            {
-                Client.Game.SetWindowTitle("");
-            }
-        }
-
-
-
         public static string HextoString(string InputText)
         {
             byte[] bb = Enumerable.Range(0, InputText.Length).Where(x => x % 2 == 0).Select(x => Convert.ToByte(InputText.Substring(x, 2), 16)).ToArray();

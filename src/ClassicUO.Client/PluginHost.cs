@@ -228,10 +228,10 @@ namespace ClassicUO
             switch (Unsafe.AsRef<int>(cmd.ToPointer()))
             {
                 case 1:
-                    GameActions.UsePrimaryAbility();
+                    //GameActions.UsePrimaryAbility();
                     break;
                 case 2:
-                    GameActions.UseSecondaryAbility();
+                    //GameActions.UseSecondaryAbility();
                     break;
                 case 3:
                     var subCmd = Unsafe.AsRef<(int, sbyte)>(cmd.ToPointer());

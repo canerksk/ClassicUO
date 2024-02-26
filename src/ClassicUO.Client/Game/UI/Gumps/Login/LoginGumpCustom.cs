@@ -350,8 +350,8 @@ namespace ClassicUO.Game.UI.Gumps.Login
             _checkboxAutologin.IsChecked = Settings.GlobalSettings.AutoLogin;
 
 
-            int htmlX = 130;
-            int htmlY = 442;
+            // int htmlX = 130;
+            // int htmlY = 442;
 
 
             Checkbox loginmusic_checkbox = new Checkbox

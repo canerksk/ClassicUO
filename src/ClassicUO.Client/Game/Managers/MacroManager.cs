@@ -710,7 +710,7 @@ namespace ClassicUO.Game.Managers
                                         }
                                         else
                                         {
-                                            UIManager.GetGump<OptionsGump>()?.Dispose();
+                                            //UIManager.GetGump<OptionsGump>()?.Dispose();
                                         }
 
                                         //UIManager.GetGump<OptionsGump>()?.Dispose();

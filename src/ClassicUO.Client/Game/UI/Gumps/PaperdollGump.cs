@@ -356,7 +356,50 @@ namespace ClassicUO.Game.UI.Gumps
             }
 
             // Name and title
-            _titleLabel = new Label("", false, 0x0386, 185, font: 1) { X = 39, Y = 262 };
+            Mobile Char = World.Mobiles.Get(LocalSerial);
+
+            if (Char != null)
+            {
+                Item CharLayer = Char.FindItemByLayer(Layer.Face);
+                if (CharLayer != null)
+                {
+                    ushort CharLayerHue = CharLayer.Hue;
+                    if (CharLayerHue != null)
+                    {
+                        _titleLabel = new Label("", false, CharLayerHue, 185, font: 3, style: FontStyle.BlackBorder)
+                        {
+                            X = 39,
+                            Y = 262
+                        };
+                    }
+                    else
+                    {
+                        _titleLabel = new Label("", false, 0x0386, 185, font: 1)
+                        {
+                            X = 39,
+                            Y = 262
+                        };
+                    }
+                }
+                else
+                {
+                    _titleLabel = new Label("", false, 0x0386, 185, font: 1)
+                    {
+                        X = 39,
+                        Y = 262
+                    };
+                }
+            }
+            else
+            {
+                _titleLabel = new Label("", false, 0x0386, 185, font: 1)
+                {
+                    X = 39,
+                    Y = 262
+                };
+            }
+
+            //_titleLabel = new Label("", false, 0x0386, 185, font: 1) { X = 39, Y = 262 };
 
             Add(_titleLabel);
 
@@ -891,9 +934,14 @@ namespace ClassicUO.Game.UI.Gumps
                     );
 
                     ref readonly var artInfo = ref Client.Game.UO.Arts.GetArt(item.DisplayedGraphic);
+                    if (item.Layer == Layer.Mount)
+                    {
+                        artInfo = ref Client.Game.UO.Arts.GetArt(0x211F);
+                    }
 
                     if (artInfo.Texture != null)
                     {
+
                         batcher.Draw(
                             artInfo.Texture,
                             new Rectangle(

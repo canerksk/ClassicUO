@@ -128,6 +128,7 @@ namespace ClassicUO.Game
             }
             else
             {
+                /*
                 OptionsGump opt = UIManager.GetGump<OptionsGump>();
                 if (opt == null)
                 {
@@ -146,6 +147,7 @@ namespace ClassicUO.Game
                     opt.SetInScreen();
                     opt.BringOnTop();
                 }
+                */
             }
 
         }

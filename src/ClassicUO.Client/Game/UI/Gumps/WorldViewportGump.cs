@@ -92,7 +92,7 @@ namespace ClassicUO.Game.UI.Gumps
                     }
                     else
                     {
-                        UIManager.GetGump<OptionsGump>()?.UpdateVideo();
+                        //UIManager.GetGump<OptionsGump>()?.UpdateVideo();
                     }
 
                     if (Client.Game.UO.Version >= ClientVersion.CV_200)
@@ -119,7 +119,7 @@ namespace ClassicUO.Game.UI.Gumps
                 }
                 else
                 {
-                    UIManager.GetGump<OptionsGump>()?.UpdateVideo();
+                    //UIManager.GetGump<OptionsGump>()?.UpdateVideo();
                 }
 
             };
@@ -233,7 +233,7 @@ namespace ClassicUO.Game.UI.Gumps
             }
             else
             {
-                UIManager.GetGump<OptionsGump>()?.UpdateVideo();
+                //UIManager.GetGump<OptionsGump>()?.UpdateVideo();
             }
 
             UpdateGameWindowPos();

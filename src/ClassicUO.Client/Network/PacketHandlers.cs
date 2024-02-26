@@ -4833,7 +4833,7 @@ namespace ClassicUO.Network
                     {
                         ushort duration = p.ReadUInt16BE();
                         ushort icon = p.ReadUInt16BE();
-                        //System.Windows.Forms.ToolTipIcon toolTipIcon = System.Windows.Forms.ToolTipIcon.Warning;
+                       // System.Windows.Forms.ToolTipIcon toolTipIcon = System.Windows.Forms.ToolTipIcon.Warning;
                         string text = p.ReadUnicodeBE();
 
                         if (ProfileManager.CurrentProfile.ClientNotifyBalloonActive)
@@ -4879,7 +4879,11 @@ namespace ClassicUO.Network
                     int SiteStatusReq = 0;
                     try
                     {
+                        // Disable the warning.
+#pragma warning disable SYSLIB0014
                         HttpWebRequest req = (HttpWebRequest)WebRequest.Create(Constants.WEB_MAIN_URL);
+                        // Re-enable the warning.
+#pragma warning restore SYSLIB0014
                         req.Timeout = 5000;
                         using (HttpWebResponse response = (HttpWebResponse)req.GetResponse())
                         {
@@ -7349,4 +7353,5 @@ namespace ClassicUO.Network
             System = 0x02
         }
     }
+
 }
