@@ -102,10 +102,7 @@ namespace ClassicUO.Game.GameObjects
 
             Vector3 hueVec = ShaderHueTranslator.GetHueVector(0, false, AlphaHue / 255f);
 
-            if (
-                ProfileManager.CurrentProfile.HighlightGameObjects
-                && ReferenceEquals(SelectedObject.Object, this)
-            )
+            if (ProfileManager.CurrentProfile.HighlightGameObjects && ReferenceEquals(SelectedObject.Object, this))
             {
                 overridedHue = Constants.HIGHLIGHT_CURRENT_OBJECT_HUE;
                 hueVec.Y = 1;
@@ -114,10 +111,7 @@ namespace ClassicUO.Game.GameObjects
             {
                 overridedHue = Notoriety.GetHue(NotorietyFlag);
             }
-            else if (
-                ProfileManager.CurrentProfile.NoColorObjectsOutOfRange
-                && Distance > World.ClientViewRange
-            )
+            else if (ProfileManager.CurrentProfile.NoColorObjectsOutOfRange && Distance > World.ClientViewRange)
             {
                 overridedHue = Constants.OUT_RANGE_COLOR;
                 hueVec.Y = 1;
@@ -169,14 +163,29 @@ namespace ClassicUO.Game.GameObjects
             }
 
             bool isAttack = Serial == World.TargetManager.LastAttack;
-            bool isUnderMouse =
-                World.TargetManager.IsTargeting && ReferenceEquals(SelectedObject.Object, this);
+            bool isUnderMouse =  World.TargetManager.IsTargeting && ReferenceEquals(SelectedObject.Object, this);
 
             if (Serial != World.Player.Serial)
             {
+                //if (isAttack || isUnderMouse)
+                //{
+                //overridedHue = Notoriety.GetHue(NotorietyFlag);
+                //}
+                //uint sel_obj = World.FindNext(ScanTypeObject.Mobiles, World.TargetManager.LastTargetInfo.Serial, false);
+                //if ((World.Player.InWarMode || isAttack) && isUnderMouse)
+
                 if (isAttack || isUnderMouse)
                 {
                     overridedHue = Notoriety.GetHue(NotorietyFlag);
+                    //Console.WriteLine(this.Name);
+                    //Console.WriteLine(isUnderMouse);
+                    //World.TargetManager.LastTargetInfo.SetEntity(this);
+                }
+                // Warmoddayken mouse uzerinde olan objeyi highlight et.
+                if (World.Player.InWarMode && ReferenceEquals(SelectedObject.Object, this))
+                {
+                    overridedHue = Notoriety.GetHue(NotorietyFlag);
+                    //World.TargetManager.LastTargetInfo.SetEntity(this);
                 }
             }
 
@@ -197,10 +206,7 @@ namespace ClassicUO.Game.GameObjects
                 ushort mountGraphic = mount.GetGraphicForAnimation();
                 byte animGroupMount = 0;
 
-                if (
-                    mountGraphic != 0xFFFF
-                    && mountGraphic < Client.Game.UO.Animations.MaxAnimationCount
-                )
+                if (mountGraphic != 0xFFFF && mountGraphic < Client.Game.UO.Animations.MaxAnimationCount)
                 {
                     mountOffsetY = Client.Game.UO.Animations.GetMountedHeightOffset(mountGraphic);
 
@@ -1081,9 +1087,7 @@ namespace ClassicUO.Game.GameObjects
                                 return true;
                             }
 
-                            position.Y += Client.Game.UO.Animations.GetMountedHeightOffset(
-                                mountGraphic
-                            );
+                            position.Y += Client.Game.UO.Animations.GetMountedHeightOffset(mountGraphic);
                         }
                     }
                 }
