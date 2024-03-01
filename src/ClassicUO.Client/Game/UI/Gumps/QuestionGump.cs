@@ -34,6 +34,7 @@ using System;
 using ClassicUO.Game.UI.Controls;
 using ClassicUO.Assets;
 using ClassicUO.Renderer;
+using ClassicUO.Configuration;
 
 namespace ClassicUO.Game.UI.Gumps
 {
@@ -44,9 +45,17 @@ namespace ClassicUO.Game.UI.Gumps
         public QuestionGump(World world, string message, Action<bool> result) : base(world, 0, 0)
         {
             CanCloseWithRightClick = true;
-            Add(new GumpPic(0, 0, 0x0816, 0));
 
-            ref readonly var gumpInfo = ref Client.Game.UO.Gumps.GetGump(0x0816);
+            ushort CustomUIGump0816 = 0x0816;
+
+            if (ProfileManager.CurrentProfile.UIType == 1)
+            {
+                CustomUIGump0816 = 0x0C33E;
+            }
+
+            Add(new GumpPic(0, 0, CustomUIGump0816, 0));
+
+            ref readonly var gumpInfo = ref Client.Game.UO.Gumps.GetGump(CustomUIGump0816);
 
             Width = gumpInfo.UV.Width;
             Height = gumpInfo.UV.Height;
