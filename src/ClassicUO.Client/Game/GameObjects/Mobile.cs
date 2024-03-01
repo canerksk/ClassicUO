@@ -428,7 +428,7 @@ namespace ClassicUO.Game.GameObjects
                 //);
 
                 AnimationGroupsType type = Client.Game.UO.Animations.GetAnimType(graphic);
-                AnimationFlags  flags = Client.Game.UO.Animations.GetAnimFlags(graphic);
+                AnimationFlags flags = Client.Game.UO.Animations.GetAnimFlags(graphic);
                 AnimationGroups animGroup = AnimationGroups.None;
 
                 bool isLowExtended = false;
@@ -593,7 +593,6 @@ namespace ClassicUO.Game.GameObjects
 
         public override void ProcessAnimation(bool evalutate = false)
         {
-
             ProcessSteps(out var dir, evalutate);
             ProcessFootstepsSound();
 
@@ -678,7 +677,7 @@ namespace ClassicUO.Game.GameObjects
                                 SetAnimation(0xFF);
                             }
 
-                            SKIP:
+                        SKIP:
                             ;
                         }
                         else
@@ -730,10 +729,8 @@ namespace ClassicUO.Game.GameObjects
 
                 if (evalutate)
                 {
-
                     if (AnimationFromServer)
                     {
-                        //Console.WriteLine("[AnimationFromServer]" + "dir:" + dir + ", evalutate:" + evalutate);
                         SetAnimation(0xFF);
                     }
 
@@ -765,7 +762,7 @@ namespace ClassicUO.Game.GameObjects
                         - (int)Client.Game.FrameDelay[1];
 
                     bool removeStep = delay >= maxDelay;
-                    bool directionChange = true;
+                    bool directionChange = false;
 
                     if (X != step.X || Y != step.Y)
                     {
@@ -783,7 +780,7 @@ namespace ClassicUO.Game.GameObjects
                                 absX = X;
                                 absY = Y;
 
-                               Pathfinder.GetNewXY((byte)(step.Direction & 7), ref absX, ref absY);
+                                Pathfinder.GetNewXY((byte)(step.Direction & 7), ref absX, ref absY);
 
                                 badStep = absX != step.X || absY != step.Y;
                             }
@@ -806,8 +803,8 @@ namespace ClassicUO.Game.GameObjects
                     }
                     else
                     {
-                        //directionChange = true;
-                        //removeStep = true;
+                        directionChange = true;
+                        removeStep = true;
                     }
 
                     if (removeStep)
@@ -817,12 +814,11 @@ namespace ClassicUO.Game.GameObjects
                             //if (Position.X != step.X || Position.Y != step.Y || Position.Z != step.Z)
                             //{
                             //}
+
                             if (Z - step.Z >= 22)
                             {
                                 // oUCH!!!!
                                 AddMessage(MessageType.Label, ResGeneral.Ouch, TextType.CLIENT);
-                                if (!IsHidden)
-                                    Client.Game.Audio.PlaySound(0x014b);
                             }
 
                             if (
@@ -876,9 +872,8 @@ namespace ClassicUO.Game.GameObjects
 
                         if (directionChange)
                         {
-
-                            //Console.WriteLine("[directionChange]" + directionChange + "dir:" + dir + ", evalutate:" + evalutate);
                             ProcessSteps(out dir, evalutate);
+
                             return;
                         }
 
@@ -1031,53 +1026,53 @@ namespace ClassicUO.Game.GameObjects
             {
                 case 0x0190:
                 case 0x0192:
-                {
-                    IsFemale = false;
-                    Race = RaceType.HUMAN;
+                    {
+                        IsFemale = false;
+                        Race = RaceType.HUMAN;
 
-                    break;
-                }
+                        break;
+                    }
 
                 case 0x0191:
                 case 0x0193:
-                {
-                    IsFemale = true;
-                    Race = RaceType.HUMAN;
+                    {
+                        IsFemale = true;
+                        Race = RaceType.HUMAN;
 
-                    break;
-                }
+                        break;
+                    }
 
                 case 0x025D:
-                {
-                    IsFemale = false;
-                    Race = RaceType.ELF;
+                    {
+                        IsFemale = false;
+                        Race = RaceType.ELF;
 
-                    break;
-                }
+                        break;
+                    }
 
                 case 0x025E:
-                {
-                    IsFemale = true;
-                    Race = RaceType.ELF;
+                    {
+                        IsFemale = true;
+                        Race = RaceType.ELF;
 
-                    break;
-                }
+                        break;
+                    }
 
                 case 0x029A:
-                {
-                    IsFemale = false;
-                    Race = RaceType.GARGOYLE;
+                    {
+                        IsFemale = false;
+                        Race = RaceType.GARGOYLE;
 
-                    break;
-                }
+                        break;
+                    }
 
                 case 0x029B:
-                {
-                    IsFemale = true;
-                    Race = RaceType.GARGOYLE;
+                    {
+                        IsFemale = true;
+                        Race = RaceType.GARGOYLE;
 
-                    break;
-                }
+                        break;
+                    }
             }
         }
 
