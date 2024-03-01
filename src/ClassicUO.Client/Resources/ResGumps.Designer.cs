@@ -583,7 +583,7 @@ namespace ClassicUO.Resources {
         }
         
         /// <summary>
-        ///   Channels benzeri yerelleştirilmiş bir dize arar.
+        ///   SOHBET KANALLARI benzeri yerelleştirilmiş bir dize arar.
         /// </summary>
         public static string Channels {
             get {
@@ -916,7 +916,7 @@ namespace ClassicUO.Resources {
         }
         
         /// <summary>
-        ///   Create benzeri yerelleştirilmiş bir dize arar.
+        ///   OLUSTUR benzeri yerelleştirilmiş bir dize arar.
         /// </summary>
         public static string Create {
             get {
@@ -925,7 +925,7 @@ namespace ClassicUO.Resources {
         }
         
         /// <summary>
-        ///   Create a channel: benzeri yerelleştirilmiş bir dize arar.
+        ///   KANAL ADI: benzeri yerelleştirilmiş bir dize arar.
         /// </summary>
         public static string CreateAChannel {
             get {
@@ -2187,7 +2187,7 @@ namespace ClassicUO.Resources {
         }
         
         /// <summary>
-        ///   Join benzeri yerelleştirilmiş bir dize arar.
+        ///   KATIL benzeri yerelleştirilmiş bir dize arar.
         /// </summary>
         public static string Join {
             get {
@@ -2277,7 +2277,7 @@ namespace ClassicUO.Resources {
         }
         
         /// <summary>
-        ///   Leave benzeri yerelleştirilmiş bir dize arar.
+        ///   AYRIL benzeri yerelleştirilmiş bir dize arar.
         /// </summary>
         public static string Leave {
             get {
@@ -4436,7 +4436,7 @@ namespace ClassicUO.Resources {
         }
         
         /// <summary>
-        ///   Your current channel: benzeri yerelleştirilmiş bir dize arar.
+        ///   Gecerli Sohbet Kanali: benzeri yerelleştirilmiş bir dize arar.
         /// </summary>
         public static string YourCurrentChannel {
             get {

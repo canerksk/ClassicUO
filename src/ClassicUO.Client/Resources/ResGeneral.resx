@@ -279,10 +279,10 @@ Hue: {1}</value>
     <value>You are no longer ignoring anyone.</value>
   </data>
   <data name="ThatIsNotAValidConferenceName" xml:space="preserve">
-    <value>That is not a valid conference name.</value>
+    <value>Kanal adi gecerli degil.</value>
   </data>
   <data name="ThereIsAlreadyAConference" xml:space="preserve">
-    <value>There is already a conference of that name.</value>
+    <value>Bu isimde zaten bir sohbet kanali var.</value>
   </data>
   <data name="YouMustHaveOperatorStatus" xml:space="preserve">
     <value>You must have operator status to do this.</value>
@@ -291,16 +291,16 @@ Hue: {1}</value>
     <value>Conference %1 renamed to %2.</value>
   </data>
   <data name="YouMustBeInAConference" xml:space="preserve">
-    <value>You must be in a conference to do this. To join a conference, select one from the Conference menu.</value>
+    <value>Herhangi bir sohbet kanalinda degilsiniz.</value>
   </data>
   <data name="ThereIsNoPlayerNamed1" xml:space="preserve">
     <value>There is no player named '%1'.</value>
   </data>
   <data name="ThereIsNoConferenceNamed1" xml:space="preserve">
-    <value>There is no conference named '%1'.</value>
+    <value>'%1' isimli sohbet kanali bulunamadi!</value>
   </data>
   <data name="ThatIsNotTheCorrectPassword" xml:space="preserve">
-    <value>That is not the correct password.</value>
+    <value>Kanal sifresi yanlis.</value>
   </data>
   <data name="HasChosenToIgnoreYou" xml:space="preserve">
     <value>%1 has chosen to ignore you. None of your messages to them will get through.</value>
@@ -336,7 +336,7 @@ Hue: {1}</value>
     <value>%1, a conference moderator, has kicked you out of the conference.</value>
   </data>
   <data name="YouAreAlreadyInTheConference1" xml:space="preserve">
-    <value>You are already in the conference '%1'.</value>
+    <value>Zaten '%1' sohbet kanalindasiniz.</value>
   </data>
   <data name="IsNoLongerAConferenceModerator" xml:space="preserve">
     <value>%1 is no longer a conference moderator.</value>
@@ -426,10 +426,10 @@ Hue: {1}</value>
     <value>Your skill in {0} has {1} by {2:F1}.  It is now {3:F1}.</value>
   </data>
   <data name="YouHaveJoinedThe0Channel" xml:space="preserve">
-    <value>You have joined the '{0}' channel.</value>
+    <value>'{0}' sohbet kanalina katildiniz.</value>
   </data>
   <data name="YouHaveLeftThe0Channel" xml:space="preserve">
-    <value>You have left the '{0}' channel.</value>
+    <value>'{0}' sohbet kanalindan ayrildiniz.</value>
   </data>
   <data name="CraftedBy" xml:space="preserve">
     <value>Crafted by </value>

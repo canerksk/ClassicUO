@@ -82,6 +82,8 @@ namespace ClassicUO.Configuration
         [JsonIgnore] public string ServerName { get; set; }
         [JsonIgnore] public string CharacterName { get; set; }
 
+        public int UIType { get; set; } = 0;
+
         // sounds
         public bool EnableSound { get; set; } = true;
         public int SoundVolume { get; set; } = 100;
@@ -108,7 +110,7 @@ namespace ClassicUO.Configuration
         public ushort PartyMessageHue { get; set; } = 0x0044;
         public ushort GuildMessageHue { get; set; } = 0x0044;
         public ushort AllyMessageHue { get; set; } = 0x0057;
-        public ushort ChatMessageHue { get; set; } = 0x0256;
+        public ushort ChatMessageHue { get; set; } = 0x481;
         public ushort InnocentHue { get; set; } = 0x005A;
         public ushort PartyAuraHue { get; set; } = 0x0044;
         public ushort FriendHue { get; set; } = 0x0044;

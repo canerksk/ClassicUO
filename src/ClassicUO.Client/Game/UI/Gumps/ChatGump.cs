@@ -39,6 +39,7 @@ using ClassicUO.Network;
 using ClassicUO.Renderer;
 using ClassicUO.Resources;
 using Microsoft.Xna.Framework;
+using ClassicUO.Game.Data;
 
 namespace ClassicUO.Game.UI.Gumps
 {
@@ -187,14 +188,17 @@ namespace ClassicUO.Game.UI.Gumps
 
             Add(button);
 
-            button = new Button(2, 0x0845, 0x0846, 0x0845)
+            if (PacketHandlers._isGM == true)
             {
-                X = 216,
-                Y = startY + 5,
-                ButtonAction = ButtonAction.Activate
-            };
+                button = new Button(2, 0x0845, 0x0846, 0x0845)
+                {
+                    X = 216,
+                    Y = startY + 5,
+                    ButtonAction = ButtonAction.Activate
+                };
+                Add(button);
+            }
 
-            Add(button);
 
             text = new Label
             (
@@ -226,20 +230,24 @@ namespace ClassicUO.Game.UI.Gumps
 
             Add(text);
 
-            text = new Label
-            (
+            if (PacketHandlers._isGM == true)
+            {
+                text = new Label
+                (
                 ResGumps.Create,
                 false,
                 0x0386,
                 0,
                 2
-            )
-            {
-                X = 233,
-                Y = startY
-            };
+                )
+                {
+                    X = 233,
+                    Y = startY
+                };
+                Add(text);
+            }
 
-            Add(text);
+
         }
 
         public override void OnButtonClick(int buttonID)
@@ -443,7 +451,14 @@ namespace ClassicUO.Game.UI.Gumps
                 }
                 else if (buttonID == 1) // ok
                 {
-                    NetClient.Socket.Send_ChatCreateChannelCommand(_textBox.Text);
+                    if (PacketHandlers._isGM == true)
+                    {
+                        NetClient.Socket.Send_ChatCreateChannelCommand(_textBox.Text);
+                    }
+                    else
+                    {
+                        //GameActions.Print(World, "Sadece yetkililer sohbet kanali olusturabilir.", 0x38, MessageType.Regular, 3, false);
+                    }
                 }
 
                 Dispose();
@@ -486,7 +501,7 @@ namespace ClassicUO.Game.UI.Gumps
                     if (_isSelected != value)
                     {
                         _isSelected = value;
-                        _label.Hue = (ushort) (value ? 0x22 : 0x49);
+                        _label.Hue = (ushort)(value ? 0x22 : 0x49);
                     }
                 }
             }
@@ -523,9 +538,9 @@ namespace ClassicUO.Game.UI.Gumps
                         (
                             x,
                             y,
-                            Width, 
+                            Width,
                             Height
-                        ),                    
+                        ),
                         hueVector
                     );
                 }

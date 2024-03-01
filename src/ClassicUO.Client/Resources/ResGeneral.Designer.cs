@@ -911,7 +911,7 @@ namespace ClassicUO.Resources {
         }
         
         /// <summary>
-        ///   That is not a valid conference name. benzeri yerelleştirilmiş bir dize arar.
+        ///   Kanal adi gecerli degil. benzeri yerelleştirilmiş bir dize arar.
         /// </summary>
         public static string ThatIsNotAValidConferenceName {
             get {
@@ -920,7 +920,7 @@ namespace ClassicUO.Resources {
         }
         
         /// <summary>
-        ///   That is not the correct password. benzeri yerelleştirilmiş bir dize arar.
+        ///   Kanal sifresi yanlis. benzeri yerelleştirilmiş bir dize arar.
         /// </summary>
         public static string ThatIsNotTheCorrectPassword {
             get {
@@ -938,7 +938,7 @@ namespace ClassicUO.Resources {
         }
         
         /// <summary>
-        ///   There is already a conference of that name. benzeri yerelleştirilmiş bir dize arar.
+        ///   Bu isimde zaten bir sohbet kanali var. benzeri yerelleştirilmiş bir dize arar.
         /// </summary>
         public static string ThereIsAlreadyAConference {
             get {
@@ -947,7 +947,7 @@ namespace ClassicUO.Resources {
         }
         
         /// <summary>
-        ///   There is no conference named &apos;%1&apos;. benzeri yerelleştirilmiş bir dize arar.
+        ///   &apos;%1&apos; isimli sohbet kanali bulunamadi! benzeri yerelleştirilmiş bir dize arar.
         /// </summary>
         public static string ThereIsNoConferenceNamed1 {
             get {
@@ -1047,7 +1047,7 @@ namespace ClassicUO.Resources {
         }
         
         /// <summary>
-        ///   You are already in the conference &apos;%1&apos;. benzeri yerelleştirilmiş bir dize arar.
+        ///   Zaten &apos;%1&apos; sohbet kanalindasiniz. benzeri yerelleştirilmiş bir dize arar.
         /// </summary>
         public static string YouAreAlreadyInTheConference1 {
             get {
@@ -1146,7 +1146,7 @@ namespace ClassicUO.Resources {
         }
         
         /// <summary>
-        ///   You have joined the &apos;{0}&apos; channel. benzeri yerelleştirilmiş bir dize arar.
+        ///   &apos;{0}&apos; sohbet kanalina katildiniz. benzeri yerelleştirilmiş bir dize arar.
         /// </summary>
         public static string YouHaveJoinedThe0Channel {
             get {
@@ -1155,7 +1155,7 @@ namespace ClassicUO.Resources {
         }
         
         /// <summary>
-        ///   You have left the &apos;{0}&apos; channel. benzeri yerelleştirilmiş bir dize arar.
+        ///   &apos;{0}&apos; sohbet kanalindan ayrildiniz. benzeri yerelleştirilmiş bir dize arar.
         /// </summary>
         public static string YouHaveLeftThe0Channel {
             get {
@@ -1164,7 +1164,7 @@ namespace ClassicUO.Resources {
         }
         
         /// <summary>
-        ///   You must be in a conference to do this. To join a conference, select one from the Conference menu. benzeri yerelleştirilmiş bir dize arar.
+        ///   Herhangi bir sohbet kanalinda degilsiniz. benzeri yerelleştirilmiş bir dize arar.
         /// </summary>
         public static string YouMustBeInAConference {
             get {

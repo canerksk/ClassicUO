@@ -186,16 +186,12 @@ namespace ClassicUO.Game.UI.Gumps
 
             if (gump == null)
             {
-                if (
-                    ProfileManager.CurrentProfile.TopbarGumpPosition.X < 0
-                    || ProfileManager.CurrentProfile.TopbarGumpPosition.Y < 0
-                )
+                if (  ProfileManager.CurrentProfile.TopbarGumpPosition.X < 0 || ProfileManager.CurrentProfile.TopbarGumpPosition.Y < 0)
                 {
                     ProfileManager.CurrentProfile.TopbarGumpPosition = Point.Zero;
                 }
 
-                UIManager.Add(
-                    gump = new TopBarGump(world)
+                UIManager.Add(gump = new TopBarGump(world)
                     {
                         X = ProfileManager.CurrentProfile.TopbarGumpPosition.X,
                         Y = ProfileManager.CurrentProfile.TopbarGumpPosition.Y

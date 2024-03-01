@@ -1158,22 +1158,22 @@ Min. Skill: {1}</value>
     <value>You are about to choose your name for the Ultima Online chat system. This name will be PERMANENT and unique on this shard. It will apply to all characters using this account. Do not use your Ultima Online account name for this name as the name you choose will be public. Enter your chat name here:</value>
   </data>
   <data name="Channels" xml:space="preserve">
-    <value>Channels</value>
+    <value>SOHBET KANALLARI</value>
   </data>
   <data name="YourCurrentChannel" xml:space="preserve">
-    <value>Your current channel:</value>
+    <value>Gecerli Sohbet Kanali:</value>
   </data>
   <data name="Join" xml:space="preserve">
-    <value>Join</value>
+    <value>KATIL</value>
   </data>
   <data name="Leave" xml:space="preserve">
-    <value>Leave</value>
+    <value>AYRIL</value>
   </data>
   <data name="Create" xml:space="preserve">
-    <value>Create</value>
+    <value>OLUSTUR</value>
   </data>
   <data name="CreateAChannel" xml:space="preserve">
-    <value>Create a channel:</value>
+    <value>KANAL ADI:</value>
   </data>
   <data name="WorldMapLoading" xml:space="preserve">
     <value>WorldMap loading...</value>

@@ -67,6 +67,7 @@ namespace ClassicUO.Network
         private static uint _requestedGridLoot;
         public static bool _isGM = false;
         public static string _timeHash;
+        public static System.Windows.Forms.NotifyIcon notifyIcon1;
 
         private static readonly TextFileParser _parser = new TextFileParser(
             string.Empty,
@@ -1966,10 +1967,7 @@ namespace ClassicUO.Network
                     int y = world.Player.Y;
                     sbyte z = world.Player.Z;
 
-                    if (
-                        world.Player.Pathfinder.CanWalk(ref pdir, ref x, ref y, ref z)
-                        && world.Player.Direction != pdir
-                    )
+                    if (world.Player.Pathfinder.CanWalk(ref pdir, ref x, ref y, ref z) && world.Player.Direction != pdir)
                     {
                         world.Player.Walk(pdir, false);
                     }
@@ -2320,7 +2318,9 @@ namespace ClassicUO.Network
 
                 //GameActions.OpenPaperdoll(world.Player);
                 GameActions.RequestMobileStatus(world, world.Player);
-                NetClient.Socket.Send_OpenChat("");
+
+                //NetClient.Socket.Send_OpenChat("Genel");
+                //NetClient.Socket.Send_ChatJoinCommand("Genel");
 
                 NetClient.Socket.Send_TextCommand(0x0F4, (uint)Client.Game.Scene.Camera.Bounds.Width + "," + (uint)Client.Game.Scene.Camera.Bounds.Height);
 
@@ -3895,6 +3895,8 @@ namespace ClassicUO.Network
         private static void ChatMessage(World world, ref StackDataReader p)
         {
             ushort cmd = p.ReadUInt16BE();
+            //ushort TextColor = 0x481;
+            //ushort TextColor = ProfileManager.CurrentProfile.ChatMessageHue;
 
             switch (cmd)
             {
@@ -3935,7 +3937,7 @@ namespace ClassicUO.Network
                     p.Skip(4);
                     string username = p.ReadUnicodeBE();
                     world.ChatManager.ChatIsEnabled = ChatStatus.Enabled;
-                    NetClient.Socket.Send_ChatJoinCommand("General");
+                    //NetClient.Socket.Send_ChatJoinCommand("Genel");
 
                     break;
 
@@ -4006,13 +4008,8 @@ namespace ClassicUO.Network
                     }
 
                     //Color c = new Color(49, 82, 156, 0);
-                    GameActions.Print(
-                        world,
-                        $"{username}: {msgSent}",
-                        ProfileManager.CurrentProfile.ChatMessageHue,
-                        MessageType.Regular,
-                        1
-                    );
+                    //GameActions.Print(world, $"{username}: {msgSent}", ProfileManager.CurrentProfile.ChatMessageHue,MessageType.Regular,1);
+                    GameActions.Print(world, $"[Sohbet] {username}: {msgSent}", ProfileManager.CurrentProfile.ChatMessageHue, MessageType.Regular, 1);
 
                     break;
 
@@ -4052,13 +4049,8 @@ namespace ClassicUO.Network
                             }
                         }
 
-                        GameActions.Print(
-                            world,
-                            msg,
-                            ProfileManager.CurrentProfile.ChatMessageHue,
-                            MessageType.Regular,
-                            1
-                        );
+                        //GameActions.Print(world,msg,ProfileManager.CurrentProfile.ChatMessageHue,MessageType.Regular,1);
+                        GameActions.Print(world,msg, ProfileManager.CurrentProfile.ChatMessageHue, MessageType.Regular,1);
                     }
 
                     break;
@@ -4831,9 +4823,10 @@ namespace ClassicUO.Network
 
                 case 0x8FFF: // Notify Balloon 
                     {
+
                         ushort duration = p.ReadUInt16BE();
                         ushort icon = p.ReadUInt16BE();
-                       // System.Windows.Forms.ToolTipIcon toolTipIcon = System.Windows.Forms.ToolTipIcon.Warning;
+                        System.Windows.Forms.ToolTipIcon toolTipIcon = System.Windows.Forms.ToolTipIcon.Warning;
                         string text = p.ReadUnicodeBE();
 
                         if (ProfileManager.CurrentProfile.ClientNotifyBalloonActive)
@@ -4842,28 +4835,47 @@ namespace ClassicUO.Network
                             {
                                 if (!string.IsNullOrEmpty(text))
                                 {
+                                    notifyIcon1 = new System.Windows.Forms.NotifyIcon();
+                                    notifyIcon1.Icon = Properties.Resources.UO_108;
+                                    notifyIcon1.Text = Constants.SERVER_NAME;
+                                    notifyIcon1.Visible = true;
+
                                     if (icon == 0)
                                     {
-                                        //toolTipIcon = System.Windows.Forms.ToolTipIcon.Info;
+                                       // notifyType = NotificationType.Information;
+                                       toolTipIcon = System.Windows.Forms.ToolTipIcon.Info;
                                     }
                                     else if (icon == 1)
                                     {
-                                        //toolTipIcon = System.Windows.Forms.ToolTipIcon.Warning;
+                                       // notifyType = NotificationType.Warning;
+                                        toolTipIcon = System.Windows.Forms.ToolTipIcon.Warning;
                                     }
                                     else if (icon == 2)
                                     {
-                                        //toolTipIcon = System.Windows.Forms.ToolTipIcon.Error;
+                                       // notifyType = NotificationType.Error;
+                                        toolTipIcon = System.Windows.Forms.ToolTipIcon.Error;
+                                    }
+                                    else if (icon == 3)
+                                    {
+                                        //notifyType = NotificationType.Success;
+                                        ///toolTipIcon = System.Windows.Forms.ToolTipIcon.Error;
+                                    }
+                                    else if (icon == 4)
+                                    {
+                                        //notifyType = NotificationType.Notification;
+                                        toolTipIcon = System.Windows.Forms.ToolTipIcon.Error;
                                     }
                                     else
                                     {
-                                        //toolTipIcon = System.Windows.Forms.ToolTipIcon.None;
+                                        //notifyType = NotificationType.None;
+                                        toolTipIcon = System.Windows.Forms.ToolTipIcon.None;
                                     }
                                     if (duration <= 0)
                                     {
                                         duration = 2500;
                                     }
-                                    //Bootstrap.notifyIcon1.Visible = true;
-                                    //Bootstrap.notifyIcon1.ShowBalloonTip(duration, Constants.SERVER_NAME, text, toolTipIcon);
+                                    notifyIcon1.Visible = true;
+                                    notifyIcon1.ShowBalloonTip(duration, Constants.SERVER_NAME, text, toolTipIcon);
                                 }
                             }
                         }
@@ -4871,7 +4883,6 @@ namespace ClassicUO.Network
                         {
                             GameActions.Print(world, "Client notify:" + text);
                         }
-
                     }
                     break;
 
