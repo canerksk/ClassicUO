@@ -41,6 +41,7 @@ using ClassicUO.Renderer;
 using ClassicUO.Utility;
 using Microsoft.Xna.Framework;
 using ClassicUO.Game.Scenes;
+using ClassicUO.Configuration;
 
 namespace ClassicUO.Game.UI.Gumps
 {
@@ -564,7 +565,14 @@ namespace ClassicUO.Game.UI.Gumps
             }
             else
             {
-                Add(new GumpPic(0, 0, 0x0866, 0));
+                ushort CustomUIGump0866 = 0x0866;
+
+                if (ProfileManager.CurrentProfile.UIType == 1)
+                {
+                    CustomUIGump0866 = 0x0C33F;
+                }
+
+                Add(new GumpPic(0, 0, CustomUIGump0866, 0));
 
                 Add(new Label(World.Player.Name, false, 0x0386, font: 1) { X = 84, Y = 40 });
 
