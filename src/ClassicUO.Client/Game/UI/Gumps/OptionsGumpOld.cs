@@ -144,7 +144,7 @@ namespace ClassicUO.Game.UI.Gumps
                          _chatShiftEnterCheckbox,
                          _enableCaveBorder;
         private static Checkbox _holdShiftForContext, _holdShiftToSplitStack, _clientnotifyballon, _reduceFPSWhenInactive, _sallosEasyGrab, _partyInviteGump, _objectsFading, _textFading, _holdAltToMoveGumps;
-        private static Combobox _hpComboBox, _healtbarType, _fieldsType, _hpComboBoxShowWhen;
+        private static Combobox _hpComboBox, _healtbarType, _fieldsType, _hpComboBoxShowWhen, _uiType;
 
         // infobar
         private static List<InfoBarBuilderControl> _infoBarBuilderControls;
@@ -1316,7 +1316,9 @@ namespace ClassicUO.Game.UI.Gumps
             );
 
             section3.AddRight(_healtbarType);
+
             section3.PopIndent();
+
             section3.Add(AddLabel(null, ResGumps.GridLoot, startX, startY));
 
             section3.AddRight
@@ -1330,6 +1332,23 @@ namespace ClassicUO.Game.UI.Gumps
                     startY,
                     120,
                     true
+                ),
+                2
+            );
+
+            section3.Add(AddLabel(null, "UI Type", startX, startY));
+
+            section3.AddRight
+            (
+                _uiType = AddCombobox
+                (
+                    null,
+                    new[] { "Default","Style-1" },
+                    _currentProfile.UIType,
+                    startX,
+                    startY,
+                    120,
+                    false
                 ),
                 2
             );
@@ -4093,6 +4112,7 @@ namespace ClassicUO.Game.UI.Gumps
                 _showCorpseNameIncoming.IsChecked = true;
                 _showMobileNameIncoming.IsChecked = true;
                 _gridLoot.SelectedIndex = 0;
+                _uiType.SelectedIndex = 0;
                 _sallosEasyGrab.IsChecked = false;
                 _partyInviteGump.IsChecked = false;
                 _showHouseContent.IsChecked = false;
@@ -4495,6 +4515,7 @@ namespace ClassicUO.Game.UI.Gumps
             _currentProfile.ShowNewMobileNameIncoming = _showMobileNameIncoming.IsChecked;
             _currentProfile.ShowNewCorpseNameIncoming = _showCorpseNameIncoming.IsChecked;
             _currentProfile.GridLootType = _gridLoot.SelectedIndex;
+            _currentProfile.UIType = _uiType.SelectedIndex;
             _currentProfile.SallosEasyGrab = _sallosEasyGrab.IsChecked;
             _currentProfile.PartyInviteGump = _partyInviteGump.IsChecked;
             _currentProfile.UseObjectsFading = _objectsFading.IsChecked;
@@ -4963,6 +4984,7 @@ namespace ClassicUO.Game.UI.Gumps
             _currentProfile.TreeToStumps = false; // _treeToStumps
             _currentProfile.CloseHealthBarType = 1; // _healtbarType
             _currentProfile.GridLootType = 0; // _gridLoot
+            //_currentProfile.UIType = 0; // _uiType
             _currentProfile.FieldsType = 0; // _fieldsType
             _currentProfile.UseDarkNights = true; //_darkNights
             _currentProfile.SmoothDoors = false;   // _smoothDoors

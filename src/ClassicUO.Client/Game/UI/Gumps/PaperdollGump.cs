@@ -94,9 +94,7 @@ namespace ClassicUO.Game.UI.Gumps
                 {
                     _isMinimized = value;
 
-                    _picBase.Graphic = value
-                        ? (ushort)0x7EE
-                        : (ushort)(0x07d0 + (LocalSerial == World.Player ? 0 : 1));
+                    _picBase.Graphic = value ? (ushort)0x7EE : (ushort)(0x07d0 + (LocalSerial == World.Player ? 0 : 1));
 
                     foreach (Control c in Children)
                     {
@@ -152,7 +150,14 @@ namespace ClassicUO.Game.UI.Gumps
 
             if (LocalSerial == World.Player)
             {
-                Add(_picBase = new GumpPic(0, 0, 0x07d0, 0));
+                ushort CustomUIGumpPaperDoll = 0x07d0;
+
+                if (ProfileManager.CurrentProfile.UIType == 1)
+                {
+                    CustomUIGumpPaperDoll = 0x0C338;
+                }
+
+                Add(_picBase = new GumpPic(0, 0, CustomUIGumpPaperDoll, 0));
                 _picBase.MouseDoubleClick += _picBase_MouseDoubleClick;
 
                 //HELP BUTTON
@@ -268,14 +273,27 @@ namespace ClassicUO.Game.UI.Gumps
                     profileX += SCROLLS_STEP;
                 }
 
-                Add(_profilePic = new GumpPic(profileX, 196, 0x07D2, 0));
+                ushort CustomUIGump07D2 = 0x07D2;
+
+                if (ProfileManager.CurrentProfile.UIType == 1)
+                {
+                    CustomUIGump07D2 = 0x0C33a;
+                }
+
+                Add(_profilePic = new GumpPic(profileX, 196, CustomUIGump07D2, 0));
                 _profilePic.MouseDoubleClick += Profile_MouseDoubleClickEvent;
                 _profilePic.SetTooltip("Ayarlar");
 
 
                 profileX += SCROLLS_STEP;
 
-                Add(_partyManifestPic = new GumpPic(profileX, 196, 0x07D2, 0));
+                ushort CustomUIGump07d2 = 0x07D2;
+                if (ProfileManager.CurrentProfile.UIType == 1)
+                {
+                    CustomUIGump07d2 = 0x0C33A;
+                }
+
+                Add(_partyManifestPic = new GumpPic(profileX, 196, CustomUIGump07d2, 0));
                 _partyManifestPic.MouseDoubleClick += PartyManifest_MouseDoubleClickEvent;
                 _partyManifestPic.SetTooltip("Party");
 
@@ -286,7 +304,14 @@ namespace ClassicUO.Game.UI.Gumps
             }
             else
             {
-                Add(_picBase = new GumpPic(0, 0, 0x07d1, 0));
+                ushort CustomUIGump07D1 = 0x07d1;
+
+                if (ProfileManager.CurrentProfile.UIType == 1)
+                {
+                    CustomUIGump07D1 = 0x0C339;
+                }
+
+                Add(_picBase = new GumpPic(0, 0, CustomUIGump07D1, 0));
                 Add(_profilePic = new GumpPic(25, 196, 0x07D2, 0));
                 _profilePic.MouseDoubleClick += Profile_MouseDoubleClickEvent;
             }
@@ -355,6 +380,16 @@ namespace ClassicUO.Game.UI.Gumps
                 }
             }
 
+            int PaperdollLabelY = ProfileManager.CurrentProfile.UIType == 0 ? 262 : 266;
+            ushort PaperdollLabelHue = 0x0386;
+            byte PaperdollLabelFont = 1;
+
+            if (ProfileManager.CurrentProfile.UIType == 1)
+            {
+                PaperdollLabelHue = 0x01;
+                PaperdollLabelFont = 9;
+            }
+            
             // Name and title
             Mobile Char = World.Mobiles.Get(LocalSerial);
 
@@ -366,36 +401,42 @@ namespace ClassicUO.Game.UI.Gumps
                     ushort CharLayerHue = CharLayer.Hue;
                     if (CharLayerHue != null)
                     {
+
+                        if (ProfileManager.CurrentProfile.UIType == 1)
+                        {
+                            PaperdollLabelY -= 4;
+                        }
+
                         _titleLabel = new Label("", false, CharLayerHue, 185, font: 3, style: FontStyle.BlackBorder)
                         {
                             X = 39,
-                            Y = 262
+                            Y = PaperdollLabelY
                         };
                     }
                     else
                     {
-                        _titleLabel = new Label("", false, 0x0386, 185, font: 1)
+                        _titleLabel = new Label("", false, PaperdollLabelHue, 185, font: PaperdollLabelFont)
                         {
                             X = 39,
-                            Y = 262
+                            Y = PaperdollLabelY
                         };
                     }
                 }
                 else
                 {
-                    _titleLabel = new Label("", false, 0x0386, 185, font: 1)
+                    _titleLabel = new Label("", false, PaperdollLabelHue, 185, font: PaperdollLabelFont)
                     {
                         X = 39,
-                        Y = 262
+                        Y = PaperdollLabelY
                     };
                 }
             }
             else
             {
-                _titleLabel = new Label("", false, 0x0386, 185, font: 1)
+                _titleLabel = new Label("", false, PaperdollLabelHue, 185, font: PaperdollLabelFont)
                 {
                     X = 39,
-                    Y = 262
+                    Y = PaperdollLabelY
                 };
             }
 

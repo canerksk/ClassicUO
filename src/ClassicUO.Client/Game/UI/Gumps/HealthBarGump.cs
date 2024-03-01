@@ -1294,6 +1294,7 @@ namespace ClassicUO.Game.UI.Gumps
     internal class HealthBarGump : BaseHealthBarGump
     {
         private const ushort BACKGROUND_NORMAL = 0x0803;
+
         private const ushort BACKGROUND_WAR = 0x0807;
         private const ushort LINE_RED = 0x0805;
         private const ushort LINE_BLUE = 0x0806;
@@ -1362,9 +1363,17 @@ namespace ClassicUO.Game.UI.Gumps
 
             if (World.Party.Contains(LocalSerial))
             {
+
+                ushort CustomUIGump0803 = BACKGROUND_NORMAL;
+
+                if (ProfileManager.CurrentProfile.UIType == 1)
+                {
+                    CustomUIGump0803 = 0x0C33C;
+                }
+
                 Add
                 (
-                    _background = new GumpPic(0, 0, BACKGROUND_NORMAL, 0)
+                    _background = new GumpPic(0, 0, CustomUIGump0803, 0)
                     {
                         ContainsByBounds = true,
                         Alpha = 0
@@ -1473,7 +1482,14 @@ namespace ClassicUO.Game.UI.Gumps
                 {
                     _oldWarMode = World.Player.InWarMode;
 
-                    Add(_background = new GumpPic(0, 0, _oldWarMode ? BACKGROUND_WAR : BACKGROUND_NORMAL, 0) { ContainsByBounds = true });
+                    ushort CustomUIGump0803 = BACKGROUND_NORMAL;
+
+                    if (ProfileManager.CurrentProfile.UIType == 1)
+                    {
+                        CustomUIGump0803 = 0x0C33C;
+                    }
+
+                    Add(_background = new GumpPic(0, 0, _oldWarMode ? BACKGROUND_WAR : CustomUIGump0803, 0) { ContainsByBounds = true });
 
                     Width = _background.Width;
                     Height = _background.Height;
@@ -1540,7 +1556,12 @@ namespace ClassicUO.Game.UI.Gumps
 
                     ushort barColor = entity == null || entity == World.Player || mobile == null || mobile.NotorietyFlag == NotorietyFlag.Criminal || mobile.NotorietyFlag == NotorietyFlag.Gray ? (ushort) 0 : Notoriety.GetHue(mobile.NotorietyFlag);
 
-                    Add(_background = new GumpPic(0, 0, 0x0804, barColor) { ContainsByBounds = true });
+                    ushort CustomUIGump0804 = 0x0804;
+                    if (ProfileManager.CurrentProfile.UIType == 1)
+                    {
+                        CustomUIGump0804 = 0x0C33D;
+                    }
+                    Add(_background = new GumpPic(0, 0, CustomUIGump0804, barColor) { ContainsByBounds = true });
                     Add(_hpLineRed = new GumpPic(34, 38, LINE_RED, hitsColor));
 
                     Add
