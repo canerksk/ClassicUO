@@ -74,9 +74,9 @@ namespace ClassicUO.Game
             _world = world;
         }
 
-        public bool AutoWalking { get; set; }
+        public bool AutoWalking { get; set; } = false;
 
-        public bool PathindingCanBeCancelled { get; set; }
+        public bool PathindingCanBeCancelled { get; set; } = true;
 
         public bool BlockMoving { get; set; }
 
