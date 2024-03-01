@@ -593,6 +593,7 @@ namespace ClassicUO.Game.GameObjects
 
         public override void ProcessAnimation(bool evalutate = false)
         {
+
             ProcessSteps(out var dir, evalutate);
             ProcessFootstepsSound();
 
@@ -729,8 +730,10 @@ namespace ClassicUO.Game.GameObjects
 
                 if (evalutate)
                 {
+
                     if (AnimationFromServer)
                     {
+                        //Console.WriteLine("[AnimationFromServer]" + "dir:" + dir + ", evalutate:" + evalutate);
                         SetAnimation(0xFF);
                     }
 
@@ -762,7 +765,7 @@ namespace ClassicUO.Game.GameObjects
                         - (int)Client.Game.FrameDelay[1];
 
                     bool removeStep = delay >= maxDelay;
-                    bool directionChange = false;
+                    bool directionChange = true;
 
                     if (X != step.X || Y != step.Y)
                     {
@@ -803,8 +806,8 @@ namespace ClassicUO.Game.GameObjects
                     }
                     else
                     {
-                        directionChange = true;
-                        removeStep = true;
+                        //directionChange = true;
+                        //removeStep = true;
                     }
 
                     if (removeStep)
@@ -814,7 +817,6 @@ namespace ClassicUO.Game.GameObjects
                             //if (Position.X != step.X || Position.Y != step.Y || Position.Z != step.Z)
                             //{
                             //}
-
                             if (Z - step.Z >= 22)
                             {
                                 // oUCH!!!!
@@ -874,8 +876,9 @@ namespace ClassicUO.Game.GameObjects
 
                         if (directionChange)
                         {
-                            ProcessSteps(out dir, evalutate);
 
+                            //Console.WriteLine("[directionChange]" + directionChange + "dir:" + dir + ", evalutate:" + evalutate);
+                            ProcessSteps(out dir, evalutate);
                             return;
                         }
 
