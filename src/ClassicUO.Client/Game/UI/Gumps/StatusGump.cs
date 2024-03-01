@@ -231,7 +231,13 @@ namespace ClassicUO.Game.UI.Gumps
             Point p = Point.Zero;
             _labels = new Label[(int) MobileStats.NumStats];
 
-            Add(new GumpPic(0, 0, 0x0802, 0));
+            ushort CustomUIGump0802 = 0x0802;
+            if (ProfileManager.CurrentProfile.UIType == 1)
+            {
+                CustomUIGump0802 = 0x0C33B;
+            }
+
+            Add(new GumpPic(0, 0, CustomUIGump0802, 0));
             p.X = 244;
             p.Y = 112;
 
