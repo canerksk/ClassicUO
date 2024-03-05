@@ -498,7 +498,7 @@ Ultima Online?</value>
 `{1}`</value>
   </data>
   <data name="ScreenshotStoredIn0" xml:space="preserve">
-    <value>Screenshot stored in: {0}</value>
+    <value>Ekran görüntüsü alındı: {0}</value>
   </data>
   <data name="WindowTitle0" xml:space="preserve">
     <value>ClassicUO - {0}</value>

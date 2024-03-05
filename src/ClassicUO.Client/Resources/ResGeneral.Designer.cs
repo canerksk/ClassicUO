@@ -821,7 +821,7 @@ namespace ClassicUO.Resources {
         }
         
         /// <summary>
-        ///   Screenshot stored in: {0} benzeri yerelleştirilmiş bir dize arar.
+        ///   Ekran görüntüsü alındı: {0} benzeri yerelleştirilmiş bir dize arar.
         /// </summary>
         public static string ScreenshotStoredIn0 {
             get {

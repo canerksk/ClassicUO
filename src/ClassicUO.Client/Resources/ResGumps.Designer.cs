@@ -151,7 +151,7 @@ namespace ClassicUO.Resources {
         }
         
         /// <summary>
-        ///   Character {0} already exist in a list. benzeri yerelleştirilmiş bir dize arar.
+        ///   {0} zaten yasaklı listesinde bulunuyor... benzeri yerelleştirilmiş bir dize arar.
         /// </summary>
         public static string AddToIgnoreListExist {
             get {
@@ -160,7 +160,7 @@ namespace ClassicUO.Resources {
         }
         
         /// <summary>
-        ///   This is not a player. benzeri yerelleştirilmiş bir dize arar.
+        ///   Bu bir oyuncu değil. benzeri yerelleştirilmiş bir dize arar.
         /// </summary>
         public static string AddToIgnoreListNotMobile {
             get {
@@ -169,7 +169,7 @@ namespace ClassicUO.Resources {
         }
         
         /// <summary>
-        ///   Added {0} to ignore list. benzeri yerelleştirilmiş bir dize arar.
+        ///   {0} yasaklı listesine eklendi. benzeri yerelleştirilmiş bir dize arar.
         /// </summary>
         public static string AddToIgnoreListSuccess {
             get {
@@ -2042,7 +2042,7 @@ namespace ClassicUO.Resources {
         }
         
         /// <summary>
-        ///   Add person to ignore list benzeri yerelleştirilmiş bir dize arar.
+        ///   Yasaklı listesine kişi ekle benzeri yerelleştirilmiş bir dize arar.
         /// </summary>
         public static string IgnoreListAddButton {
             get {
@@ -2051,7 +2051,7 @@ namespace ClassicUO.Resources {
         }
         
         /// <summary>
-        ///   Ignore List benzeri yerelleştirilmiş bir dize arar.
+        ///   Yasaklı Listesi benzeri yerelleştirilmiş bir dize arar.
         /// </summary>
         public static string IgnoreListManager {
             get {
@@ -2060,7 +2060,7 @@ namespace ClassicUO.Resources {
         }
         
         /// <summary>
-        ///   Character name benzeri yerelleştirilmiş bir dize arar.
+        ///   Oyuncu Adı benzeri yerelleştirilmiş bir dize arar.
         /// </summary>
         public static string IgnoreListName {
             get {
@@ -3189,7 +3189,7 @@ namespace ClassicUO.Resources {
         }
         
         /// <summary>
-        ///   Remove benzeri yerelleştirilmiş bir dize arar.
+        ///   Sil benzeri yerelleştirilmiş bir dize arar.
         /// </summary>
         public static string Remove {
             get {

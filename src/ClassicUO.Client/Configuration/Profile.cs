@@ -356,6 +356,7 @@ namespace ClassicUO.Configuration
         public bool WorldMapAllowPositionalTarget { get; set; } = false;
 
         public bool ClientNotifyBalloonActive { get; set; } = true;
+        public bool InputAutoFocused { get; set; } = true;
 
 
 

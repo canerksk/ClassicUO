@@ -143,7 +143,7 @@ namespace ClassicUO.Game.UI.Gumps
                          _chatAdditionalButtonsCheckbox,
                          _chatShiftEnterCheckbox,
                          _enableCaveBorder;
-        private static Checkbox _holdShiftForContext, _holdShiftToSplitStack, _clientnotifyballon, _reduceFPSWhenInactive, _sallosEasyGrab, _partyInviteGump, _objectsFading, _textFading, _holdAltToMoveGumps;
+        private static Checkbox _holdShiftForContext, _holdShiftToSplitStack, _clientnotifyballon, _inputautofocused, _reduceFPSWhenInactive, _sallosEasyGrab, _partyInviteGump, _objectsFading, _textFading, _holdAltToMoveGumps;
         private static Combobox _hpComboBox, _healtbarType, _fieldsType, _hpComboBoxShowWhen, _uiType;
 
         // infobar
@@ -711,6 +711,18 @@ namespace ClassicUO.Game.UI.Gumps
                     null,
                     "Anlık bildirimleri aç",
                     _currentProfile.ClientNotifyBalloonActive,
+                    startX,
+                    startY
+                )
+            );
+
+            section.Add
+            (
+                _inputautofocused = AddCheckBox
+                (
+                    null,
+                    "Yazım yerlerine otomatik odaklan",
+                    _currentProfile.InputAutoFocused,
                     startX,
                     startY
                 )
@@ -3839,7 +3851,8 @@ namespace ClassicUO.Game.UI.Gumps
             int startY = 5;
             Label text;
 
-            bool hasBackpacks = Client.Game.UO.Version >= ClientVersion.CV_705301;
+            //bool hasBackpacks = Client.Game.UO.Version >= ClientVersion.CV_705301;
+            bool hasBackpacks = true;
 
             if (hasBackpacks)
             {
@@ -3852,8 +3865,10 @@ namespace ClassicUO.Game.UI.Gumps
                 rightArea,
                 new[]
                 {
-                    ResGumps.BackpackStyle_Default, ResGumps.BackpackStyle_Suede,
-                    ResGumps.BackpackStyle_PolarBear, ResGumps.BackpackStyle_GhoulSkin
+                    ResGumps.BackpackStyle_Default, 
+                    ResGumps.BackpackStyle_Suede,
+                    ResGumps.BackpackStyle_PolarBear, 
+                    ResGumps.BackpackStyle_GhoulSkin
                 },
                 _currentProfile.BackpackStyle,
                 startX,
@@ -3906,7 +3921,8 @@ namespace ClassicUO.Game.UI.Gumps
                 startY
             );
 
-            _useLargeContianersGumps.IsVisible = Client.Game.UO.Version >= ClientVersion.CV_706000;
+            //_useLargeContianersGumps.IsVisible = Client.Game.UO.Version >= ClientVersion.CV_706000;
+            _useLargeContianersGumps.IsVisible = true;
 
             if (_useLargeContianersGumps.IsVisible)
             {
@@ -4073,6 +4089,7 @@ namespace ClassicUO.Game.UI.Gumps
                 _sliderFPS.Value = 60;
                 _reduceFPSWhenInactive.IsChecked = true;
                 _clientnotifyballon.IsChecked = true;
+                _inputautofocused.IsChecked = false;
                 //_singleclickmenu.IsChecked = false;
                 _highlightObjects.IsChecked = false;
                 _enableTopbar.IsChecked = false;
@@ -4415,6 +4432,7 @@ namespace ClassicUO.Game.UI.Gumps
             _currentProfile.HighlightGameObjects = _highlightObjects.IsChecked;
             _currentProfile.ReduceFPSWhenInactive = _reduceFPSWhenInactive.IsChecked;
             _currentProfile.ClientNotifyBalloonActive = _clientnotifyballon.IsChecked;
+            _currentProfile.InputAutoFocused = _inputautofocused.IsChecked;
             //_currentProfile.SingleClickMenu = _singleclickmenu.IsChecked;
             _currentProfile.EnablePathfind = _enablePathfind.IsChecked;
             _currentProfile.UseShiftToPathfind = _useShiftPathfind.IsChecked;
@@ -4475,7 +4493,9 @@ namespace ClassicUO.Game.UI.Gumps
                 _currentProfile.TreeToStumps = _treeToStumps.IsChecked;
             }
 
-            _currentProfile.FieldsType = _fieldsType.SelectedIndex;
+            //_currentProfile.FieldsType = _fieldsType.SelectedIndex;
+            _currentProfile.FieldsType = 0;
+
             _currentProfile.HideVegetation = _hideVegetation.IsChecked;
             _currentProfile.NoColorObjectsOutOfRange = _noColorOutOfRangeObjects.IsChecked;
             _currentProfile.UseCircleOfTransparency = _useCircleOfTransparency.IsChecked;
@@ -4585,12 +4605,12 @@ namespace ClassicUO.Game.UI.Gumps
             _currentProfile.EnableMousewheelScaleZoom = _zoomCheckbox.IsChecked;
             _currentProfile.RestoreScaleAfterUnpressCtrl = _restorezoomCheckbox.IsChecked;
 
+            _currentProfile.UseOldStatusGump = true;
+
             if (!CUOEnviroment.IsOutlands && _use_old_status_gump.IsChecked != _currentProfile.UseOldStatusGump)
             {
                 StatusGumpBase status = StatusGumpBase.GetStatusGump();
-
-                _currentProfile.UseOldStatusGump = _use_old_status_gump.IsChecked;
-
+                //_currentProfile.UseOldStatusGump = _use_old_status_gump.IsChecked;
                 if (status != null)
                 {
                     status.Dispose();

@@ -81,7 +81,7 @@ namespace ClassicUO.Game.UI.Gumps.CharCreation
 
             Add
             (
-                new Label(localization.GetString(3000326, "Choose a Trade for Your Character"), unicode, hue, font: font)
+                new Label(localization.GetString(3000326, "Karakter Sinifi Seciniz."), unicode, hue, font: font)
                 {
                     X = 158,
                     Y = 132

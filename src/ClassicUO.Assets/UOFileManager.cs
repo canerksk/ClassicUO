@@ -47,15 +47,40 @@ namespace ClassicUO.Assets
     {
         public static string GetUOFilePath(string file)
         {
+            /*
+            if (!UOFilesOverrideMap.Instance.TryGetValue(file.ToLowerInvariant(), out string uoFilePath))
+            {
+                uoFilePath = Path.Combine(BasePath, file);
+            }
+            */
+
+            //Console.WriteLine("basepath:" + BasePath);
             if (!UOFilesOverrideMap.Instance.TryGetValue(file.ToLowerInvariant(), out string uoFilePath))
             {
                 uoFilePath = Path.Combine(BasePath, file);
             }
 
-            //If the file with the given name doesn't exist, check for it with alternative casing if not on windows
-            if (!PlatformHelper.IsWindows && !File.Exists(uoFilePath))
+            if (!UOFilesOverrideMap.Instance.TryGetValue(file.ToLowerInvariant(), out string clientFilePath))
             {
-                FileInfo finfo = new FileInfo(uoFilePath);
+                clientFilePath = Path.Combine(Environment.CurrentDirectory, file);
+            }
+
+            var filepath = string.Empty;
+
+            if (File.Exists(clientFilePath))
+            {
+                filepath = clientFilePath;
+            }
+            else
+            {
+                filepath = uoFilePath;
+            }
+
+
+            //If the file with the given name doesn't exist, check for it with alternative casing if not on windows
+            if (!PlatformHelper.IsWindows && !File.Exists(filepath))
+            {
+                FileInfo finfo = new FileInfo(filepath);
                 var dir = Path.GetFullPath(finfo.DirectoryName ?? BasePath);
 
                 if (Directory.Exists(dir))
@@ -65,21 +90,21 @@ namespace ClassicUO.Assets
 
                     foreach (var f in files)
                     {
-                        if (string.Equals(f, uoFilePath, StringComparison.OrdinalIgnoreCase))
+                        if (string.Equals(f, filepath, StringComparison.OrdinalIgnoreCase))
                         {
                             matches++;
-                            uoFilePath = f;
+                            filepath = f;
                         }
                     }
 
                     if (matches > 1)
                     {
-                        Log.Warn($"Multiple files with ambiguous case found for {file}, using {Path.GetFileName(uoFilePath)}. Check your data directory for duplicate files.");
+                        Log.Warn($"Multiple files with ambiguous case found for {file}, using {Path.GetFileName(filepath)}. Check your data directory for duplicate files.");
                     }
                 }
             }
 
-            return uoFilePath;
+            return filepath;
         }
 
         public static ClientVersion Version;

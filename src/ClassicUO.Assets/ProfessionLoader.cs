@@ -32,6 +32,7 @@
 
 using ClassicUO.IO;
 using ClassicUO.Utility;
+using ClassicUO.Utility.Logging;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
@@ -68,8 +69,24 @@ namespace ClassicUO.Assets
         private static ProfessionLoader _instance;
         private readonly string[] _Keys =
         {
-            "begin", "name", "truename", "desc", "toplevel", "gump", "type", "children", "skill",
-            "stat", "str", "int", "dex", "end", "true", "category", "nameid", "descid"
+            "begin", 
+            "name", 
+            "truename", 
+            "desc", 
+            "toplevel", 
+            "gump", 
+            "type", 
+            "children", 
+            "skill",
+            "stat", 
+            "str", 
+            "int", 
+            "dex", 
+            "end", 
+            "true", 
+            "category", 
+            "nameid", 
+            "descid"
         };
 
         private ProfessionLoader()
@@ -89,6 +106,8 @@ namespace ClassicUO.Assets
                     bool result = false;
 
                     FileInfo file = new FileInfo(UOFileManager.GetUOFilePath("Prof.txt"));
+
+                    Log.Error(file.ToString());
 
                     if (file.Exists)
                     {
@@ -121,7 +140,7 @@ namespace ClassicUO.Assets
 
                     Professions[new ProfessionInfo
                     {
-                        Name = "Advanced",
+                        Name = "Gelismis",
                         Localization = 1061176,
                         Description = 1061226,
                         Graphic = 5545,

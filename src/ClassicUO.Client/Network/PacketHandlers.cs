@@ -1488,11 +1488,8 @@ namespace ClassicUO.Network
                         y;
 
                     // TODO: check client version ?
-                    if (
-                        Client.Game.UO.Version >= Utility.ClientVersion.CV_706000
-                        && ProfileManager.CurrentProfile != null
-                        && ProfileManager.CurrentProfile.UseLargeContainerGumps
-                    )
+                    //if ( Client.Game.UO.Version >= Utility.ClientVersion.CV_706000 && ProfileManager.CurrentProfile != null && ProfileManager.CurrentProfile.UseLargeContainerGumps)
+                    if ( ProfileManager.CurrentProfile != null && ProfileManager.CurrentProfile.UseLargeContainerGumps)
                     {
                         var gumps = Client.Game.UO.Gumps;
 
@@ -7159,8 +7156,11 @@ namespace ClassicUO.Network
 
                     if (!textBoxFocused)
                     {
-                        textBox.SetKeyboardFocus();
-                        textBoxFocused = true;
+                        if (ProfileManager.CurrentProfile.InputAutoFocused)
+                        {
+                            textBox.SetKeyboardFocus();
+                            textBoxFocused = true;
+                        }
                     }
 
                     gump.Add(textBox, page);

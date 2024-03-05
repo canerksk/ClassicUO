@@ -809,7 +809,7 @@ Time left: {1:00}:{2:00}:{3:00}</value>
     <value>Use object (Double click)</value>
   </data>
   <data name="Remove" xml:space="preserve">
-    <value>Remove</value>
+    <value>Sil</value>
   </data>
   <data name="Selected0" xml:space="preserve">
     <value>- Selected: {0}</value>
@@ -1481,22 +1481,22 @@ Client version: '{0}'</value>
     <value>Invalid marker name.</value>
   </data>
   <data name="AddToIgnoreListExist" xml:space="preserve">
-    <value>Character {0} already exist in a list.</value>
+    <value>{0} zaten yasaklı listesinde bulunuyor...</value>
   </data>
   <data name="AddToIgnoreListNotMobile" xml:space="preserve">
-    <value>This is not a player.</value>
+    <value>Bu bir oyuncu değil.</value>
   </data>
   <data name="AddToIgnoreListSuccess" xml:space="preserve">
-    <value>Added {0} to ignore list.</value>
+    <value>{0} yasaklı listesine eklendi.</value>
   </data>
   <data name="IgnoreListAddButton" xml:space="preserve">
-    <value>Add person to ignore list</value>
+    <value>Yasaklı listesine kişi ekle</value>
   </data>
   <data name="IgnoreListManager" xml:space="preserve">
-    <value>Ignore List</value>
+    <value>Yasaklı Listesi</value>
   </data>
   <data name="IgnoreListName" xml:space="preserve">
-    <value>Character name</value>
+    <value>Oyuncu Adı</value>
   </data>
   <data name="AddMarker" xml:space="preserve">
     <value>Add Marker</value>

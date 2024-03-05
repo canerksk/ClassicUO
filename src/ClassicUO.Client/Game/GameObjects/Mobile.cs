@@ -803,8 +803,12 @@ namespace ClassicUO.Game.GameObjects
                     }
                     else
                     {
-                        directionChange = true;
-                        removeStep = true;
+                        //if (!IsMounted)
+                        //{
+                            directionChange = true;
+                            removeStep = true;
+                        //}
+
                     }
 
                     if (removeStep)

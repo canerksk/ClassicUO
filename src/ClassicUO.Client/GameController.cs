@@ -854,7 +854,7 @@ namespace ClassicUO
 
             string path = Path.Combine(
                 screenshotsFolder,
-                $"screenshot_{DateTime.Now:yyyy-MM-dd_hh-mm-ss}.png"
+                $"SS_{DateTime.Now:yyyy-MM-dd_hh-mm-ss}.png"
             );
 
             Color[] colors = new Color[
@@ -878,10 +878,7 @@ namespace ClassicUO
                 texture.SaveAsPng(fileStream, texture.Width, texture.Height);
                 string message = string.Format(ResGeneral.ScreenshotStoredIn0, path);
 
-                if (
-                    ProfileManager.CurrentProfile == null
-                    || ProfileManager.CurrentProfile.HideScreenshotStoredInMessage
-                )
+                if (ProfileManager.CurrentProfile == null || ProfileManager.CurrentProfile.HideScreenshotStoredInMessage)
                 {
                     Log.Info(message);
                 }
@@ -889,6 +886,7 @@ namespace ClassicUO
                 {
                     GameActions.Print(UO.World, message, 0x44, MessageType.System);
                 }
+
             }
         }
     }
