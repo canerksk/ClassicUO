@@ -2278,8 +2278,6 @@ namespace ClassicUO.Network
         {
             if (world.Player != null && Client.Game.Scene is LoginScene)
             {
-
-
                 // ProfileManager
                 ProfileManager.CurrentProfile.FieldsType = 0;
                 ProfileManager.CurrentProfile.AutoOpenCorpses = false;
@@ -2320,7 +2318,10 @@ namespace ClassicUO.Network
                 GameActions.RequestMobileStatus(world, world.Player);
 
                 //NetClient.Socket.Send_OpenChat("Genel");
+                NetClient.Socket.Send_OpenChat("");
+
                 //NetClient.Socket.Send_ChatJoinCommand("Genel");
+                //NetClient.Socket.Send_ChatJoinCommand("");
 
                 NetClient.Socket.Send_TextCommand(0x0F4, (uint)Client.Game.Scene.Camera.Bounds.Width + "," + (uint)Client.Game.Scene.Camera.Bounds.Height);
 

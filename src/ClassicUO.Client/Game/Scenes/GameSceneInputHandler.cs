@@ -742,6 +742,7 @@ namespace ClassicUO.Game.Scenes
 
                         if (Keyboard.Alt && ent is Mobile)
                         {
+                            /*
                             _world.MessageManager.HandleMessage(
                                 _world.Player,
                                 ResGeneral.NowFollowing,
@@ -754,6 +755,7 @@ namespace ClassicUO.Game.Scenes
 
                             _followingMode = true;
                             _followingTarget = ent;
+                            */
                         }
                         else if (!_world.DelayedObjectClickManager.IsEnabled)
                         {
@@ -1393,7 +1395,6 @@ namespace ClassicUO.Game.Scenes
                         //Console.WriteLine("NumLock:OFF");
                         switch (e.keysym.sym)
                         {
-
                             case SDL.SDL_Keycode.SDLK_KP_8: // up
                                 _flags[0] = true;
                                 break;
@@ -1605,6 +1606,21 @@ namespace ClassicUO.Game.Scenes
                     _flags[3] = false;
 
                     break;
+
+                case SDL.SDL_Keycode.SDLK_PAGEUP:
+
+                    _flags[0] = false;
+                    _flags[3] = false;
+
+                    break;
+
+                case SDL.SDL_Keycode.SDLK_PAGEDOWN:
+
+                    _flags[1] = false;
+                    _flags[2] = false;
+
+                    break;
+
                 // num keypad
                 case SDL.SDL_Keycode.SDLK_KP_8:
 

@@ -101,6 +101,14 @@ namespace ClassicUO.Game.Managers
                 return;
             }
 
+            // Repeating message filter
+            /*
+            if (!MessageQueue.Enqueue(_world.Player.Serial, 0, 1, hue, font, lang, name, text))
+            {
+                return;
+            }
+            */
+
             Profile currentProfile = ProfileManager.CurrentProfile;
 
             if (currentProfile != null && currentProfile.OverrideAllFonts)

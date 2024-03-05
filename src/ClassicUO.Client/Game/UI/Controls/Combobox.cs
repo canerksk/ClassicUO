@@ -48,6 +48,7 @@ namespace ClassicUO.Game.UI.Controls
         private readonly Label _label;
         private readonly int _maxHeight;
         private int _selectedIndex;
+        private bool _hasBackGround;
 
         public Combobox
         (
@@ -59,7 +60,8 @@ namespace ClassicUO.Game.UI.Controls
             int maxHeight = 200,
             bool showArrow = true,
             string emptyString = "",
-            byte font = 9
+            byte font = 9,
+            bool HasBackGround = true
         )
         {
             X = x;
@@ -71,13 +73,18 @@ namespace ClassicUO.Game.UI.Controls
             _items = items;
             _maxHeight = maxHeight;
 
-            Add
-            (
-                new ResizePic(0x0BB8)
-                {
-                    Width = width, Height = Height
-                }
-            );
+            if (HasBackGround)
+            {
+                Add
+                (
+                    new ResizePic(0x0BB8)
+                    {
+                        Width = width,
+                        Height = Height
+                    }
+                );
+            }
+
 
             string initialText = selected > -1 ? items[selected] : emptyString;
 

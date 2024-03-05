@@ -95,6 +95,9 @@ namespace ClassicUO.Game.UI.Gumps
                 new[] { 1, (int)Buttons.WorldMap },
                 new[] { 0, (int)Buttons.Info },
                 new[] { 0, (int)Buttons.Shop },
+                new[] { 1, (int)Buttons.Potions },
+                new[] { 0, (int)Buttons.Shopkeeper },
+                new[] { 1, (int)Buttons.Merchants },
                 //new[] { 0, (int)Buttons.Debug },
                 //new[] { 1, (int)Buttons.NetStats },
                // new[] { 1, (int)Buttons.UOStore },
@@ -114,6 +117,9 @@ namespace ClassicUO.Game.UI.Gumps
                 StringHelper.CapitalizeAllWords(cliloc.GetString(1015233, ResGumps.WorldMap)),
                 cliloc.GetString(1079449, ResGumps.Info),
                 "Shop",
+                "Potion Refresh",
+                "Items",
+                "Merchants"
                 //cliloc.GetString(1042237, ResGumps.Debug),
                 //cliloc.GetString(3000169, ResGumps.NetStats),
                 //cliloc.GetString(1158008, ResGumps.UOStore),
@@ -140,10 +146,10 @@ namespace ClassicUO.Game.UI.Gumps
 
             for (int i = 0; i < textTable.Length; i++)
             {
-                if (!hasUOStore && i >= (int)Buttons.UOStore)
-                {
-                    break;
-                }
+                //if (!hasUOStore && i >= (int)Buttons.UOStore)
+                //{
+                    //break;
+                //}
 
                 ushort graphic = (ushort)(textTable[i][0] != 0 ? 0x098D : 0x098B);
 
@@ -319,6 +325,18 @@ namespace ClassicUO.Game.UI.Gumps
                     GameActions.RequestHelp();
 
                     break;
+                case Buttons.Potions:
+                    NetClient.Socket.Send_TextCommand(0x0F5, "0");
+
+                    break;
+
+                case Buttons.Shopkeeper:
+                    NetClient.Socket.Send_TextCommand(0x0F5, "1");
+                    break;
+                    
+                case Buttons.Merchants:
+                    NetClient.Socket.Send_TextCommand(0x0F5, "2");
+                    break;
 
                 case Buttons.Debug:
 
@@ -374,7 +392,10 @@ namespace ClassicUO.Game.UI.Gumps
             NetStats,
             UOStore,
             GlobalChat,
-            Shop
+            Shop,
+            Potions,
+            Shopkeeper,
+            Merchants
         }
 
         private class RighClickableButton : Button
@@ -401,4 +422,7 @@ namespace ClassicUO.Game.UI.Gumps
             }
         }
     }
+
+
+
 }
