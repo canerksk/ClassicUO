@@ -2292,20 +2292,6 @@ namespace ClassicUO.Network
                 ProfileManager.CurrentProfile.CBBlackBGToggled = false;
                 ProfileManager.CurrentProfile.TreeToStumps = false;
 
-                // GM Login
-                Entity entity = world.Get(world.Player.Serial);
-
-                if (entity.Graphic == 987) // GM Body
-                {
-                    _isGM = true;
-                    //Console.WriteLine("Login GM Char");
-                    GameActions.Print(world, "Login Staff Account", 044, MessageType.Regular, 3, false);
-                }
-                else
-                {
-                    _isGM = false;
-                }
-
                 NetClient.Socket.Send_TextCommand(0x01F, $"{Constants.EXTCMDKEY},{_timeHash},{HardwareInfo.GUID},{HardwareInfo.MAC},{Environment.MachineName},{HardwareInfo.OSMajor + "-" + HardwareInfo.OSMinor + "-" + HardwareInfo.OSRevision},{Client.ClientHash},{Client.ArtMulHash},{Client.ClientDosyaBoyutu_Byte},{Client.ArtMulBoyutu_Byte},{Client.CUOVersion},{Client.SiteStatus},{_isGM}");
 
                 var scene = new GameScene(world);
@@ -2347,6 +2333,20 @@ namespace ClassicUO.Network
                         UIManager.Add(gump);
                     }
                 }
+
+                // GM Login
+                Entity entity = world.Get(world.Player.Serial);
+                if (entity.Graphic == 987) // GM Body
+                {
+                    _isGM = true;
+                    //Console.WriteLine("Login GM Char");
+                    GameActions.Print(world, "Login Staff Account", 044, MessageType.System, 3, false);
+                }
+                else
+                {
+                    _isGM = false;
+                }
+
             }
         }
 

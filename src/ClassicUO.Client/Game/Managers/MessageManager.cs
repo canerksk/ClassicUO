@@ -42,6 +42,7 @@ using ClassicUO.Assets;
 using ClassicUO.Renderer;
 using ClassicUO.Utility;
 using ClassicUO.Game.Scenes;
+using Windows.Globalization;
 
 namespace ClassicUO.Game.Managers
 {
@@ -102,12 +103,11 @@ namespace ClassicUO.Game.Managers
             }
 
             // Repeating message filter
-            /*
-            if (!MessageQueue.Enqueue(_world.Player.Serial, 0, 1, hue, font, lang, name, text))
-            {
-                return;
-            }
-            */
+            // 2.
+            //if (!MessageQueue.Enqueue(0, 0, (ushort)hue, 3, lang, "System", text))
+            //{
+            //    return;
+            //}
 
             Profile currentProfile = ProfileManager.CurrentProfile;
 
@@ -247,22 +247,9 @@ namespace ClassicUO.Game.Managers
                     break;
             }
 
-            MessageReceived.Raise
-            (
-                new MessageEventArgs
-                (
-                    parent,
-                    text,
-                    name,
-                    hue,
-                    type,
-                    font,
-                    textType,
-                    unicode,
-                    lang
-                ),
-                parent
-            );
+
+            MessageReceived.Raise(new MessageEventArgs(parent,text,name,hue,type,font,textType,unicode,lang),parent);
+
         }
 
         public void OnLocalizedMessage(Entity entity, MessageEventArgs args)

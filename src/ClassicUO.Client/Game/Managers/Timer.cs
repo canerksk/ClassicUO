@@ -274,6 +274,7 @@ namespace ClassicUO.Game.Managers
         public static void Slice()
         {
             int breakCount = 100;
+            //Console.WriteLine("slice");
             ArrayList readd = new ArrayList();
 
             while (!m_Heap.IsEmpty && ((Timer) m_Heap.Peek()).TimeUntilTick < TimeSpan.Zero)

@@ -1,87 +1,69 @@
 ﻿#region license
-
-// Copyright (c) 2024, andreakarasho
-// All rights reserved.
+// Razor: An Ultima Online Assistant
+// Copyright (c) 2022 Razor Development Community on GitHub <https://github.com/markdwags/Razor>
 // 
-// Redistribution and use in source and binary forms, with or without
-// modification, are permitted provided that the following conditions are met:
-// 1. Redistributions of source code must retain the above copyright
-//    notice, this list of conditions and the following disclaimer.
-// 2. Redistributions in binary form must reproduce the above copyright
-//    notice, this list of conditions and the following disclaimer in the
-//    documentation and/or other materials provided with the distribution.
-// 3. All advertising materials mentioning features or use of this software
-//    must display the following acknowledgement:
-//    This product includes software developed by andreakarasho - https://github.com/andreakarasho
-// 4. Neither the name of the copyright holder nor the
-//    names of its contributors may be used to endorse or promote products
-//    derived from this software without specific prior written permission.
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
 // 
-// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS ''AS IS'' AND ANY
-// EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
-// WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-// DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER BE LIABLE FOR ANY
-// DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
-// (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-// LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
-// ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+// 
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #endregion
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-using ClassicUO.Configuration;
 using ClassicUO.Game.Data;
 using ClassicUO.Game.GameObjects;
-using ClassicUO.Game.UI.Controls;
-using ClassicUO.Game.UI.Gumps;
-using ClassicUO.Assets;
-using ClassicUO.Renderer;
-using ClassicUO.Utility;
-using ClassicUO.Game.Scenes;
+using ClassicUO;
+using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
+using ClassicUO.Game.Managers;
+using ClassicUO.Game;
 using Microsoft.Xna.Framework.Audio;
+using static System.Net.Mime.MediaTypeNames;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TextBox;
+using ClassicUO.Network;
 
 namespace ClassicUO.Game.Managers
 {
-
     public class MessageQueue
     {
+        private static World _world;
+
         private class MsgInfo
         {
-            public MsgInfo(uint ser, ushort body, byte type, ushort hue, ushort font, string lang, string name)
+            public MsgInfo(World world, ushort body, byte type, ushort hue, ushort font, string lang,
+                string name)
             {
-                Serial = ser;
                 Body = body;
                 Type = type;
                 Hue = hue;
                 Font = font;
                 Lang = lang;
                 Name = name;
+                World = world;
             }
 
             public TimeSpan Delay;
             public DateTime NextSend;
             public int Count;
+
+            public World World;
             //ser, body, type, hue, font, lang, name
-            public uint Serial;
             public ushort Body, Hue, Font;
-            public byte Type;
+            public byte Type = 0;
             public string Lang, Name;
         }
 
-
-
         private class MessageTimer : Timer
         {
-            private readonly World _world;
-
             public MessageTimer() : base(TimeSpan.FromSeconds(0.1), TimeSpan.FromSeconds(0.1))
             {
-
             }
 
             protected override void OnTick()
@@ -103,57 +85,27 @@ namespace ClassicUO.Game.Managers
                             {
                                 case "O":
                                     //msg.Mobile.OverheadMessage(msg.Hue, msg.Count > 1 ? $"{txt} [{msg.Count}]" : txt);
-                                    //_world.Player.AddMessage(MessageType.System, msg.Count > 1 ? $"{txt} [{msg.Count}]" : txt, TextType.SYSTEM);
-
-                                    _world.MessageManager.HandleMessage
-                                    (
-                                        null,
-                                        msg.Count > 1 ? $"{txt} [{msg.Count}]" : txt,
-                                        "",
-                                        0x0,
-                                        MessageType.Regular,
-                                        3,
-                                        TextType.SYSTEM,
-                                        true
-                                    );
-
+                                    Console.WriteLine(msg.Count > 1 ? $"{txt} [{msg.Count}]" : txt);
+                                    //GameActions.Print(_world, msg.Count > 1 ? $"{txt} [{msg.Count}]" : txt, msg.Hue, MessageType.Regular, 0, false);
                                     break;
                                 case "A":
-                                    // _world.Player.AddMessage(MessageType.System, msg.Count > 1 ? $"{txt} [{msg.Count}]" : txt, TextType.SYSTEM);
+                                    //PacketHandlers.Talk(_world);
 
-                                    _world.MessageManager.HandleMessage
-                                    (
-                                        null,
-                                        msg.Count > 1 ? $"{txt} [{msg.Count}]" : txt,
-                                        "",
-                                        0x0,
-                                        MessageType.Regular,
-                                        3,
-                                        TextType.SYSTEM,
-                                        true
-                                    );
+                                    //Talk(new Talk(_world, msg.Body, msg.Type,
+                                    //    msg.Hue, msg.Font, msg.Name,
+                                    //    msg.Count > 1 ? $"{txt} [{msg.Count}]" : txt));
 
-                                    // Client.Instance.SendToClient(new AsciiMessage(msg.Serial, msg.Body, msg.Type,
-                                    //msg.Hue, msg.Font, msg.Name,
-                                    //msg.Count > 1 ? $"{txt} [{msg.Count}]" : txt));
+                                    //Console.WriteLine($"{txt} [{msg.Count}]");
+
+                                    Console.WriteLine(msg.Count > 1 ? $"{txt} [{msg.Count}]" : txt);
+                                    //GameActions.Print(_world, msg.Count > 1 ? $"{txt} [{msg.Count}]" : txt, msg.Hue, MessageType.Regular, 0, false);
                                     break;
                                 default:
-
-                                    _world.MessageManager.HandleMessage
-                                    (
-                                        null,
-                                        msg.Count > 1 ? $"{txt} [{msg.Count}]" : txt,
-                                        "",
-                                        0x0,
-                                        MessageType.Regular,
-                                        3,
-                                        TextType.SYSTEM,
-                                        true
-                                    );
-
                                     //Client.Instance.SendToClient(new UnicodeMessage(msg.Serial, msg.Body, msg.Type,
-                                    //msg.Hue, msg.Font, msg.Lang, msg.Name,
-                                    //msg.Count > 1 ? $"{txt} [{msg.Count}]" : txt));
+                                    //    msg.Hue, msg.Font, msg.Lang, msg.Name,
+                                    //    msg.Count > 1 ? $"{txt} [{msg.Count}]" : txt));
+
+                                    Console.WriteLine(msg.Count > 1 ? $"{txt} [{msg.Count}]" : txt);
                                     break;
                             }
 
@@ -164,6 +116,7 @@ namespace ClassicUO.Game.Managers
                         {
                             if (txt != null)
                                 toremove.Add(txt);
+                            Console.WriteLine($"{txt} [{msg.Count}]");
                         }
                     }
                 }
@@ -183,31 +136,22 @@ namespace ClassicUO.Game.Managers
             m_Timer.Start();
         }
 
-       // public static bool Enqueue(World ser, int hue, string lang, string text)
+        //public static bool Enqueue(Mobile m, int hue, string lang, string text)
         //{
-        //    return Enqueue(ser, 0, MessageType.Regular, (ushort)hue, 3, lang, "System", text);
+           // return Enqueue(0xFFFFFFFF, m, 0, MessageType.Regular, (ushort)hue, 3, lang, "System", text);
         //}
 
-        public static bool Enqueue(
-            uint ser, 
-            ushort body, 
-            byte type, 
-            ushort hue, 
-            ushort font, 
-            string lang, 
-            string name, 
-            string text)
+        public static bool Enqueue(ushort body, byte type, ushort hue, ushort font, string lang, string name, string text)
         {
-
             MsgInfo m;
 
             if (!m_Table.TryGetValue(text, out m) || m == null)
             {
-                m_Table[text] = m = new MsgInfo(ser, body, type, hue, font, lang, name);
+                m_Table[text] = m = new MsgInfo(_world, body, type, hue, font, lang, name);
 
                 m.Count = 0;
 
-                m.Delay = TimeSpan.FromSeconds((text.Length / 50 + 1) * 1000);
+                m.Delay = TimeSpan.FromSeconds((text.Length / 50 + 1) * 3.5);
 
                 m.NextSend = DateTime.UtcNow + m.Delay;
 
@@ -219,5 +163,4 @@ namespace ClassicUO.Game.Managers
             return false;
         }
     }
-
 }

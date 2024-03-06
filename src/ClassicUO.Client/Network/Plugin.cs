@@ -532,6 +532,8 @@ namespace ClassicUO.Network
         {
             Client.Game.PluginHost?.Tick();
 
+            Timer.Slice();
+
             foreach (Plugin t in Plugins)
             {
                 if (t._tick != null)

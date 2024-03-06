@@ -2882,7 +2882,7 @@ namespace ClassicUO.Game.UI.Gumps
                 _currentProfile.OverrideAllFonts,
                 startX,
                 startY,
-                true
+                false
             );
 
             startX += _overrideAllFonts.Width + 5;
@@ -2898,7 +2898,7 @@ namespace ClassicUO.Game.UI.Gumps
                 startX,
                 startY,
                 100,
-                true
+                false
             );
 
             startX = 5;
@@ -4238,6 +4238,7 @@ namespace ClassicUO.Game.UI.Gumps
             {
                 _fontSelectorChat.SetSelectedFont(0);
                 //_overrideAllFonts.IsChecked = true;
+                //_overrideAllFonts.IsChecked = false;
                 _overrideAllFonts.IsChecked = false;
                 _overrideAllFontsIsUnicodeCheckbox.SelectedIndex = 1;
 
