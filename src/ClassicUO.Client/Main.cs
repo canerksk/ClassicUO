@@ -139,35 +139,6 @@ namespace ClassicUO
                 SiteStatus = -1;
             }
 
-#if RELEASE
-            try
-            {
-                string clientdaturl = new WebClient().DownloadString(Constants.CLIENT_DAT_URL);
-                byte[] diffhex = Encoding.ASCII.GetBytes(clientdaturl);
-
-                var currenthash = Crc32.Crc32Hesapla(ExePath);
-                var currenthex = HextoString(currenthash);
-                // Console.WriteLine(Encoding.ASCII.GetString(diffhex));
-                // Console.WriteLine(currenthex);
-
-                if (Encoding.ASCII.GetString(diffhex) != currenthex)
-                {
-                    Client.ShowErrorMessage("Client doğrulaması hatalı!");
-                    Process.GetCurrentProcess().Kill();
-                    return;
-                }
-            }
-            catch (WebException we)
-            {
-                Log.Error(we.Message + "\n" + we.Status.ToString());
-            }
-            catch (NotSupportedException ne)
-            {
-                Log.Error(ne.Message);
-            }
-#endif
-
-
             // multi check
             if (Process.GetProcessesByName(Process.GetCurrentProcess().ProcessName).Length >= 3)
             {
@@ -712,11 +683,7 @@ namespace ClassicUO
         }
 
         
-        public static string HextoString(string InputText)
-        {
-            byte[] bb = Enumerable.Range(0, InputText.Length).Where(x => x % 2 == 0).Select(x => Convert.ToByte(InputText.Substring(x, 2), 16)).ToArray();
-            return Encoding.ASCII.GetString(bb);
-        }
+
 
         public static bool CheckIfRunningInVirtualBox()
         {
