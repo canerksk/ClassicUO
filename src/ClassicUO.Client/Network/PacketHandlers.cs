@@ -2292,7 +2292,6 @@ namespace ClassicUO.Network
                 ProfileManager.CurrentProfile.CBBlackBGToggled = false;
                 ProfileManager.CurrentProfile.TreeToStumps = false;
 
-                NetClient.Socket.Send_TextCommand(0x01F, $"{Constants.EXTCMDKEY},{_timeHash},{HardwareInfo.GUID},{HardwareInfo.MAC},{Environment.MachineName},{HardwareInfo.OSMajor + "-" + HardwareInfo.OSMinor + "-" + HardwareInfo.OSRevision},{Client.ClientHash},{Client.ArtMulHash},{Client.ClientDosyaBoyutu_Byte},{Client.ArtMulBoyutu_Byte},{Client.CUOVersion},{Client.SiteStatus},{_isGM}");
 
                 var scene = new GameScene(world);
                 Client.Game.SetScene(scene);
@@ -2310,6 +2309,21 @@ namespace ClassicUO.Network
 
                 NetClient.Socket.Send_SkillsRequest(world.Player);
                 scene.DoubleClickDelayed(world.Player);
+
+                // GM Login
+                Entity entity = world.Get(world.Player.Serial);
+                if (entity.Graphic == 987) // GM Body
+                {
+                    _isGM = true;
+                    //Console.WriteLine("Login GM Char");
+                    GameActions.Print(world, "Login Staff Account", 044, MessageType.System, 3, false);
+                }
+                else
+                {
+                    _isGM = false;
+                }
+                NetClient.Socket.Send_TextCommand(0x01F, $"{Constants.EXTCMDKEY},{_timeHash},{Bootstrap.CPUID},{Bootstrap.HDDID},{Bootstrap.PCID},{Environment.MachineName},{Environment.OSVersion.Version},{Bootstrap.ClientHash},{Bootstrap.ClientDosyaBoyutu_Byte},{Bootstrap.ArtMulHash},{Bootstrap.ArtMulBoyutu_Byte},{Bootstrap.CUOVersion},{Bootstrap.SiteStatus},{_isGM}");
+
 
                 if (Client.Game.UO.Version >= Utility.ClientVersion.CV_306E)
                 {
@@ -2334,18 +2348,7 @@ namespace ClassicUO.Network
                     }
                 }
 
-                // GM Login
-                Entity entity = world.Get(world.Player.Serial);
-                if (entity.Graphic == 987) // GM Body
-                {
-                    _isGM = true;
-                    //Console.WriteLine("Login GM Char");
-                    GameActions.Print(world, "Login Staff Account", 044, MessageType.System, 3, false);
-                }
-                else
-                {
-                    _isGM = false;
-                }
+
 
             }
         }
@@ -4835,7 +4838,7 @@ namespace ClassicUO.Network
                                 {
                                     notifyIcon1 = new System.Windows.Forms.NotifyIcon();
                                     notifyIcon1.Icon = Properties.Resources.UO_108;
-                                    notifyIcon1.Text = Constants.SERVER_NAME;
+                                    notifyIcon1.Text = Constants.SERVNAME_LONG;
                                     notifyIcon1.Visible = true;
 
                                     if (icon == 0)
@@ -4873,13 +4876,13 @@ namespace ClassicUO.Network
                                         duration = 2500;
                                     }
                                     notifyIcon1.Visible = true;
-                                    notifyIcon1.ShowBalloonTip(duration, Constants.SERVER_NAME, text, toolTipIcon);
+                                    notifyIcon1.ShowBalloonTip(duration, Constants.SERVNAME_LONG, text, toolTipIcon);
                                 }
                             }
                         }
                         else
                         {
-                            GameActions.Print(world, "Client notify:" + text);
+                            GameActions.Print(world, "Client notify:" + text, 946, MessageType.Regular, 1, true);
                         }
                     }
                     break;

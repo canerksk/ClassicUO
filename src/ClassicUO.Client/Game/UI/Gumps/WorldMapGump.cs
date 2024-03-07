@@ -144,7 +144,7 @@ namespace ClassicUO.Game.UI.Gumps
 
             LoadSettings();
 
-            GameActions.Print(World, ResGumps.WorldMapLoading, 0x35);
+            GameActions.Print(World, ResGumps.WorldMapLoading, 0x35, MessageType.Regular, 1, true);
             Load();
             OnResize();
 
@@ -313,7 +313,7 @@ namespace ClassicUO.Game.UI.Gumps
 
                             if (string.IsNullOrWhiteSpace(name))
                             {
-                                GameActions.Print(World, ResGumps.InvalidLocation, 0x35);
+                                GameActions.Print(World, ResGumps.InvalidLocation, 0x35, MessageType.Regular, 1, true);
 
                                 return;
                             }
@@ -331,19 +331,19 @@ namespace ClassicUO.Game.UI.Gumps
                                 }
                                 catch
                                 {
-                                    GameActions.Print(World, ResGumps.InvalidLocation, 0x35);
+                                    GameActions.Print(World, ResGumps.InvalidLocation, 0x35, MessageType.Regular, 1, true);
                                 }
                             }
                             else
                             {
                                 if (!int.TryParse(coords[0], out x))
                                 {
-                                    GameActions.Print(World, ResGumps.InvalidLocation, 0x35);
+                                    GameActions.Print(World, ResGumps.InvalidLocation, 0x35, MessageType.Regular, 1, true);
                                 }
 
                                 if (!int.TryParse(coords[1], out y))
                                 {
-                                    GameActions.Print(World, ResGumps.InvalidLocation, 0x35);
+                                    GameActions.Print(World, ResGumps.InvalidLocation, 0x35, MessageType.Regular, 1, true);
                                 }
                             }
 
@@ -1601,7 +1601,7 @@ namespace ClassicUO.Game.UI.Gumps
                             Log.Error($"error loading worldmap: {ex}");
                         }
 
-                        GameActions.Print(World, ResGumps.WorldMapLoaded, 0x48);
+                        GameActions.Print(World, ResGumps.WorldMapLoaded, 0x48, MessageType.Regular, 1, true);
                     }
                 }
             );
@@ -1754,7 +1754,7 @@ namespace ClassicUO.Game.UI.Gumps
                 {
                     _mapMarkersLoaded = false;
 
-                    GameActions.Print(World, ResGumps.LoadingWorldMapMarkers, 0x2A);
+                    GameActions.Print(World, ResGumps.LoadingWorldMapMarkers, 0x2A, MessageType.Regular, 1, true);
 
                     foreach (Texture2D t in _markerIcons.Values)
                     {
@@ -1982,7 +1982,7 @@ namespace ClassicUO.Game.UI.Gumps
 
                             if (markerFile.Markers.Count > 0)
                             {
-                                GameActions.Print(World, $"..{Path.GetFileName(mapFile)} ({markerFile.Markers.Count})", 0x2B);
+                                GameActions.Print(World, $"..{Path.GetFileName(mapFile)} ({markerFile.Markers.Count})", 0x2B, MessageType.Regular, 1, true);
                             }
                             _markerFiles.Add(markerFile);
                         }
@@ -1999,7 +1999,7 @@ namespace ClassicUO.Game.UI.Gumps
 
                     _mapMarkersLoaded = true;
 
-                    GameActions.Print(World, string.Format(ResGumps.WorldMapMarkersLoaded0, count), 0x2A);
+                    GameActions.Print(World, string.Format(ResGumps.WorldMapMarkersLoaded0, count), 0x2A, MessageType.Regular, 1, true);
                 }
             }
 
@@ -2030,7 +2030,7 @@ namespace ClassicUO.Game.UI.Gumps
 
             if (string.IsNullOrWhiteSpace(markerName))
             {
-                GameActions.Print(World, ResGumps.InvalidMarkerName, 0x2A);
+                GameActions.Print(World, ResGumps.InvalidMarkerName, 0x2A, MessageType.Regular, 1, true);
             }
 
             var markerColor = "blue";

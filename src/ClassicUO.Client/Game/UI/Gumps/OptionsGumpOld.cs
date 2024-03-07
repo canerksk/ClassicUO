@@ -2556,11 +2556,11 @@ namespace ClassicUO.Game.UI.Gumps
 
                     _convertMacro.Clear();
 
-                    GameActions.Print(World, "Macrolar başarıyla aktarıldı!" + ":" + fileToLoad + " (" + sira + ")", 0x44, MessageType.System);
+                    GameActions.Print(World, "Macrolar başarıyla aktarıldı!" + ":" + fileToLoad + " (" + sira + ")", 0x44, MessageType.Regular, 1, true);
                 }
                 else
                 {
-                    GameActions.Print(World, "macros.txt dosyası bulunamadı!", 0x20, MessageType.System);
+                    GameActions.Print(World, "macros.txt dosyası bulunamadı!", 0x20, MessageType.Regular, 1, true);
                 }
             };
 
@@ -2579,7 +2579,7 @@ namespace ClassicUO.Game.UI.Gumps
                         }
                         Array.ForEach(UIManager.Gumps.OfType<MacroButtonGump>().ToArray(), m => m?.Dispose());
                         Array.ForEach(World.Macros.GetAllMacros().ToArray(), m => World.Macros.Remove(m));
-                        GameActions.Print(World, "Tüm macrolar silindi.", 0x20, MessageType.System);
+                        GameActions.Print(World, "Tüm macrolar silindi.", 0x44, MessageType.Regular, 1, true);
                         databox.ReArrangeChildren();
                         UIManager.GetGump<OptionsGumpOld>()?.Dispose();
 
@@ -2614,9 +2614,9 @@ namespace ClassicUO.Game.UI.Gumps
 
                 if (!Directory.Exists(path))
                 {
-                    GameActions.Print(World, "Klasör bulunamadı!", 0x20, MessageType.System);
+                    GameActions.Print(World, "Klasör bulunamadı!", 0x20, MessageType.Regular, 1, true);
                 }
-                GameActions.Print(World, "Hesap, Sunucu ve karaktere ait macro klasörü açılıyor...", 0x44, MessageType.System);
+                GameActions.Print(World, "Hesap, Sunucu ve karaktere ait macro klasörü açılıyor...", 946, MessageType.Regular, 1, true);
                 System.Diagnostics.Process.Start("explorer.exe", path);
 
             };
@@ -4081,7 +4081,7 @@ namespace ClassicUO.Game.UI.Gumps
         {
             if (page > 0)
             {
-                GameActions.Print(World, "Sayfa: " + page, 0x44, MessageType.System);
+                GameActions.Print(World, "Sayfa: " + page, 946, MessageType.Regular, 1, true);
             }
 
             if (page == 1)
@@ -4237,8 +4237,6 @@ namespace ClassicUO.Game.UI.Gumps
             if (page == 6) // fonts
             {
                 _fontSelectorChat.SetSelectedFont(0);
-                //_overrideAllFonts.IsChecked = true;
-                //_overrideAllFonts.IsChecked = false;
                 _overrideAllFonts.IsChecked = false;
                 _overrideAllFontsIsUnicodeCheckbox.SelectedIndex = 1;
 
@@ -4355,7 +4353,7 @@ namespace ClassicUO.Game.UI.Gumps
                 SetDefault(11);
                 SetDefault(12);
 
-                GameActions.Print(World, "[Tümü] Ayarlar varsayılan haline getirildi.", 0x44, MessageType.System);
+                GameActions.Print(World, "[Tümü] Ayarlar varsayılan haline getirildi.", 0x44, MessageType.Regular, 1, true);
                 SetDefaultClickCount = 0;
             }
             else
@@ -4369,46 +4367,46 @@ namespace ClassicUO.Game.UI.Gumps
                         break;
 
                     case 2: // sounds
-                        GameActions.Print(World, "[Sounds] Ayarlar varsayılan haline getirildi.", 0x44, MessageType.System);
+                        GameActions.Print(World, "[Sounds] Ayarlar varsayılan haline getirildi.", 0x44, MessageType.Regular, 1, true);
                         break;
 
                     case 3: // video
-                        GameActions.Print(World, "[Video] Ayarlar varsayılan haline getirildi.", 0x44, MessageType.System);
+                        GameActions.Print(World, "[Video] Ayarlar varsayılan haline getirildi.", 0x44, MessageType.Regular, 1, true);
                         break;
 
                     case 4: // macros
                         break;
 
                     case 5: // tooltip
-                        GameActions.Print(World, "[Tooltip] Ayarlar varsayılan haline getirildi.", 0x44, MessageType.System);
+                        GameActions.Print(World, "[Tooltip] Ayarlar varsayılan haline getirildi.", 0x44, MessageType.Regular, 1, true);
                         break;
 
                     case 6: // fonts
-                        GameActions.Print(World, "[Fonts] Ayarlar varsayılan haline getirildi.", 0x44, MessageType.System);
+                        GameActions.Print(World, "[Fonts] Ayarlar varsayılan haline getirildi.", 0x44, MessageType.Regular, 1, true);
                         break;
 
                     case 7: // speech
-                        GameActions.Print(World, "[Speech] Ayarlar varsayılan haline getirildi.", 0x44, MessageType.System);
+                        GameActions.Print(World, "[Speech] Ayarlar varsayılan haline getirildi.", 0x44, MessageType.Regular, 1, true);
                         break;
 
                     case 8: // combat
-                        GameActions.Print(World, "[Combat] Ayarlar varsayılan haline getirildi.", 0x44, MessageType.System);
+                        GameActions.Print(World, "[Combat] Ayarlar varsayılan haline getirildi.", 0x44, MessageType.Regular, 1, true);
                         break;
 
                     case 9: // counters
-                        GameActions.Print(World, "[Counters] Ayarlar varsayılan haline getirildi.", 0x44, MessageType.System);
+                        GameActions.Print(World, "[Counters] Ayarlar varsayılan haline getirildi.", 0x44, MessageType.Regular, 1, true);
                         break;
 
                     case 10: // info bar
-                        GameActions.Print(World, "[Info Bar] Ayarlar varsayılan haline getirildi.", 0x44, MessageType.System);
+                        GameActions.Print(World, "[Info Bar] Ayarlar varsayılan haline getirildi.", 0x44, MessageType.Regular, 1, true);
                         break;
 
                     case 11: // containers
-                        GameActions.Print(World, "[Containers] Ayarlar varsayılan haline getirildi.", 0x44, MessageType.System);
+                        GameActions.Print(World, "[Containers] Ayarlar varsayılan haline getirildi.", 0x44, MessageType.Regular, 1, true);
                         break;
 
                     case 12: // experimental
-                        GameActions.Print(World, "[Experimental] Ayarlar varsayılan haline getirildi.", 0x44, MessageType.System);
+                        GameActions.Print(World, "[Experimental] Ayarlar varsayılan haline getirildi.", 0x44, MessageType.Regular, 1, true);
                         break;
                 }
 
@@ -4423,6 +4421,8 @@ namespace ClassicUO.Game.UI.Gumps
         private void Apply()
         {
             WorldViewportGump vp = UIManager.GetGump<WorldViewportGump>();
+
+            GameActions.Print(World, "Ayarlar uygulandı.", 0x44, MessageType.Regular, 1, true);
 
             // general
             if (Settings.GlobalSettings.FPS != _sliderFPS.Value)
@@ -4985,7 +4985,6 @@ namespace ClassicUO.Game.UI.Gumps
             _currentProfile.TooltipDisplayZoom = _tooltip_zoom.Value;
             _currentProfile.TooltipFont = _tooltip_font_selector.GetSelectedFont();
 
-            GameActions.Print(World, "Ayarlar uygulandı.", 0x44, MessageType.System);
             //Console.WriteLine("Ayarlar uygulandı.");
 
 
@@ -4998,8 +4997,8 @@ namespace ClassicUO.Game.UI.Gumps
         public static void SetDisabledSettingsDefault(bool inoptions)
         {
             _currentProfile.ShowHouseContent = false;
-            _currentProfile.OverrideAllFonts = false;
-            _currentProfile.OverrideAllFontsIsUnicode = false;
+            //_currentProfile.OverrideAllFonts = false;
+            //_currentProfile.OverrideAllFontsIsUnicode = false;
 
             _currentProfile.DrawRoofs = true; // _drawRoofs
             _currentProfile.TreeToStumps = false; // _treeToStumps

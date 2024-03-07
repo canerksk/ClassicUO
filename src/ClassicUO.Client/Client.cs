@@ -34,20 +34,17 @@ using ClassicUO.Assets;
 using ClassicUO.Configuration;
 using ClassicUO.Game;
 using ClassicUO.Game.Data;
-using ClassicUO.Game.UI.Controls;
 using ClassicUO.IO;
 using ClassicUO.Network;
 using ClassicUO.Network.Encryption;
 using ClassicUO.Resources;
 using ClassicUO.Utility;
 using ClassicUO.Utility.Logging;
-using ClassicUO.Utility.Platforms;
 using Microsoft.Xna.Framework.Graphics;
 using SDL2;
 using System;
 using System.Diagnostics;
 using System.IO;
-using System.Net;
 
 namespace ClassicUO
 {
@@ -277,21 +274,11 @@ namespace ClassicUO
     }
 
 
+
     internal static class Client
     {
         public static GameController Game { get; private set; }
 
-
-        public static string ArtMulPath = UOFileManager.GetUOFilePath("art.mul");
-        public static string ClientExePath = System.Reflection.Assembly.GetExecutingAssembly().Location;
-        public static string ClientHash;
-        public static string ArtMulHash;
-        public static string CUOVersion = CUOEnviroment.Version.ToString();
-        public static FileInfo ArtMulFileInfo = new FileInfo(ArtMulPath);
-        public static long ArtMulBoyutu_Byte = ArtMulFileInfo.Length;
-        public static FileInfo ClientFileInfo = new FileInfo(ClientExePath);
-        public static long ClientDosyaBoyutu_Byte = ClientFileInfo.Length;
-        public static int SiteStatus;
         public static System.Timers.Timer WindowTitleRestoreTimer;
         public static System.Timers.Timer ProgramCloseTimer;
         private static World _world;
@@ -299,42 +286,7 @@ namespace ClassicUO
         public static void Run(IPluginHost pluginHost)
         {
             Debug.Assert(Game == null);
-
             Log.Trace("Running game...");
-
-            // client.exe dosyası varsa hashını al
-            if (File.Exists(ClientExePath))
-            {
-                ClientHash = Crc32.Crc32Hesapla(ClientExePath);
-            }
-            // art.mul dosyası varsa hashını al
-            if (File.Exists(ArtMulPath))
-            {
-                ArtMulHash = Crc32.Crc32Hesapla(ArtMulPath);
-            }
-
-            // Site bağlantısını kontrol Et
-            try
-            {
-
-                // Disable the warning.
-#pragma warning disable SYSLIB0014
-                // HTTP isteği oluştur
-                HttpWebRequest req = (HttpWebRequest)WebRequest.Create(Constants.WEB_MAIN_URL);
-                // Re-enable the warning.
-#pragma warning restore SYSLIB0014
-
-                req.Timeout = 5000; // İstek zaman aşımı süresi (ms) ayarlayabilirsiniz
-                using (HttpWebResponse response = (HttpWebResponse)req.GetResponse())
-                {
-                    SiteStatus = (int)response.StatusCode;
-                }
-            }
-            catch (WebException)
-            {
-                SiteStatus = -1;
-            }
-
             using (Game = new GameController(pluginHost))
             {
                 // https://github.com/FNA-XNA/FNA/wiki/7:-FNA-Environment-Variables#fna_graphics_enable_highdpi
@@ -346,7 +298,6 @@ namespace ClassicUO
                 }
 
                 Game.Run();
-
                 StartTimers();
             }
 

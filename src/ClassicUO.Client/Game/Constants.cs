@@ -43,8 +43,12 @@ namespace ClassicUO.Game
         // Server Config
 #if MythicPVP
         public const string CLIENTVERSION = "7.0.15.1";
-        //public const string CLIENTVERSION = "7.0.101.2";
-        public const string SERVER_NAME = "Mythic";
+
+
+        public const string SERVNAME_SHORT = "Mythic";
+        public const string SERVNAME_LONG = "Mythic PVP";
+        public const string SERVNAME_FULL = "Arcane Ultima Online";
+
         public const string EXTCMDKEY = "MythicUO";
         public const string TIMEHASHKEY = "MytH";
 
@@ -56,9 +60,8 @@ namespace ClassicUO.Game
 
         public static string AUTOUPDATER_XML_URL = WEB_MAIN_URL + "conn/updates/app/Updater.xml";
         public static Uri WEB_UPDATER_PATH_URL = new Uri(WEB_MAIN_URL + "conn/updates/muls/");
-        //public static Uri AUTOUPDATER_XML_URL = new Uri(WEB_MAIN_URL + "conn/updates/app/Updater.xml");
-        //public static Uri LAUNCHER_DAT_URL = new Uri(WEB_MAIN_URL + "Conn/control/launcher.dat");
-        //public static Uri FPS_DAT_URL = new Uri(WEB_MAIN_URL + "Conn/control/fps.dat");
+        public static Uri CLIENT_DAT_URL = new Uri(WEB_MAIN_URL + "conn/control/client");
+        public static string BLOCKPC_XML_URL = WEB_MAIN_URL + "conn/control/BlocksPC.xml";
 
         //
         public const bool USE_OLD_OPTIONGUMP = true;

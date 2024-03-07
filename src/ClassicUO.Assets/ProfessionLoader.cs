@@ -107,8 +107,6 @@ namespace ClassicUO.Assets
 
                     FileInfo file = new FileInfo(UOFileManager.GetUOFilePath("Prof.txt"));
 
-                    Log.Error(file.ToString());
-
                     if (file.Exists)
                     {
                         if (file.Length > 0x100000) //1megabyte limit of string file

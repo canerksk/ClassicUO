@@ -3,7 +3,7 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <ApplicationIcon>UO_108.ico</ApplicationIcon>
-    <AssemblyName>cuo</AssemblyName>
+    <AssemblyName>Mythic</AssemblyName>
     <RootNamespace>ClassicUO</RootNamespace>
     <PublishAot>true</PublishAot>
     <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
@@ -88,6 +88,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Autoupdater.NET.Official" Version="1.8.5" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Reference Include="cuoapi">
       <HintPath>..\..\external\cuoapi\cuoapi.dll</HintPath>
     </Reference>
@@ -100,8 +104,8 @@
     <UseWindowsForms>True</UseWindowsForms>
     <TargetFramework>net8.0-windows10.0.22621.0</TargetFramework>
     <Authors />
-    <AssemblyVersion>1.1.0.0</AssemblyVersion>
-    <FileVersion>1.1.0.0</FileVersion>
+    <AssemblyVersion>1.1.0.8</AssemblyVersion>
+    <FileVersion>1.1.0.8</FileVersion>
     <UseWPF>False</UseWPF>
     <SupportedOSPlatformVersion>10.0.22621.0</SupportedOSPlatformVersion>
   </PropertyGroup>
