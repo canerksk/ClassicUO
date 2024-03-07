@@ -39,7 +39,7 @@ namespace ClassicUO.Game.GameObjects
 {
     internal class TextContainer : LinkedObject
     {
-        public int Size, MaxSize = 4;
+        public int Size, MaxSize = 4; // ust uste yazacak max yazi 
 
         public void Add(TextObject obj)
         {

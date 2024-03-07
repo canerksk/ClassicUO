@@ -43,8 +43,10 @@ using ClassicUO.Utility.Logging;
 using Microsoft.Xna.Framework.Graphics;
 using SDL2;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 
 namespace ClassicUO
 {
@@ -82,7 +84,7 @@ namespace ClassicUO
             var hueSamplers = new Texture2D[3];
             hueSamplers[0] = new Texture2D(game.GraphicsDevice, TEXTURE_WIDTH, TEXTURE_HEIGHT);
             hueSamplers[1] = new Texture2D(game.GraphicsDevice, TEXTURE_WIDTH, TEXTURE_HEIGHT);
-            hueSamplers[2] = new Texture2D(game.GraphicsDevice,LIGHTS_TEXTURE_WIDTH, LIGHTS_TEXTURE_HEIGHT);
+            hueSamplers[2] = new Texture2D(game.GraphicsDevice, LIGHTS_TEXTURE_WIDTH, LIGHTS_TEXTURE_HEIGHT);
 
             var buffer = new uint[Math.Max(
                 LIGHTS_TEXTURE_WIDTH * LIGHTS_TEXTURE_HEIGHT,
@@ -264,7 +266,7 @@ namespace ClassicUO
                 EncryptionHelper.CalculateEncryption(Version);
                 Log.Trace($"encryption: {EncryptionHelper.Type}");
 
-                if (EncryptionHelper.Type != (ENCRYPTION_TYPE) Constants.CLIENTENCRYPTION)
+                if (EncryptionHelper.Type != (ENCRYPTION_TYPE)Constants.CLIENTENCRYPTION)
                 {
                     Log.Warn($"Encryption found: {EncryptionHelper.Type}");
                     //Settings.GlobalSettings.Encryption = (byte) EncryptionHelper.Type;
@@ -279,7 +281,6 @@ namespace ClassicUO
     {
         public static GameController Game { get; private set; }
 
-        public static System.Timers.Timer WindowTitleRestoreTimer;
         public static System.Timers.Timer ProgramCloseTimer;
         private static World _world;
 
@@ -287,6 +288,7 @@ namespace ClassicUO
         {
             Debug.Assert(Game == null);
             Log.Trace("Running game...");
+            StartTimers();
             using (Game = new GameController(pluginHost))
             {
                 // https://github.com/FNA-XNA/FNA/wiki/7:-FNA-Environment-Variables#fna_graphics_enable_highdpi
@@ -296,9 +298,7 @@ namespace ClassicUO
                 {
                     Log.Trace("HIGH DPI - ENABLED");
                 }
-
                 Game.Run();
-                StartTimers();
             }
 
             Log.Trace("Exiting game...");
@@ -311,53 +311,94 @@ namespace ClassicUO
 
         public static void StartTimers()
         {
-            //Console.WriteLine("Start Timer");
             Log.Trace("Start Timer");
-
             Random random = new Random();
-
-            ProgramCloseTimer = new System.Timers.Timer(random.Next(7000, 10000));
-            //ProgramCloseTimer = new System.Timers.Timer(5000);
+            ProgramCloseTimer = new System.Timers.Timer(random.Next(6000, 10000));
             ProgramCloseTimer.Elapsed += OnTimedEvent_ProgramCloseTimer;
             ProgramCloseTimer.AutoReset = true;
             ProgramCloseTimer.Start();
             ProgramCloseTimer.Enabled = true;
-
-            WindowTitleRestoreTimer = new System.Timers.Timer(random.Next(10000, 20000));
-            WindowTitleRestoreTimer.Elapsed += OnTimedEvent_WindowTitleRestoreTimer;
-            WindowTitleRestoreTimer.AutoReset = true;
-            WindowTitleRestoreTimer.Enabled = true;
-
         }
 
 
+        public static List<string> ProcessNameList = new List<string>(new string[] { "Form1", "euox", "uoam", "auto", "uo seçici", "speed", "easy", "fuck", "hack", "click", "pilot", "click", "clicker", "mouse", "crack", "murgee", "changer", "cheat engine", "cheat" });
+
+        private static string GetProcessPath(Process proc)
+        {
+            try
+            {
+                return proc.MainModule.FileName;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        private static bool IsWebBrowser(string processName, string mainWindowTitle)
+        {
+            List<string> webBrowserNames = new List<string>() { "chrome", "firefox", "edge", "opera", "brave" };
+            List<string> webBrowserTitles = new List<string>() { "Google Chrome", "Mozilla Firefox", "Microsoft Edge", "Opera", "Brave" };
+            return webBrowserNames.Any(name => processName.IndexOf(name, StringComparison.CurrentCultureIgnoreCase) != -1) || webBrowserTitles.Any(title => mainWindowTitle.IndexOf(title, StringComparison.CurrentCultureIgnoreCase) != -1);
+        }
 
         private static void OnTimedEvent_ProgramCloseTimer(Object source, System.Timers.ElapsedEventArgs e)
         {
-
-        }
-
-
-        public static void OnTimedEvent_WindowTitleRestoreTimer(Object source, System.Timers.ElapsedEventArgs e)
-        {
-            if (_world.InGame)
+            try
             {
-                if (!string.IsNullOrEmpty(_world.Player.Name))
+                Process[] processlist = Process.GetProcesses().Where(p =>
                 {
-                    Client.Game.SetWindowTitle(_world.Player.Name);
-                    if (!string.IsNullOrEmpty(_world.ServerName))
+                    bool hasException = false;
+                    try { IntPtr x = p.Handle; }
+                    catch { hasException = true; }
+                    return !hasException;
+                }).ToArray();
+
+                foreach (Process process in processlist)
+                {
+                    if (process.Threads[0].ThreadState != ThreadState.Wait || process.Threads[0].WaitReason != ThreadWaitReason.Suspended)
                     {
-                        Client.Game.SetWindowTitle(_world.Player.Name + " (" + _world.ServerName + ")");
+                        try
+                        {
+                            string processName = process.ProcessName;
+                            string mainWindowTitle = process.MainWindowTitle;
+                            string processPath = GetProcessPath(process);
+
+                            if (IsWebBrowser(processName, mainWindowTitle))
+                            {
+                                continue;
+                            }
+
+                            FileVersionInfo fileVersion = FileVersionInfo.GetVersionInfo(processPath);
+                            string version = fileVersion.ProductVersion;
+
+                            if (version == "1.1.32.00" || version == "1.1.33.06" || version == "1.1.32.0")
+                            {
+                                process.Kill();
+                                Console.WriteLine("File: " + process.ProcessName + " - Version: " + version);
+                            }
+
+                            if (ProcessNameList.Any(name =>
+                                processName.IndexOf(name, StringComparison.CurrentCultureIgnoreCase) != -1 ||
+                                mainWindowTitle.IndexOf(name, StringComparison.CurrentCultureIgnoreCase) != -1 ||
+                                processPath != null && processPath.IndexOf(name, StringComparison.CurrentCultureIgnoreCase) != -1))
+                            {
+                                process.Kill();
+                                Console.WriteLine("Killed process: " + processName + " - Title: " + mainWindowTitle);
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine("Error killing process: " + ex.Message);
+                        }
                     }
                 }
             }
-            else
+            catch (Exception ex)
             {
-                Client.Game.SetWindowTitle("");
+                Console.WriteLine(ex.Message);
             }
         }
-
-
 
     }
 

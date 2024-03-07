@@ -531,7 +531,6 @@ namespace ClassicUO.Network
         internal static void Tick()
         {
             Client.Game.PluginHost?.Tick();
-
             Timer.Slice();
 
             foreach (Plugin t in Plugins)
@@ -541,6 +540,7 @@ namespace ClassicUO.Network
                     t._tick();
                 }
             }
+
         }
 
         internal static bool ProcessRecvPacket(byte[] data, ref int length)

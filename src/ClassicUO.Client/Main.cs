@@ -144,8 +144,12 @@ namespace ClassicUO
             {
                 string clientdaturl = new WebClient().DownloadString(Constants.CLIENT_DAT_URL);
                 byte[] diffhex = Encoding.ASCII.GetBytes(clientdaturl);
-                var currenthash = Crc32.Crc32Hesapla(Path.Combine(CUOEnviroment.ExecutablePath, "Mythic.exe"));
+
+                var currenthash = Crc32.Crc32Hesapla(ExePath);
                 var currenthex = HextoString(currenthash);
+                // Console.WriteLine(Encoding.ASCII.GetString(diffhex));
+                // Console.WriteLine(currenthex);
+
                 if (Encoding.ASCII.GetString(diffhex) != currenthex)
                 {
                     Client.ShowErrorMessage("Client doğrulaması hatalı!");

@@ -499,6 +499,8 @@ namespace ClassicUO
             return !_suppressedDraw && base.BeginDraw();
         }
 
+
+
         private void WindowOnClientSizeChanged(object sender, EventArgs e)
         {
             int width = Window.ClientBounds.Width;
@@ -519,6 +521,19 @@ namespace ClassicUO
                 viewport.ResizeGameWindow(new Point(width, height));
                 viewport.X = -5;
                 viewport.Y = -5;
+            }
+        }
+
+        public void WindowTitleResTore()
+        {
+            if (UO.World.InGame)
+            {
+                SetWindowTitle(UO.World.Player.Name);
+                if (!string.IsNullOrEmpty(UO.World.ServerName))
+                {
+                    SetWindowTitle(UO.World.Player.Name + " (" + UO.World.ServerName + ")");
+                }
+                Log.Info("WindowTitle Restore");
             }
         }
 
@@ -566,11 +581,13 @@ namespace ClassicUO
                             break;
 
                         case SDL_WindowEventID.SDL_WINDOWEVENT_FOCUS_GAINED:
+                            WindowTitleResTore();
                             Plugin.OnFocusGained();
 
                             break;
 
                         case SDL_WindowEventID.SDL_WINDOWEVENT_FOCUS_LOST:
+                            WindowTitleResTore();
                             Plugin.OnFocusLost();
 
                             break;
