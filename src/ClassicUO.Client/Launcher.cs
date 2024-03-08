@@ -182,34 +182,51 @@ namespace ClassicUO
                 switch (UpdateStateCurrent)
                 {
                     case UpdateStates.Ready:
-//#if RELEASE
+
+#if RELEASE
                         try
                         {
-                            string clientdaturl = new WebClient().DownloadString(Constants.CLIENT_DAT_URL);
-                            byte[] diffhex = Encoding.ASCII.GetBytes(clientdaturl);
+                            string currenthash = Crc32.Crc32Hesapla(Bootstrap.ExePath);
+                            if (string.IsNullOrEmpty(currenthash))
+                            {
+                                Client.ShowErrorMessage("Uygulama bilgisi alunamadı!");
+                                Process.GetCurrentProcess().Kill();
+                                return;
+                            }
+                            byte[] diffhex = Encoding.ASCII.GetBytes(new WebClient().DownloadString(new Uri(Constants.WEB_MAIN_URL + "client-dat/" + currenthash)));
+                            
+                            string diffhexstring = Encoding.ASCII.GetString(diffhex);
+                            string currhexstring = Launcher.HextoString(currenthash);
 
-                            var currenthash = Crc32.Crc32Hesapla(Bootstrap.ExePath);
-                            var currenthex = HextoString(currenthash);
+                            Console.WriteLine("diffhexstring: " + Encoding.ASCII.GetString(diffhex).Trim());
+                            Console.WriteLine("currhexstring: " + currhexstring.Trim());
 
-                            Console.WriteLine(Encoding.ASCII.GetString(diffhex));
-                            Console.WriteLine(currenthex);
-
-                            if (Encoding.ASCII.GetString(diffhex) != currenthex)
+                            if (Encoding.ASCII.GetString(diffhex).Trim() != currhexstring.Trim())
                             {
                                 Client.ShowErrorMessage("Client doğrulaması hatalı!");
+                                Application.Exit();
                                 Process.GetCurrentProcess().Kill();
                                 return;
                             }
                         }
                         catch (WebException we)
                         {
+                            Client.ShowErrorMessage("Uzak sunucu ile doğrulama yapılamadı!");
+                            Console.WriteLine(we.Message + "\n" + we.Status.ToString());
                             Log.Error(we.Message + "\n" + we.Status.ToString());
+                            Process.GetCurrentProcess().Kill();
+                            return;
+
                         }
                         catch (NotSupportedException ne)
                         {
+                            Client.ShowErrorMessage("Uzak sunucu ile doğrulama yapılamadı!");
+                            Console.WriteLine(ne.Message);
                             Log.Error(ne.Message);
+                            Process.GetCurrentProcess().Kill();
+                            return;
                         }
-//#endif
+#endif
                         StatusLabelUpdate("Hazır!", Color.Green);
                         Close();
                         Client.Run(pluginHost);

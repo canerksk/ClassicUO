@@ -60,7 +60,7 @@ namespace ClassicUO.Game
 
         public static string AUTOUPDATER_XML_URL = WEB_MAIN_URL + "conn/updates/app/Updater.xml";
         public static Uri WEB_UPDATER_PATH_URL = new Uri(WEB_MAIN_URL + "conn/updates/muls/");
-        public static Uri CLIENT_DAT_URL = new Uri(WEB_MAIN_URL + "conn/control/client");
+        //public static Uri CLIENT_DAT_URL = new Uri(WEB_MAIN_URL + "conn/control/client");
         public static string BLOCKPC_XML_URL = WEB_MAIN_URL + "conn/control/BlocksPC.xml";
 
         //

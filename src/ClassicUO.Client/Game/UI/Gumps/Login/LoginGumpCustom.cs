@@ -416,6 +416,19 @@ namespace ClassicUO.Game.UI.Gumps.Login
 
         public override void OnKeyboardReturn(int textID, string text)
         {
+
+            if (string.IsNullOrEmpty(_textboxAccount.Text))
+            {
+                //UIManager.GetGump<LoadingGump>()?.SetText("Kullanici adi alani bos olamaz.");
+                return;
+            }
+
+            if (string.IsNullOrEmpty(_passwordFake.RealText))
+            {
+                //UIManager.GetGump<LoadingGump>()?.SetText("Sifre alani bos olamaz.");
+                return;
+            }
+
             SaveCheckboxStatus();
             LoginScene ls = Client.Game.GetScene<LoginScene>();
 
@@ -477,6 +490,18 @@ namespace ClassicUO.Game.UI.Gumps.Login
             switch ((Buttons) buttonID)
             {
                 case Buttons.NextArrow:
+                    if (string.IsNullOrEmpty(_textboxAccount.Text))
+                    {
+                        //UIManager.GetGump<LoadingGump>()?.SetText("Kullanici adi alani bos olamaz.");
+                        return;
+                    }
+
+                    if (string.IsNullOrEmpty(_passwordFake.RealText))
+                    {
+                        //UIManager.GetGump<LoadingGump>()?.SetText("Sifre alani bos olamaz.");
+                        return;
+                    }
+
                     SaveCheckboxStatus();
 
                     if (!_textboxAccount.IsDisposed)

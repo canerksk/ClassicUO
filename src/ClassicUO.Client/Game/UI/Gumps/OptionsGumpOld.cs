@@ -169,8 +169,8 @@ namespace ClassicUO.Game.UI.Gumps
         private Checkbox _scaleSpeechDelay, _saveJournalCheckBox;
         private static Checkbox _showHouseContent;
         private Checkbox _showInfoBar;
-        //private Checkbox _ignoreAllianceMessages;
-        //private Checkbox _ignoreGuildMessages;
+        private Checkbox _ignoreAllianceMessages;
+        private Checkbox _ignoreGuildMessages;
 
         // general
         private HSliderBar _sliderFPS, _circleOfTranspRadius;
@@ -727,20 +727,6 @@ namespace ClassicUO.Game.UI.Gumps
                     startY
                 )
             );
-
-            /*
-            section.Add
-            (
-                _singleclickmenu = AddCheckBox
-                (
-                    null,
-                    "SingleClick menu",
-                    _currentProfile.SingleClickMenu,
-                    startX,
-                    startY
-                )
-            );
-            */
 
             section.Add
             (
@@ -2882,7 +2868,7 @@ namespace ClassicUO.Game.UI.Gumps
                 _currentProfile.OverrideAllFonts,
                 startX,
                 startY,
-                false
+                true
             );
 
             startX += _overrideAllFonts.Width + 5;
@@ -3033,7 +3019,7 @@ namespace ClassicUO.Game.UI.Gumps
             );
 
             startY += _hideChatGradient.Height + 2;
-            /*
+
             _ignoreGuildMessages = AddCheckBox
             (
                 rightArea,
@@ -3053,7 +3039,7 @@ namespace ClassicUO.Game.UI.Gumps
                 startX,
                 startY
             );
-            */
+
 
             startY += 35;
 
@@ -4090,7 +4076,6 @@ namespace ClassicUO.Game.UI.Gumps
                 _reduceFPSWhenInactive.IsChecked = true;
                 _clientnotifyballon.IsChecked = true;
                 _inputautofocused.IsChecked = false;
-                //_singleclickmenu.IsChecked = false;
                 _highlightObjects.IsChecked = false;
                 _enableTopbar.IsChecked = false;
                 _holdDownKeyTab.IsChecked = true;
@@ -4262,8 +4247,8 @@ namespace ClassicUO.Game.UI.Gumps
                 _saveJournalCheckBox.IsChecked = false;
                 _hideChatGradient.IsChecked = false;
                 _hideChatGradient.IsChecked = true;
-                //_ignoreGuildMessages.IsChecked = false;
-               //_ignoreAllianceMessages.IsChecked = false;
+                _ignoreGuildMessages.IsChecked = false;
+                _ignoreAllianceMessages.IsChecked = false;
 
             }
 
@@ -4420,9 +4405,8 @@ namespace ClassicUO.Game.UI.Gumps
 
         private void Apply()
         {
-            WorldViewportGump vp = UIManager.GetGump<WorldViewportGump>();
-
             GameActions.Print(World, "Ayarlar uygulandı.", 0x44, MessageType.Regular, 1, true);
+            WorldViewportGump vp = UIManager.GetGump<WorldViewportGump>();
 
             // general
             if (Settings.GlobalSettings.FPS != _sliderFPS.Value)
@@ -4432,9 +4416,6 @@ namespace ClassicUO.Game.UI.Gumps
 
             _currentProfile.HighlightGameObjects = _highlightObjects.IsChecked;
             _currentProfile.ReduceFPSWhenInactive = _reduceFPSWhenInactive.IsChecked;
-            _currentProfile.ClientNotifyBalloonActive = _clientnotifyballon.IsChecked;
-            _currentProfile.InputAutoFocused = _inputautofocused.IsChecked;
-            //_currentProfile.SingleClickMenu = _singleclickmenu.IsChecked;
             _currentProfile.EnablePathfind = _enablePathfind.IsChecked;
             _currentProfile.UseShiftToPathfind = _useShiftPathfind.IsChecked;
             _currentProfile.AlwaysRun = _alwaysRun.IsChecked;
@@ -4459,14 +4440,12 @@ namespace ClassicUO.Game.UI.Gumps
             _currentProfile.CloseHealthBarType = _healtbarType.SelectedIndex;
             _currentProfile.HideScreenshotStoredInMessage = _hideScreenshotStoredInMessage.IsChecked;
 
-            /*
             if (_currentProfile.DrawRoofs == _drawRoofs.IsChecked)
             {
                 _currentProfile.DrawRoofs = !_drawRoofs.IsChecked;
 
                 Client.Game.GetScene<GameScene>()?.UpdateMaxDrawZ(true);
             }
-            */
 
             if (_currentProfile.TopbarGumpIsDisabled != _enableTopbar.IsChecked)
             {
@@ -4494,19 +4473,11 @@ namespace ClassicUO.Game.UI.Gumps
                 _currentProfile.TreeToStumps = _treeToStumps.IsChecked;
             }
 
-            //_currentProfile.FieldsType = _fieldsType.SelectedIndex;
-            _currentProfile.FieldsType = 0;
-
+            _currentProfile.FieldsType = _fieldsType.SelectedIndex;
             _currentProfile.HideVegetation = _hideVegetation.IsChecked;
             _currentProfile.NoColorObjectsOutOfRange = _noColorOutOfRangeObjects.IsChecked;
             _currentProfile.UseCircleOfTransparency = _useCircleOfTransparency.IsChecked;
-
-            if (_currentProfile.CircleOfTransparencyRadius != _circleOfTranspRadius.Value)
-            {
-                _currentProfile.CircleOfTransparencyRadius = _circleOfTranspRadius.Value;
-                CircleOfTransparency.Create(_currentProfile.CircleOfTransparencyRadius);
-            }
-
+            _currentProfile.CircleOfTransparencyRadius = _circleOfTranspRadius.Value;
             _currentProfile.CircleOfTransparencyType = _cotType.SelectedIndex;
             _currentProfile.StandardSkillsGump = _useStandardSkillsGump.IsChecked;
 
@@ -4536,18 +4507,17 @@ namespace ClassicUO.Game.UI.Gumps
             _currentProfile.ShowNewMobileNameIncoming = _showMobileNameIncoming.IsChecked;
             _currentProfile.ShowNewCorpseNameIncoming = _showCorpseNameIncoming.IsChecked;
             _currentProfile.GridLootType = _gridLoot.SelectedIndex;
-            _currentProfile.UIType = _uiType.SelectedIndex;
             _currentProfile.SallosEasyGrab = _sallosEasyGrab.IsChecked;
             _currentProfile.PartyInviteGump = _partyInviteGump.IsChecked;
             _currentProfile.UseObjectsFading = _objectsFading.IsChecked;
             _currentProfile.TextFading = _textFading.IsChecked;
             _currentProfile.UseSmoothBoatMovement = _use_smooth_boat_movement.IsChecked;
 
-            if (_currentProfile.ShowHouseContent != _showHouseContent.IsChecked)
-            {
-                _currentProfile.ShowHouseContent = _showHouseContent.IsChecked;
-                NetClient.Socket.Send_ShowPublicHouseContent(_currentProfile.ShowHouseContent);
-            }
+            //if (_currentProfile.ShowHouseContent != _showHouseContent.IsChecked)
+            //{
+                //_currentProfile.ShowHouseContent = _showHouseContent.IsChecked;
+                //NetClient.Socket.Send_ShowPublicHouseContent(_currentProfile.ShowHouseContent);
+            //}
 
 
             // sounds
@@ -4606,12 +4576,12 @@ namespace ClassicUO.Game.UI.Gumps
             _currentProfile.EnableMousewheelScaleZoom = _zoomCheckbox.IsChecked;
             _currentProfile.RestoreScaleAfterUnpressCtrl = _restorezoomCheckbox.IsChecked;
 
-            _currentProfile.UseOldStatusGump = true;
-
             if (!CUOEnviroment.IsOutlands && _use_old_status_gump.IsChecked != _currentProfile.UseOldStatusGump)
             {
                 StatusGumpBase status = StatusGumpBase.GetStatusGump();
-                //_currentProfile.UseOldStatusGump = _use_old_status_gump.IsChecked;
+
+                _currentProfile.UseOldStatusGump = _use_old_status_gump.IsChecked;
+
                 if (status != null)
                 {
                     status.Dispose();
@@ -4622,9 +4592,6 @@ namespace ClassicUO.Game.UI.Gumps
 
             int.TryParse(_gameWindowWidth.Text, out int gameWindowSizeWidth);
             int.TryParse(_gameWindowHeight.Text, out int gameWindowSizeHeight);
-
-            //NetClient.Socket.Send_PacketClientType(0x04);
-            NetClient.Socket.Send_GameWindowSize((uint)gameWindowSizeWidth, (uint)gameWindowSizeHeight, World);
 
             if (gameWindowSizeWidth != Client.Game.Scene.Camera.Bounds.Width || gameWindowSizeHeight != Client.Game.Scene.Camera.Bounds.Height)
             {
@@ -4676,8 +4643,8 @@ namespace ClassicUO.Game.UI.Gumps
                 {
                     if (vp != null)
                     {
-                        n = vp.ResizeGameWindow(new Point(Constants.CLIENT_DEF_SIZE_WIDTH, Constants.CLIENT_DEF_SIZE_HEIGHT));
-                        vp.SetGameWindowPosition(new Point(Constants.CLIENT_START_POSX, Constants.CLIENT_START_POSY));
+                        n = vp.ResizeGameWindow(new Point(600, 480));
+                        vp.SetGameWindowPosition(new Point(20, 20));
                         _currentProfile.GameWindowPosition = vp.Location;
                     }
                 }
@@ -4700,7 +4667,6 @@ namespace ClassicUO.Game.UI.Gumps
             _currentProfile.UseCustomLightLevel = _enableLight.IsChecked;
             _currentProfile.LightLevel = (byte)(_lightBar.MaxValue - _lightBar.Value);
             _currentProfile.LightLevelType = _lightLevelType.SelectedIndex;
-
 
             if (_enableLight.IsChecked)
             {
@@ -4727,8 +4693,8 @@ namespace ClassicUO.Game.UI.Gumps
             _currentProfile.PartyAura = _partyAura.IsChecked;
             _currentProfile.PartyAuraHue = _partyAuraColorPickerBox.Hue;
             _currentProfile.HideChatGradient = _hideChatGradient.IsChecked;
-            //_currentProfile.IgnoreGuildMessages = _ignoreGuildMessages.IsChecked;
-            //_currentProfile.IgnoreAllianceMessages = _ignoreAllianceMessages.IsChecked;
+            _currentProfile.IgnoreGuildMessages = _ignoreGuildMessages.IsChecked;
+            _currentProfile.IgnoreAllianceMessages = _ignoreAllianceMessages.IsChecked;
 
             // fonts
             _currentProfile.ForceUnicodeJournal = _forceUnicodeJournal.IsChecked;
@@ -4911,7 +4877,6 @@ namespace ClassicUO.Game.UI.Gumps
             _currentProfile.ShowInfoBar = _showInfoBar.IsChecked;
             _currentProfile.InfoBarHighlightType = _infoBarHighlightType.SelectedIndex;
 
-
             World.InfoBars.Clear();
 
             for (int i = 0; i < _infoBarBuilderControls.Count; i++)
@@ -4984,61 +4949,41 @@ namespace ClassicUO.Game.UI.Gumps
             _currentProfile.TooltipBackgroundOpacity = _tooltip_background_opacity.Value;
             _currentProfile.TooltipDisplayZoom = _tooltip_zoom.Value;
             _currentProfile.TooltipFont = _tooltip_font_selector.GetSelectedFont();
+            _currentProfile.UIType = _uiType.SelectedIndex;                 // _uiType
 
-            //Console.WriteLine("Ayarlar uygulandı.");
 
-
-            SetDisabledSettingsDefault(true);
+            // Disabled Settings
+            _currentProfile.ShowHouseContent = false;           // _showHouseContent
+            _currentProfile.OverrideAllFonts = false;           // _overrideAllFonts
+            _currentProfile.OverrideAllFontsIsUnicode = true;   // _overrideAllFontsIsUnicodeCheckbox
+            _currentProfile.DrawRoofs = true;                   // _drawRoofs
+            _currentProfile.TreeToStumps = false;               // _treeToStumps
+            _currentProfile.CloseHealthBarType = 1;             // _healtbarType
+            _currentProfile.GridLootType = 0;                   // _gridLoot
+            _currentProfile.FieldsType = 0;                     // _fieldsType
+            _currentProfile.UseDarkNights = true;               //_darkNights
+            _currentProfile.SmoothDoors = false;                // _smoothDoors
+            _currentProfile.AutoOpenCorpses = false;            // _autoOpenCorpse
+            _currentProfile.UseCustomLightLevel = false;        // _enableLight
+            _currentProfile.UseAlternativeLights = false;       // _altLights
+            _currentProfile.DoubleClickToLootInsideContainers = false;
+            _currentProfile.HideChatGradient = true;            // _hideChatGradient
+            _currentProfile.SkipEmptyCorpse = false;            // _skipEmptyCorpse
+            _currentProfile.EnableDeathScreen = true;           // _enableDeathScreen
+            _currentProfile.EnableBlackWhiteEffect = true;      // _enableBlackWhiteEffect
+            _currentProfile.UseOldStatusGump = true;            // _use_old_status_gump
+            _currentProfile.SallosEasyGrab = false;             // _sallosEasyGrab
+            _currentProfile.CustomBarsToggled = false;          // _customBars
+            _currentProfile.CBBlackBGToggled = false;           // _customBarsBBG
+            _currentProfile.LightLevel = 0;                     // _lightBar
+            _currentProfile.LightLevelType = 0;                 // _lightLevelType
+            _currentProfile.UseColoredLights = false;           // _useColoredLights
+            _currentProfile.TreeToStumps = false;               // _treeToStumps
+            _currentProfile.CloseHealthBarType = 0;             // _healtbarType
 
             _currentProfile?.Save(World, ProfileManager.ProfilePath);
 
         }
-
-        public static void SetDisabledSettingsDefault(bool inoptions)
-        {
-            _currentProfile.ShowHouseContent = false;
-            //_currentProfile.OverrideAllFonts = false;
-            //_currentProfile.OverrideAllFontsIsUnicode = false;
-
-            _currentProfile.DrawRoofs = true; // _drawRoofs
-            _currentProfile.TreeToStumps = false; // _treeToStumps
-            _currentProfile.CloseHealthBarType = 1; // _healtbarType
-            _currentProfile.GridLootType = 0; // _gridLoot
-            //_currentProfile.UIType = 0; // _uiType
-            _currentProfile.FieldsType = 0; // _fieldsType
-            _currentProfile.UseDarkNights = true; //_darkNights
-            _currentProfile.SmoothDoors = false;   // _smoothDoors
-            _currentProfile.AutoOpenCorpses = false;   // _autoOpenCorpse
-            _currentProfile.UseCustomLightLevel = false;
-            _currentProfile.UseAlternativeLights = false;
-            _currentProfile.DoubleClickToLootInsideContainers = false;
-            _currentProfile.CustomBarsToggled = false;
-            _currentProfile.CBBlackBGToggled = false;
-            _currentProfile.HideChatGradient = true; // _hideChatGradient
-            _currentProfile.SkipEmptyCorpse = false; // _skipEmptyCorpse
-            _currentProfile.EnableDeathScreen = true; // _enableDeathScreen
-            _currentProfile.EnableBlackWhiteEffect = true; // _enableBlackWhiteEffect
-            _currentProfile.UseOldStatusGump = true; // _use_old_status_gump
-            _currentProfile.SallosEasyGrab = false; // _sallosEasyGrab
-            _currentProfile.CustomBarsToggled = false; // _customBars
-            _currentProfile.CBBlackBGToggled = false; // _customBarsBBG
-            _currentProfile.LightLevel = 0; // _lightBar
-            _currentProfile.UseCustomLightLevel = false; // _enableLight
-            _currentProfile.LightLevelType = 0; // _lightLevelType
-            _currentProfile.UseColoredLights = false; // _useColoredLights
-
-            if (inoptions)
-            {
-                _showHouseContent.IsChecked = _currentProfile.ShowHouseContent;
-                _drawRoofs.IsChecked = _currentProfile.DrawRoofs;
-                _treeToStumps.IsChecked = _currentProfile.TreeToStumps;
-                _healtbarType.SelectedIndex = _currentProfile.CloseHealthBarType;
-
-            }
-
-           // _currentProfile?.Save(World, ProfileManager.ProfilePath);
-        }
-
 
         internal void UpdateVideo()
         {

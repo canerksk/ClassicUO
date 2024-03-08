@@ -138,7 +138,7 @@ namespace ClassicUO.Configuration
 
 
         [JsonPropertyName("login_music_volume")] 
-        public int LoginMusicVolume { get; set; } = 70;
+        public int LoginMusicVolume { get; set; } = 1;
 
 
         [JsonPropertyName("shard_type")] 

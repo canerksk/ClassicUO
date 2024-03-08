@@ -901,7 +901,7 @@ namespace ClassicUO
                 }
                 else
                 {
-                    GameActions.Print(UO.World, message, 0x44, MessageType.System);
+                    GameActions.Print(UO.World, message, 0x44, MessageType.System, 1, true);
                 }
 
             }
