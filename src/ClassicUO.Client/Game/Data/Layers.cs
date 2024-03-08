@@ -63,6 +63,31 @@ namespace ClassicUO.Game.Data
         ShopBuyRestock = 0x1A,
         ShopBuy = 0x1B,
         ShopSell = 0x1C,
-        Bank = 0x1D
+        Bank = 0x1D,
+        Special = 0x1E, // 30
+        Dragging = 0x1F, // 31
+        SpellStat = 0x20, // 32
+        SpellReactive = 0x21, // 33
+        SpellNightSight = 0x22, // 34
+        SpellProtection = 0x23, // 35
+        SpellIncognito = 0x24, // 36
+        SpellMagicReflection = 0x25, // 37
+        SpellParalyze = 0x26, // 38
+        SpellInvis = 0x27, // 39
+        SpellPolymorph = 0x28, // 40
+        SpellSummon = 0x29, // 41
+        FlagPoison = 0x2A, // 42
+        FlagCriminal = 0x2B, // 43
+        FlagPotion = 0x2C, // 44
+        FlagSpiritSpeak = 0x2D, // 45 
+        FlagWool = 0x2E, // 46
+        FlagDrunk = 0x2F, // 47
+        FlagClientLinger = 0x30, // 48
+        FlagHallucination = 0x31, // 49
+        FlagPotionUsed = 0x32, // 50
+        FlagStuck = 0x33, // 51
+        FlagMurders = 0x34, // 52
+        FlagBandage = 0x35, // 53
+        FlagAuction = 0x36, // 54
     }
 }

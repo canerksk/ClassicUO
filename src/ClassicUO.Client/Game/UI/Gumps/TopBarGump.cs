@@ -151,8 +151,11 @@ namespace ClassicUO.Game.UI.Gumps
                     //break;
                 //}
 
-                ushort graphic = (ushort)(textTable[i][0] != 0 ? 0x098D : 0x098B);
+                ushort graphic = (ushort)(textTable[i][0] != 0 ? 0x98D : 0x98B);
+                ushort graphichover = (ushort)(textTable[i][0] != 0 ? 0x98D : 0x98C);
+                ushort maxwidth = (ushort)(textTable[i][0] != 0 ? 108 : 63);
 
+                /*
                 Add(
                     new RighClickableButton(
                         textTable[i][1],
@@ -162,8 +165,8 @@ namespace ClassicUO.Game.UI.Gumps
                         texts[i],
                         1,
                         true,
-                        0,
-                        0x0036
+                        0x481,
+                        0x036
                     )
                     {
                         ButtonAction = ButtonAction.Activate,
@@ -173,6 +176,107 @@ namespace ClassicUO.Game.UI.Gumps
                     },
                     1
                 );
+                */
+
+                Add(
+                    new RighClickableButton(
+                        textTable[i][1],
+                        graphic,
+                        graphic,
+                        graphichover,
+                        texts[i],
+                        1,
+                        true,
+                        0x0481,
+                        0x036
+                    )
+                    {
+                        ButtonAction = ButtonAction.Activate,
+                        X = startX,
+                        Y = 2,
+                        FontCenter = true
+                    },
+                    1
+                );
+
+                /*
+                Add(
+                    new HoveredLabel(texts[i], true, 0x0481, 0x036, 0x036, maxwidth, 1, FontStyle.BlackBorder, TEXT_ALIGN_TYPE.TS_CENTER)
+                    {
+                        X = startX - 4,
+                        Y = 3,
+                    }
+                 );
+                */
+
+                /*
+                Add(new GumpPic(startX, 1, graphic,0));
+                Add
+                (
+                    new NiceButton
+                    (
+                        startX,
+                        1,
+                        maxwidth,
+                        25,
+                        ButtonAction.Activate,
+                        texts[i],
+                        0,
+                        TEXT_ALIGN_TYPE.TS_CENTER,
+                        0x0481,
+                        true,
+                        1
+                    )
+                    {
+                        ButtonParameter = textTable[i][1]
+                    }
+                );
+                */
+                /*
+                Add
+                (
+                    new Button(textTable[i][1], graphic, graphic, graphichover)
+                    {
+                        X = startX,
+                        Y = 1,
+                        ButtonAction = ButtonAction.Activate,
+                        FontCenter = true
+                    }
+                );
+                */
+
+                /*
+                Add
+                (
+                    new NiceButton
+                    (
+                        startX,
+                        1,
+                        maxwidth,
+                        25,
+                        ButtonAction.Activate,
+                        texts[i],
+                        0,
+                        TEXT_ALIGN_TYPE.TS_CENTER,
+                        0x0,
+                        true,
+                        1
+                    )
+                    {
+                        ButtonParameter = textTable[i][1]
+                    }
+                );
+                */
+
+                /*
+                Add(
+                    new HoveredLabel(texts[i], true, 0x0, 0x036, 0x036, maxwidth, 1, FontStyle.BlackBorder, TEXT_ALIGN_TYPE.TS_CENTER)
+                    {
+                        X = startX,
+                        Y = 1,
+                    }
+                 );*/
+
 
                 startX += (textTable[i][0] != 0 ? largeWidth : smallWidth) + 1;
                 background.Width = startX;
@@ -421,6 +525,7 @@ namespace ClassicUO.Game.UI.Gumps
                 Parent?.InvokeMouseUp(new Point(x, y), button);
             }
         }
+
     }
 
 

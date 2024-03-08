@@ -4958,7 +4958,6 @@ namespace ClassicUO.Game.UI.Gumps
             _currentProfile.OverrideAllFontsIsUnicode = true;   // _overrideAllFontsIsUnicodeCheckbox
             _currentProfile.DrawRoofs = true;                   // _drawRoofs
             _currentProfile.TreeToStumps = false;               // _treeToStumps
-            _currentProfile.CloseHealthBarType = 1;             // _healtbarType
             _currentProfile.GridLootType = 0;                   // _gridLoot
             _currentProfile.FieldsType = 0;                     // _fieldsType
             _currentProfile.UseDarkNights = true;               //_darkNights

@@ -92,5 +92,6 @@ namespace ClassicUO.Game.Data
                 Layer.Helmet, Layer.TwoHanded
             }
         };
+
     }
 }
