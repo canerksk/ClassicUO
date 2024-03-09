@@ -324,6 +324,7 @@ namespace ClassicUO.Game.UI.Gumps.Login
                 }
             );
 
+            _textboxAccount.SetTooltip("Hesap adınızı giriniz.");
             _textboxAccount.SetText(Settings.GlobalSettings.Username);
 
             Add
@@ -344,6 +345,7 @@ namespace ClassicUO.Game.UI.Gumps.Login
                 }
             );
 
+            _passwordFake.SetTooltip("Hesap şifrenizi giriniz.");
             _passwordFake.RealText = Crypter.Decrypt(Settings.GlobalSettings.Password);
 
             _checkboxSaveAccount.IsChecked = Settings.GlobalSettings.SaveAccount;

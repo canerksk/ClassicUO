@@ -92,6 +92,7 @@ namespace ClassicUO.Game.UI.Gumps
                     ButtonAction = ButtonAction.Activate
                 }
             );
+            _button.SetTooltip("Buff-Debuff yönünü değiştir");
 
             switch (_direction)
             {

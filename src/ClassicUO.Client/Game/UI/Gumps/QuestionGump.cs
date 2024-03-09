@@ -41,6 +41,8 @@ namespace ClassicUO.Game.UI.Gumps
     internal class QuestionGump : Gump
     {
         private readonly Action<bool> _result;
+        private readonly Button _quitokbutton;
+        private readonly Button _quitnobutton;
 
         public QuestionGump(World world, string message, Action<bool> result) : base(world, 0, 0)
         {
@@ -63,22 +65,26 @@ namespace ClassicUO.Game.UI.Gumps
             Add(new Label(message, false, 0x0386, 165, font: 1) { X = 33, Y = 30 });
 
             Add(
-                new Button((int)Buttons.Cancel, 0x817, 0x818, 0x0819)
+                _quitnobutton = new Button((int)Buttons.Cancel, 0x817, 0x818, 0x0819)
                 {
                     X = 37,
                     Y = 75,
                     ButtonAction = ButtonAction.Activate
                 }
             );
+            _quitnobutton.SetTooltip("<basefont color=\"lime\">Vazgeç</basefont>");
+
 
             Add(
-                new Button((int)Buttons.Ok, 0x81A, 0x81B, 0x081C)
+                _quitokbutton = new Button((int)Buttons.Ok, 0x81A, 0x81B, 0x081C)
                 {
                     X = 100,
                     Y = 75,
                     ButtonAction = ButtonAction.Activate
                 }
             );
+            _quitokbutton.SetTooltip("<basefont color=\"red\">Onayla</basefont>");
+
 
             CanMove = false;
             IsModal = true;

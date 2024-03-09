@@ -34,6 +34,7 @@ namespace ClassicUO
             ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 
+#if RELEASE
             #region App Update Trigger
             AutoUpdater.ShowSkipButton = false;
             AutoUpdater.CheckForUpdateEvent += AutoUpdaterOnCheckForUpdateEvent;
@@ -47,6 +48,9 @@ namespace ClassicUO
             AutoUpdater.ShowRemindLaterButton = false;
             AutoUpdater.InstallationPath = Application.StartupPath;
             #endregion
+#else
+            Client.Run(pluginHost);
+#endif
 
             Text = Constants.SERVNAME_LONG + " Güncelleme";
 
@@ -112,6 +116,7 @@ namespace ClassicUO
                 else
                 {
 
+#if RELEASE
                     #region Mul Update Trigger
                     UpdaterBackgroundWorker.WorkerReportsProgress = true;
                     //UpdateStateCurrent = UpdateStates.Ready;
@@ -131,6 +136,8 @@ namespace ClassicUO
                         UpdaterBackgroundWorker.RunWorkerAsync();
                     }
                     #endregion
+#endif
+
                     StatusLabelUpdate("Uygulama güncel.", Color.Green);
                 }
             }

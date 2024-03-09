@@ -321,7 +321,8 @@ namespace ClassicUO.Game.UI.Gumps
             {
                 Dispose();
 
-                return true;
+                //return true; // hpbarlarin birlesmesini kapat
+                return false;
             }
 
             return false;
@@ -1304,6 +1305,7 @@ namespace ClassicUO.Game.UI.Gumps
         private const ushort LINE_RED_PARTY = 0x0028;
         private const ushort LINE_BLUE_PARTY = 0x0029;
         private GumpPic _background, _hpLineRed, _manaLineRed, _stamLineRed;
+        private Label _hppercentlabel;
 
         private readonly GumpPicWithWidth[] _bars = new GumpPicWithWidth[3];
 
@@ -1563,6 +1565,28 @@ namespace ClassicUO.Game.UI.Gumps
                     }
                     Add(_background = new GumpPic(0, 0, CustomUIGump0804, barColor) { ContainsByBounds = true });
                     Add(_hpLineRed = new GumpPic(34, 38, LINE_RED, hitsColor));
+
+                    int barW = 109;
+
+                    int hitsPercent = CalculatePercents(entity.HitsMax, entity.Hits, entity.HitsMax);
+
+                    if (hitsPercent > 100)
+                    {
+                        hitsPercent = 100;
+                    }
+
+                    Add(
+                        _hppercentlabel = new Label(
+                            "%" + hitsPercent.ToString(), 
+                            true, 
+                            0x0, 
+                            barW
+                            )
+                        {
+                            X = 101,
+                            Y = 13
+                        }
+                        );
 
                     Add
                     (
@@ -1870,12 +1894,19 @@ namespace ClassicUO.Game.UI.Gumps
 
                 int hits = CalculatePercents(entity.HitsMax, entity.Hits, barW);
 
-
                 if (hits != _oldHits)
                 {
                     _bars[0].Percent = hits;
 
                     _oldHits = hits;
+                }
+                if (mobile.Serial == World.Player.Serial)
+                {
+                    _bars[0].SetTooltip("Hits/Str: " + World.Player.Hits + "/" + World.Player.Strength);
+                }
+                else
+                {
+                    _bars[0].SetTooltip("Hits: " + mobile.Hits);
                 }
 
 
@@ -1884,18 +1915,37 @@ namespace ClassicUO.Game.UI.Gumps
                     int mana = CalculatePercents(mobile.ManaMax, mobile.Mana, barW);
                     int stam = CalculatePercents(mobile.StaminaMax, mobile.Stamina, barW);
 
+                    // int - mana
                     if (mana != _oldMana && _bars.Length >= 2 && _bars[1] != null)
                     {
                         _bars[1].Percent = mana;
 
                         _oldMana = mana;
                     }
+                    if (mobile.Serial == World.Player.Serial)
+                    {
+                        _bars[1].SetTooltip("Mana/Int: " + World.Player.Mana + "/" + World.Player.Intelligence);
+                    }
+                    else
+                    {
+                        _bars[1].SetTooltip("Mana: " + mobile.Mana);
+                    }
 
+                    // dex-stam
                     if (stam != _oldStam && _bars.Length >= 2 && _bars[2] != null)
                     {
                         _bars[2].Percent = stam;
 
                         _oldStam = stam;
+                    }
+
+                    if (mobile.Serial == World.Player.Serial)
+                    {
+                        _bars[1].SetTooltip("Stam/Dex: " + World.Player.Stamina + "/" + World.Player.Dexterity);
+                    }
+                    else
+                    {
+                        _bars[1].SetTooltip("Stam: " + mobile.Stamina);
                     }
                 }
 

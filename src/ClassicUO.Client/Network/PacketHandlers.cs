@@ -984,15 +984,10 @@ namespace ClassicUO.Network
                 world.ChangeSeason(Game.Managers.Season.Desolation, 42);
             }
 
-            if (
-                Client.Game.UO.Version >= Utility.ClientVersion.CV_70796
-                && ProfileManager.CurrentProfile != null
-            )
-            {
-                NetClient.Socket.Send_ShowPublicHouseContent(
-                    ProfileManager.CurrentProfile.ShowHouseContent
-                );
-            }
+            //if ( Client.Game.UO.Version >= Utility.ClientVersion.CV_70796 && ProfileManager.CurrentProfile != null)
+            //{
+                //NetClient.Socket.Send_ShowPublicHouseContent(ProfileManager.CurrentProfile.ShowHouseContent);
+            //}
 
             NetClient.Socket.Send_ToPlugins_AllSkills();
             NetClient.Socket.Send_ToPlugins_AllSpells();
@@ -2280,7 +2275,7 @@ namespace ClassicUO.Network
                 ProfileManager.CurrentProfile.AutoOpenCorpses = false;
                 ProfileManager.CurrentProfile.AutoOpenDoors = false;
                 ProfileManager.CurrentProfile.UseCustomLightLevel = false;
-                ProfileManager.CurrentProfile.UseOldStatusGump = true;
+                //ProfileManager.CurrentProfile.UseStatusGump = 0;
                 ProfileManager.CurrentProfile.DrawRoofs = true;
                 ProfileManager.CurrentProfile.UseAlternativeLights = false;
                 ProfileManager.CurrentProfile.CloseHealthBarType = 1;

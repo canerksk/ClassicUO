@@ -185,7 +185,9 @@ namespace ClassicUO.Game.UI.Gumps
         private Checkbox _dragSelectAsAnchor;
 
         // video
-        private Checkbox _use_old_status_gump, _windowBorderless, _enableDeathScreen, _enableBlackWhiteEffect, _altLights, _enableLight, _enableShadows, _enableShadowsStatics, _auraMouse, _runMouseInSeparateThread, _useColoredLights, _darkNights, _partyAura, _hideChatGradient, _animatedWaterEffect;
+        private Combobox _use_status_gump;
+
+        private Checkbox _windowBorderless, _enableDeathScreen, _enableBlackWhiteEffect, _altLights, _enableLight, _enableShadows, _enableShadowsStatics, _auraMouse, _runMouseInSeparateThread, _useColoredLights, _darkNights, _partyAura, _hideChatGradient, _animatedWaterEffect;
         private Combobox _lightLevelType;
         private Checkbox _use_smooth_boat_movement;
         private HSliderBar _terrainShadowLevel;
@@ -1227,20 +1229,22 @@ namespace ClassicUO.Game.UI.Gumps
                 )
             );
 
-            section3.Add
+            section3.Add(AddLabel(null, "Healthbar Type", startX, startY));
+            section3.AddRight
             (
-                _use_old_status_gump = AddCheckBox
+                _use_status_gump = AddCombobox
                 (
                     null,
-                    ResGumps.UseOldStatusGump,
-                    _currentProfile.UseOldStatusGump,
+                    new[]
+                    {
+                        "Default", "Extended"
+                    },
+                    _currentProfile.UseStatusGump,
                     startX,
                     startY,
-                    true
+                    100
                 )
             );
-
-            _use_old_status_gump.IsVisible = !CUOEnviroment.IsOutlands;
 
             section3.Add
             (
@@ -4073,13 +4077,13 @@ namespace ClassicUO.Game.UI.Gumps
             if (page == 1)
             {
                 _sliderFPS.Value = 60;
-                _reduceFPSWhenInactive.IsChecked = true;
+                _reduceFPSWhenInactive.IsChecked = false;
                 _clientnotifyballon.IsChecked = true;
                 _inputautofocused.IsChecked = false;
                 _highlightObjects.IsChecked = false;
                 _enableTopbar.IsChecked = false;
                 _holdDownKeyTab.IsChecked = true;
-                _holdDownKeyAlt.IsChecked = true;
+                _holdDownKeyAlt.IsChecked = false;
                 _closeAllAnchoredGumpsWithRClick.IsChecked = false;
                 _holdShiftForContext.IsChecked = false;
                 _holdAltToMoveGumps.IsChecked = false;
@@ -4091,24 +4095,25 @@ namespace ClassicUO.Game.UI.Gumps
                 _showHpMobile.IsChecked = false;
                 _hpComboBox.SelectedIndex = 0;
                 _hpComboBoxShowWhen.SelectedIndex = 0;
-                _highlightByPoisoned.IsChecked = true;
-                _highlightByParalyzed.IsChecked = true;
-                _highlightByInvul.IsChecked = true;
+                _highlightByPoisoned.IsChecked = false;
+                _highlightByParalyzed.IsChecked = false;
+                _highlightByInvul.IsChecked = false;
                 _poisonColorPickerBox.Hue = 0x0044;
                 _paralyzedColorPickerBox.Hue = 0x014C;
                 _invulnerableColorPickerBox.Hue = 0x0030;
 
                 //_drawRoofs.IsChecked = false;
                 _drawRoofs.IsChecked = true;
+                _use_status_gump.SelectedIndex = 0;
 
                 _enableCaveBorder.IsChecked = false;
                 _treeToStumps.IsChecked = false;
                 _hideVegetation.IsChecked = false;
                 _noColorOutOfRangeObjects.IsChecked = false;
-                _circleOfTranspRadius.Value = Constants.MIN_CIRCLE_OF_TRANSPARENCY_RADIUS;
+                _circleOfTranspRadius.Value = Constants.MAX_CIRCLE_OF_TRANSPARENCY_RADIUS / 2;
                 _cotType.SelectedIndex = 0;
                 _useCircleOfTransparency.IsChecked = false;
-                _healtbarType.SelectedIndex = 0;
+                _healtbarType.SelectedIndex = 1;
                 _fieldsType.SelectedIndex = 0;
                 _useStandardSkillsGump.IsChecked = true;
                 _showCorpseNameIncoming.IsChecked = true;
@@ -4134,8 +4139,6 @@ namespace ClassicUO.Game.UI.Gumps
                 _saveHealthbars.IsChecked = false;
                 _use_smooth_boat_movement.IsChecked = false;
                 _hideScreenshotStoredInMessage.IsChecked = false;
-                _use_old_status_gump.IsChecked = false;
-                _use_old_status_gump.IsChecked = true;
                 _auraType.SelectedIndex = 0;
                 _fieldsType.SelectedIndex = 0;
 
@@ -4151,14 +4154,16 @@ namespace ClassicUO.Game.UI.Gumps
             if (page == 2) // sounds
             {
                 _enableSounds.IsChecked = true;
-                _enableMusic.IsChecked = true;
+                _enableMusic.IsChecked = false;
+
                 _combatMusic.IsChecked = true;
-                _soundsVolume.Value = 100;
+                _soundsVolume.Value = 10;
                 _musicVolume.Value = 25;
                 _musicInBackground.IsChecked = false;
                 _footStepsSound.IsChecked = true;
-                _loginMusicVolume.Value = 100;
-                _loginMusic.IsChecked = true;
+                _loginMusicVolume.Value = 25;
+                _loginMusic.IsChecked = false;
+
                 _soundsVolume.IsVisible = _enableSounds.IsChecked;
                 _musicVolume.IsVisible = _enableMusic.IsChecked;
             }
@@ -4166,7 +4171,7 @@ namespace ClassicUO.Game.UI.Gumps
             if (page == 3) // video
             {
                 _windowBorderless.IsChecked = false;
-                _zoomCheckbox.IsChecked = false;
+                _zoomCheckbox.IsChecked = true;
                 _restorezoomCheckbox.IsChecked = false;
 
                 //_gameWindowWidth.SetText("600");
@@ -4196,7 +4201,7 @@ namespace ClassicUO.Game.UI.Gumps
                 _enableShadowsStatics.IsChecked = true;
                 _terrainShadowLevel.Value = 15;
                 _runMouseInSeparateThread.IsChecked = true;
-                _auraMouse.IsChecked = true;
+                _auraMouse.IsChecked = false;
                 _partyAura.IsChecked = true;
                 _animatedWaterEffect.IsChecked = false;
                 _partyAuraColorPickerBox.Hue = 0x0044;
@@ -4204,7 +4209,7 @@ namespace ClassicUO.Game.UI.Gumps
 
             if (page == 4) // macros
             {
-
+                GameActions.Print(World, "Bu sayfada varsayılan ayar bulunmuyor");
             }
 
 
@@ -4261,7 +4266,7 @@ namespace ClassicUO.Game.UI.Gumps
                 _canAttackColorPickerBox.Hue = 0x03b2;
                 _murdererColorPickerBox.Hue = 0x0023;
                 _enemyColorPickerBox.Hue = 0x0031;
-                _queryBeforAttackCheckbox.IsChecked = true;
+                _queryBeforAttackCheckbox.IsChecked = false;
                 _queryBeforeBeneficialCheckbox.IsChecked = false;
                 _uiButtonsSingleClick.IsChecked = false;
                 _buffBarTime.IsChecked = true;
@@ -4437,7 +4442,7 @@ namespace ClassicUO.Game.UI.Gumps
             _currentProfile.HoldShiftForContext = _holdShiftForContext.IsChecked;
             _currentProfile.HoldAltToMoveGumps = _holdAltToMoveGumps.IsChecked;
             _currentProfile.HoldShiftToSplitStack = _holdShiftToSplitStack.IsChecked;
-            _currentProfile.CloseHealthBarType = _healtbarType.SelectedIndex;
+            //_currentProfile.CloseHealthBarType = _healtbarType.SelectedIndex;
             _currentProfile.HideScreenshotStoredInMessage = _hideScreenshotStoredInMessage.IsChecked;
 
             if (_currentProfile.DrawRoofs == _drawRoofs.IsChecked)
@@ -4576,19 +4581,13 @@ namespace ClassicUO.Game.UI.Gumps
             _currentProfile.EnableMousewheelScaleZoom = _zoomCheckbox.IsChecked;
             _currentProfile.RestoreScaleAfterUnpressCtrl = _restorezoomCheckbox.IsChecked;
 
-            if (!CUOEnviroment.IsOutlands && _use_old_status_gump.IsChecked != _currentProfile.UseOldStatusGump)
-            {
-                StatusGumpBase status = StatusGumpBase.GetStatusGump();
-
-                _currentProfile.UseOldStatusGump = _use_old_status_gump.IsChecked;
-
-                if (status != null)
-                {
-                    status.Dispose();
-                    UIManager.Add(StatusGumpBase.AddStatusGump(World, status.ScreenCoordinateX, status.ScreenCoordinateY));
-                }
-            }
-
+           StatusGumpBase status = StatusGumpBase.GetStatusGump();
+           _currentProfile.UseStatusGump = _use_status_gump.SelectedIndex;
+           if (status != null)
+           {
+               status.Dispose();
+               UIManager.Add(StatusGumpBase.AddStatusGump(World, status.ScreenCoordinateX, status.ScreenCoordinateY));
+           }
 
             int.TryParse(_gameWindowWidth.Text, out int gameWindowSizeWidth);
             int.TryParse(_gameWindowHeight.Text, out int gameWindowSizeHeight);
@@ -4970,7 +4969,6 @@ namespace ClassicUO.Game.UI.Gumps
             _currentProfile.SkipEmptyCorpse = false;            // _skipEmptyCorpse
             _currentProfile.EnableDeathScreen = true;           // _enableDeathScreen
             _currentProfile.EnableBlackWhiteEffect = true;      // _enableBlackWhiteEffect
-            _currentProfile.UseOldStatusGump = true;            // _use_old_status_gump
             _currentProfile.SallosEasyGrab = false;             // _sallosEasyGrab
             _currentProfile.CustomBarsToggled = false;          // _customBars
             _currentProfile.CBBlackBGToggled = false;           // _customBarsBBG
@@ -4978,7 +4976,7 @@ namespace ClassicUO.Game.UI.Gumps
             _currentProfile.LightLevelType = 0;                 // _lightLevelType
             _currentProfile.UseColoredLights = false;           // _useColoredLights
             _currentProfile.TreeToStumps = false;               // _treeToStumps
-            _currentProfile.CloseHealthBarType = 0;             // _healtbarType
+            _currentProfile.CloseHealthBarType = 1;             // _healtbarType
 
             _currentProfile?.Save(World, ProfileManager.ProfilePath);
 

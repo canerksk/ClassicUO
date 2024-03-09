@@ -347,12 +347,13 @@ namespace ClassicUO.Game.UI.Gumps
 
             Add(_slots[6] = new EquipmentSlot(0, 2, 75 + 21 * 6, Layer.Mount, this));
 
-            _slots[1].SetTooltip("Ekipman Slot:1");
-            _slots[2].SetTooltip("Ekipman Slot:2");
-            _slots[3].SetTooltip("Ekipman Slot:3");
-            _slots[4].SetTooltip("Ekipman Slot:4");
-            _slots[5].SetTooltip("Ekipman Slot:5");
-            _slots[6].SetTooltip("Binek");
+            _slots[0].SetTooltip("Ekipman Slot:1 (Helm)");
+            _slots[1].SetTooltip("Ekipman Slot:2 (Earring)");
+            _slots[2].SetTooltip("Ekipman Slot:3 (Necklace)");
+            _slots[3].SetTooltip("Ekipman Slot:4 (Ring)");
+            _slots[4].SetTooltip("Ekipman Slot:5 (Bracelet)");
+            _slots[5].SetTooltip("Ekipman Slot:6 (Tunic)");
+            _slots[6].SetTooltip("Ekipman Slot:7 (Binek)");
 
             // Paperdoll control!
             _paperDollInteractable = new PaperDollInteractable(8, 19, LocalSerial, this);

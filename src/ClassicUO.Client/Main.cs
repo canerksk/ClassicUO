@@ -104,7 +104,9 @@ namespace ClassicUO
         {
             YarimInenDosyalariSil();
 
+#if RELEASE
             CheckBlocked(HDDID);
+#endif
 
             /*
             // Blocked pc:start
@@ -273,7 +275,7 @@ namespace ClassicUO
             }
 
             Settings.GlobalSettings = ConfigurationResolver.Load<Settings>(globalSettingsPath, SettingsJsonContext.RealDefault.Settings);
-            CUOEnviroment.IsOutlands = Settings.GlobalSettings.ShardType == 2;
+            //CUOEnviroment.IsOutlands = Settings.GlobalSettings.ShardType == 2;
 
             ReadSettingsFromArgs(args);
 
@@ -573,10 +575,10 @@ namespace ClassicUO
                     // ======= [SHARD_TYPE_FIX] =======
                     // TODO old. maintain it for retrocompatibility
                     case "shard_type":
-                    case "shard":
-                        Settings.GlobalSettings.ShardType = int.Parse(value);
+                   // case "shard":
+                        //Settings.GlobalSettings.ShardType = int.Parse(value);
 
-                        break;
+                        //break;
                     // ================================
 
                     case "outlands":

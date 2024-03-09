@@ -88,7 +88,7 @@ namespace ClassicUO.Configuration
         public bool EnableSound { get; set; } = true;
         public int SoundVolume { get; set; } = 10;
         public bool EnableMusic { get; set; } = false;
-        public int MusicVolume { get; set; } = 100;
+        public int MusicVolume { get; set; } = 25;
         public bool EnableFootstepsSound { get; set; } = true;
         public bool EnableCombatMusic { get; set; } = true;
         public bool ReproduceSoundsInBackground { get; set; }
@@ -133,7 +133,8 @@ namespace ClassicUO.Configuration
         public bool EnabledBeneficialCriminalActionQuery { get; set; } = false;
         public bool EnableStatReport { get; set; } = true;
         public bool EnableSkillReport { get; set; } = true;
-        public bool UseOldStatusGump { get; set; } = true;
+
+        public int UseStatusGump { get; set; } = 0;
 
         public int BackpackStyle { get; set; }
         public bool HighlightGameObjects { get; set; }
@@ -212,12 +213,12 @@ namespace ClassicUO.Configuration
         public int LightLevelType { get; set; } // 0 = absolute, 1 = minimum
         public bool UseColoredLights { get; set; } = true;
         public bool UseDarkNights { get; set; }
-        public int CloseHealthBarType { get; set; } = 0; // 0 = none, 1 == not exists, 2 == is dead
+        public int CloseHealthBarType { get; set; } = 1; // 0 = none, 1 == not exists, 2 == is dead
         public bool ActivateChatAfterEnter { get; set; }
         public bool ActivateChatAdditionalButtons { get; set; } = true;
         public bool ActivateChatShiftEnterSupport { get; set; } = true;
         public bool UseObjectsFading { get; set; } = false;
-        public bool HoldDownKeyAltToCloseAnchored { get; set; } = true;
+        public bool HoldDownKeyAltToCloseAnchored { get; set; } = false;
         public bool CloseAllAnchoredGumpsInGroupWithRightClick { get; set; } = false;
         public bool HoldAltToMoveGumps { get; set; }
 

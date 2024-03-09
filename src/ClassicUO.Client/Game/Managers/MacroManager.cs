@@ -102,7 +102,7 @@ namespace ClassicUO.Game.Managers
                 Log.Trace("No macros.xml file. Creating a default file.");
 
                 Clear();
-                CreateDefaultMacros();
+                //CreateDefaultMacros();
                 Save();
 
                 return;
@@ -163,9 +163,9 @@ namespace ClassicUO.Game.Managers
             }
         }
 
-        private void CreateDefaultMacros()
+        public void CreateDefaultMacros()
         {
-            /*
+
             PushToBack
             (
                 new Macro
@@ -291,7 +291,6 @@ namespace ClassicUO.Game.Managers
                     }
                 }
             );
-            */
 
         }
 
