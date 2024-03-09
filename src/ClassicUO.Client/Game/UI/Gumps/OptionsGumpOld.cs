@@ -4838,7 +4838,7 @@ namespace ClassicUO.Game.UI.Gumps
 
             _currentProfile.ShowTargetRangeIndicator = _showTargetRangeIndicator.IsChecked;
 
-
+            /*
             bool updateHealthBars = _currentProfile.CustomBarsToggled != _customBars.IsChecked;
             _currentProfile.CustomBarsToggled = _customBars.IsChecked;
 
@@ -4869,6 +4869,12 @@ namespace ClassicUO.Game.UI.Gumps
             }
 
             _currentProfile.CBBlackBGToggled = _customBarsBBG.IsChecked;
+            */
+            _currentProfile.CBBlackBGToggled = false;
+            _currentProfile.CustomBarsToggled = false;
+
+
+
             _currentProfile.SaveHealthbars = _saveHealthbars.IsChecked;
 
 

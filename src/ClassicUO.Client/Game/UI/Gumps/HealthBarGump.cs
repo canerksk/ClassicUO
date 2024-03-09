@@ -1664,10 +1664,11 @@ namespace ClassicUO.Game.UI.Gumps
             {
                 if (LocalSerial != World.Player && !inparty && (ProfileManager.CurrentProfile.CloseHealthBarType == 1 || ProfileManager.CurrentProfile.CloseHealthBarType == 2 && World.CorpseManager.Exists(0, LocalSerial | 0x8000_0000)))
                 {
-                    if (CheckIfAnchoredElseDispose())
-                    {
-                        return;
-                    }
+                    Dispose(); // birlesen hpbarlarin kapanmasi
+                    //if (CheckIfAnchoredElseDispose())
+                    //{
+                        ///return;
+                    //}
                 }
 
                 if (_isDead)
