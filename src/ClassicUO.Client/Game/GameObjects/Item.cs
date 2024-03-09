@@ -230,6 +230,7 @@ namespace ClassicUO.Game.GameObjects
                 if (IsCorpse)
                 {
                     UIManager.GetGump<GridLootGump>(Serial)?.Dispose();
+                    GameActions.Print(World, "Ceset kayboldu", 38, MessageType.Regular, 1, true);
                 }
 
                 UIManager.GetGump<BulletinBoardGump>(Serial)?.Dispose();

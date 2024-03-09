@@ -41,6 +41,8 @@ using ClassicUO.Renderer;
 using ClassicUO.Resources;
 using Microsoft.Xna.Framework;
 using ClassicUO.Game.Scenes;
+using ClassicUO.Game.Data;
+using System;
 
 namespace ClassicUO.Game.UI.Gumps
 {
@@ -210,7 +212,7 @@ namespace ClassicUO.Game.UI.Gumps
             }
             else if (buttonID == 2)
             {
-                GameActions.Print(World, ResGumps.TargetContainerToGrabItemsInto);
+                GameActions.Print(World, ResGumps.TargetContainerToGrabItemsInto, 044, MessageType.System, 1, true);
                 World.TargetManager.SetTargeting(CursorTarget.SetGrabBag, 0, TargetType.Neutral);
             }
             else
@@ -305,10 +307,10 @@ namespace ClassicUO.Game.UI.Gumps
                 _buttonNext.IsVisible = true;
                 _buttonPrev.IsVisible = true;
             }
-
-            if (count == 0)
+            if (count <= 0)
             {
-                GameActions.Print(World, ResGumps.CorpseIsEmpty);
+                Console.WriteLine(ResGumps.CorpseIsEmpty);
+                GameActions.Print(World, ResGumps.CorpseIsEmpty, 38, MessageType.Regular, 1, true);
                 Dispose();
             }
             else if (_hideIfEmpty && !IsVisible)

@@ -808,7 +808,7 @@ namespace ClassicUO.Resources {
         }
         
         /// <summary>
-        ///   [GridLoot]: Corpse is empty! benzeri yerelleştirilmiş bir dize arar.
+        ///   [GridLoot]: Ceset bos! benzeri yerelleştirilmiş bir dize arar.
         /// </summary>
         public static string CorpseIsEmpty {
             get {
@@ -3396,7 +3396,7 @@ namespace ClassicUO.Resources {
         }
         
         /// <summary>
-        ///   Set loot bag benzeri yerelleştirilmiş bir dize arar.
+        ///   Loot çantası seç benzeri yerelleştirilmiş bir dize arar.
         /// </summary>
         public static string SetLootBag {
             get {

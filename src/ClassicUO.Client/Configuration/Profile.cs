@@ -297,7 +297,7 @@ namespace ClassicUO.Configuration
 
         public uint GrabBagSerial { get; set; }
 
-        public int GridLootType { get; set; } // 0 = none, 1 = only grid, 2 = both
+        public int GridLootType { get; set; } = 0; // 0 = none, 1 = only grid, 2 = both
 
         public bool ReduceFPSWhenInactive { get; set; } = false;
 
@@ -312,7 +312,7 @@ namespace ClassicUO.Configuration
 
         public bool ScaleItemsInsideContainers { get; set; }
 
-        public bool DoubleClickToLootInsideContainers { get; set; }
+        public bool DoubleClickToLootInsideContainers { get; set; } = false;
 
         public bool UseLargeContainerGumps { get; set; } = false;
 

@@ -413,10 +413,7 @@ namespace ClassicUO.Game.GameObjects
                 }
                 else
                 {
-                    if (
-                        ProfileManager.CurrentProfile.GridLootType > 0
-                        && SelectedObject.CorpseObject == owner
-                    )
+                    if ( ProfileManager.CurrentProfile.GridLootType > 0 && SelectedObject.CorpseObject == owner)
                     {
                         color = 0x0034;
                     }

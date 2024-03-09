@@ -2280,7 +2280,7 @@ namespace ClassicUO.Network
                 ProfileManager.CurrentProfile.UseAlternativeLights = false;
                 ProfileManager.CurrentProfile.CloseHealthBarType = 1;
                 ProfileManager.CurrentProfile.DoubleClickToLootInsideContainers = false;
-                ProfileManager.CurrentProfile.GridLootType = 0;
+                //ProfileManager.CurrentProfile.GridLootType = 0;
                 ProfileManager.CurrentProfile.EnableBlackWhiteEffect = true;
                 ProfileManager.CurrentProfile.EnableDeathScreen = true;
                 ProfileManager.CurrentProfile.CustomBarsToggled = false;

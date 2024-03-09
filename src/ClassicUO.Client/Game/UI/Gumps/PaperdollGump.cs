@@ -232,6 +232,7 @@ namespace ClassicUO.Game.UI.Gumps
                 );
                 _skillsbutton.SetTooltip("Skills"); 
 
+
                 // GUILD BUTTON
                 Add(
                     _guildbutton = new Button((int)Buttons.Guild, 0x57b2, 0x57b4, 0x57b3)
@@ -241,7 +242,8 @@ namespace ClassicUO.Game.UI.Gumps
                         ButtonAction = ButtonAction.Activate
                     }
                 );
-                _guildbutton.SetTooltip("Skills");
+                _guildbutton.SetTooltip("Guild");
+
 
                 // TOGGLE PEACE/WAR BUTTON
                 Mobile mobile = World.Mobiles.Get(LocalSerial);
@@ -262,8 +264,15 @@ namespace ClassicUO.Game.UI.Gumps
                         ButtonAction = ButtonAction.Activate
                     }
                 );
+                if ( _isWarMode )
+                {
+                    _warModeBtn.SetTooltip("Peace");
+                }
+                else
+                {
+                    _warModeBtn.SetTooltip("War");
+                }
 
-                _warModeBtn.SetTooltip("War/Peace");
 
                 int profileX = 25;
                 const int SCROLLS_STEP = 14;
@@ -282,7 +291,7 @@ namespace ClassicUO.Game.UI.Gumps
 
                 Add(_profilePic = new GumpPic(profileX, 196, CustomUIGump07D2, 0));
                 _profilePic.MouseDoubleClick += Profile_MouseDoubleClickEvent;
-                _profilePic.SetTooltip("Ayarlar");
+                _profilePic.SetTooltip("Profile");
 
 
                 profileX += SCROLLS_STEP;
@@ -331,6 +340,7 @@ namespace ClassicUO.Game.UI.Gumps
             // Virtue menu
             Add(_virtueMenuPic = new GumpPic(80, 4, 0x0071, 0));
             _virtueMenuPic.MouseDoubleClick += VirtueMenu_MouseDoubleClickEvent;
+            _virtueMenuPic.SetTooltip("Virtue System");
 
             // Equipment slots for hat/earrings/neck/ring/bracelet
             Add(_slots[0] = new EquipmentSlot(0, 2, 75, Layer.Helmet, this));
@@ -526,6 +536,15 @@ namespace ClassicUO.Game.UI.Gumps
                 Dispose();
 
                 return;
+            }
+
+            if (_isWarMode)
+            {
+                _warModeBtn.SetTooltip("<basefont color=\"#45db40\">Peace</basefont>");
+            }
+            else
+            {
+                _warModeBtn.SetTooltip("<basefont color=\"#e03719\">War</basefont>");
             }
 
             // This is to update the state of the war mode button.

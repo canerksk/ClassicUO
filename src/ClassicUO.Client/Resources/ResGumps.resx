@@ -827,7 +827,7 @@ Time left: {1:00}:{2:00}:{3:00}</value>
     <value>Land (0x{0:X4})  flags: {1}</value>
   </data>
   <data name="SetLootBag" xml:space="preserve">
-    <value>Set loot bag</value>
+    <value>Loot çantası seç</value>
   </data>
   <data name="Prev" xml:space="preserve">
     <value>&lt;&lt;</value>
@@ -839,7 +839,7 @@ Time left: {1:00}:{2:00}:{3:00}</value>
     <value>Target the container to Grab items into.</value>
   </data>
   <data name="CorpseIsEmpty" xml:space="preserve">
-    <value>[GridLoot]: Corpse is empty!</value>
+    <value>[GridLoot]: Ceset bos!</value>
   </data>
   <data name="Self" xml:space="preserve">
     <value>[* SELF *]</value>

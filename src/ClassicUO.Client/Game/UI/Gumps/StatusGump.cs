@@ -2592,8 +2592,8 @@ namespace ClassicUO.Game.UI.Gumps
             if (_refreshTime < Time.Ticks)
             {
                 //_refreshTime = (long)Time.Ticks + 250;
-                _refreshTime = (long)Time.Ticks + 100;
-                Console.WriteLine("refresh time:" + _refreshTime);
+                _refreshTime = (long)Time.Ticks + 150;
+                //Console.WriteLine("refresh time:" + _refreshTime);
 
                 UpdateStatusFillBar(FillStats.Hits, World.Player.Hits, World.Player.HitsMax);
                 UpdateStatusFillBar(FillStats.Mana, World.Player.Mana, World.Player.ManaMax);

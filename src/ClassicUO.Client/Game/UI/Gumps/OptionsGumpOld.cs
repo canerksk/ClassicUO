@@ -1333,7 +1333,7 @@ namespace ClassicUO.Game.UI.Gumps
                     startX,
                     startY,
                     120,
-                    true
+                    false
                 ),
                 2
             );
@@ -4933,7 +4933,9 @@ namespace ClassicUO.Game.UI.Gumps
             }
 
             _currentProfile.UseLargeContainerGumps = _useLargeContianersGumps.IsChecked;
-            _currentProfile.DoubleClickToLootInsideContainers = _containerDoubleClickToLoot.IsChecked;
+            //_currentProfile.DoubleClickToLootInsideContainers = _containerDoubleClickToLoot.IsChecked;
+            _currentProfile.DoubleClickToLootInsideContainers = false;
+
             _currentProfile.RelativeDragAndDropItems = _relativeDragAnDropItems.IsChecked;
             _currentProfile.HighlightContainerWhenSelected = _highlightContainersWhenMouseIsOver.IsChecked;
             _currentProfile.HueContainerGumps = _hueContainerGumps.IsChecked;
@@ -4963,7 +4965,9 @@ namespace ClassicUO.Game.UI.Gumps
             _currentProfile.OverrideAllFontsIsUnicode = true;   // _overrideAllFontsIsUnicodeCheckbox
             _currentProfile.DrawRoofs = true;                   // _drawRoofs
             _currentProfile.TreeToStumps = false;               // _treeToStumps
-            _currentProfile.GridLootType = 0;                   // _gridLoot
+
+            //_currentProfile.GridLootType = 0;                   // _gridLoot
+
             _currentProfile.FieldsType = 0;                     // _fieldsType
             _currentProfile.UseDarkNights = true;               //_darkNights
             _currentProfile.SmoothDoors = false;                // _smoothDoors
