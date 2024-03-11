@@ -4758,9 +4758,15 @@ namespace ClassicUO.Network
                 case 0x26:
                     byte val = p.ReadUInt8();
 
-                    if (val > (int)CharacterSpeedType.FastUnmountAndCantRun)
+                    //Console.WriteLine("speedmode" + val);
+                    //if (val > (int)CharacterSpeedType.FastUnmountAndCantRun)
+                    //{
+                    //    val = 0;
+                    //}
+
+                    if (val > (int)CharacterSpeedType.NoWalk)
                     {
-                        val = 0;
+                        val = (int)CharacterSpeedType.NoWalk;
                     }
 
                     world.Player.SpeedMode = (CharacterSpeedType)val;

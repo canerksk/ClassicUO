@@ -1619,12 +1619,23 @@ namespace ClassicUO.Game.GameObjects
                     x = newX;
                     y = newY;
                     z = newZ;
-
                     walkTime = (ushort) MovementSpeed.TimeToCompleteMovement(run, IsMounted || SpeedMode == CharacterSpeedType.FastUnmount || SpeedMode == CharacterSpeedType.FastUnmountAndCantRun || IsFlying);
+                }
+                else
+                {
+                    if (Walker.LastStepRequestTime == 0)
+                    {
+                        x = newX;
+                        y = newY;
+                        z = newZ;
+                        walkTime = (ushort)MovementSpeed.TimeToCompleteMovement(run, IsMounted || SpeedMode == CharacterSpeedType.FastUnmount || SpeedMode == CharacterSpeedType.FastUnmountAndCantRun || IsFlying);
+                    }
                 }
 
                 direction = newDir;
             }
+
+            //System.Console.WriteLine();
 
             CloseBank();
 
