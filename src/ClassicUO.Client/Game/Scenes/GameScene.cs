@@ -137,8 +137,9 @@ namespace ClassicUO.Game.Scenes
 
             Client.Game.UO.GameCursor.ItemHold.Clear();
 
-            _world.Macros.Clear();
-            _world.Macros.Load();
+            //_world.Macros.Clear();
+            //_world.Macros.Load();
+
             _animatedStaticsManager = new AnimatedStaticsManager();
             _animatedStaticsManager.Initialize();
             _world.InfoBars.Load();

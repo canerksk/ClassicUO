@@ -1623,12 +1623,12 @@ namespace ClassicUO.Game.GameObjects
                 }
                 else
                 {
-                    if (Walker.LastStepRequestTime == 0)
+                    if (Walker.LastStepRequestTime == 0)  // karakter yürümüyorsa
                     {
-                        x = newX;
-                        y = newY;
-                        z = newZ;
-                        walkTime = (ushort)MovementSpeed.TimeToCompleteMovement(run, IsMounted || SpeedMode == CharacterSpeedType.FastUnmount || SpeedMode == CharacterSpeedType.FastUnmountAndCantRun || IsFlying);
+                        // x = newX;
+                        // y = newY;
+                       /// z = newZ;
+                        // walkTime = (ushort)MovementSpeed.TimeToCompleteMovement(run, IsMounted || SpeedMode == CharacterSpeedType.FastUnmount || SpeedMode == CharacterSpeedType.FastUnmountAndCantRun || IsFlying);
                     }
                 }
 

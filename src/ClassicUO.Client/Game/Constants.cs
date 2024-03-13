@@ -51,9 +51,13 @@ namespace ClassicUO.Game
 
         public const string EXTCMDKEY = "MythicUO";
         public const string TIMEHASHKEY = "MytH";
-
+#if DEBUG
+        public static string SPHERE_IP { get; set; } = "127.0.0.1";
+        public static ushort SPHERE_PORT { get; set; } = 2593;
+#else
         public static string SPHERE_IP { get; set; } = "89.107.227.186";
         public static ushort SPHERE_PORT { get; set; } = 2599;
+#endif
         public const string ADMIN_EMAIL = "root@mythic.gen.tr";
         public const string WEB_MAIN_URL = "https://mythic.gen.tr/";
 #endif

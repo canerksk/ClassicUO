@@ -106,7 +106,7 @@ namespace ClassicUO.Resources {
         }
         
         /// <summary>
-        ///   Add benzeri yerelleştirilmiş bir dize arar.
+        ///   Ekle benzeri yerelleştirilmiş bir dize arar.
         /// </summary>
         public static string Add {
             get {
@@ -934,7 +934,7 @@ namespace ClassicUO.Resources {
         }
         
         /// <summary>
-        ///   + Create macro button benzeri yerelleştirilmiş bir dize arar.
+        ///   + Kısayol oluştur benzeri yerelleştirilmiş bir dize arar.
         /// </summary>
         public static string CreateMacroButton {
             get {
@@ -1087,7 +1087,7 @@ namespace ClassicUO.Resources {
         }
         
         /// <summary>
-        ///   Delete benzeri yerelleştirilmiş bir dize arar.
+        ///   Sil benzeri yerelleştirilmiş bir dize arar.
         /// </summary>
         public static string Delete {
             get {

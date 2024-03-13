@@ -855,7 +855,7 @@ namespace ClassicUO.Game.UI.Gumps
             Status
         }
 
-        private class EquipmentSlot : Control
+        public class EquipmentSlot : Control
         {
             private ItemGumpFixed _itemGump;
             private readonly PaperDollGump _paperDollGump;
@@ -890,6 +890,7 @@ namespace ClassicUO.Game.UI.Gumps
             public override void Update()
             {
                 Item item = _paperDollGump.World.Items.Get(LocalSerial);
+                Mobile mobile = _paperDollGump.World.Mobiles.Get(_paperDollGump.LocalSerial);
 
                 if (item == null || item.IsDestroyed)
                 {
@@ -897,13 +898,22 @@ namespace ClassicUO.Game.UI.Gumps
                     _itemGump = null;
                 }
 
-                Mobile mobile = _paperDollGump.World.Mobiles.Get(_paperDollGump.LocalSerial);
-
                 if (mobile != null)
                 {
+
                     Item it_at_layer = mobile.FindItemByLayer(Layer);
 
-                    if ((it_at_layer != null && _itemGump != null && _itemGump.Graphic != it_at_layer.DisplayedGraphic) || _itemGump == null)
+                    //if (_itemGump != null && it_at_layer != null)
+                    //{
+                    //    if (_itemGump.LocalSerial != it_at_layer.Serial)
+                    //    {
+                    //        _itemGump?.Dispose();
+                    //        _itemGump = null;
+                    //        Console.WriteLine(_itemGump.LocalSerial + " = " + it_at_layer.Serial);
+                    //    }
+                    //}
+
+                    if ( (it_at_layer != null && _itemGump != null && _itemGump.LocalSerial != it_at_layer.Serial) || _itemGump == null)
                     {
                         if (_itemGump != null)
                         {
@@ -924,13 +934,8 @@ namespace ClassicUO.Game.UI.Gumps
                                     Y = 0,
                                     Width = 18,
                                     Height = 18,
-                                    HighlightOnMouseOver = false,
-                                    CanPickUp =
-                                        _paperDollGump.World.InGame
-                                        && (
-                                            _paperDollGump.World.Player.Serial == _paperDollGump.LocalSerial
-                                            || _paperDollGump.CanLift
-                                        )
+                                    HighlightOnMouseOver = true,
+                                    CanPickUp =  _paperDollGump.World.InGame && ( _paperDollGump.World.Player.Serial == _paperDollGump.LocalSerial || _paperDollGump.CanLift)
                                 }
                             );
                         }

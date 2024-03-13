@@ -93,19 +93,29 @@ namespace ClassicUO.Game.Managers
         public bool WaitingBandageTarget { get; set; }
 
 
-        public void Load()
+        public void Load(bool force)
         {
             string path = Path.Combine(ProfileManager.ProfilePath, "macros.xml");
 
-            if (!File.Exists(path))
+            if (force)
             {
-                Log.Trace("No macros.xml file. Creating a default file.");
+                 Log.Trace("No macros.xml file. Creating a default file.");
+                 Clear();
+                 CreateDefaultMacros();
+                 Save();
+            }
+            else
+            {
+                if (!File.Exists(path))
+                {
+                    Log.Trace("No macros.xml file. Creating a default file.");
 
-                Clear();
-                //CreateDefaultMacros();
-                Save();
+                    Clear();
+                    CreateDefaultMacros();
+                    Save();
 
-                return;
+                    return;
+                }
             }
 
             XmlDocument doc = new XmlDocument();

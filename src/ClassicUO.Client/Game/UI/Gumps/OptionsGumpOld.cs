@@ -57,6 +57,7 @@ namespace ClassicUO.Game.UI.Gumps
     {
         public string TusName;
 
+
         private const byte FONT = 0x00;
         private const ushort HUE_FONT = 0x0;
 
@@ -80,7 +81,7 @@ namespace ClassicUO.Game.UI.Gumps
 
         private Button _soundButton, _macroButton, _speechButton, _toolTipsButton, _fontsButton, _displayButton, _generalButton, _filterButton;
 
-        private NiceButton _alldelButton, _convertMacro, _openFolder;
+        private NiceButton _alldelButton, _convertMacro, _openFolder, _builddefaultmacroButton;
 
 
         //experimental
@@ -2238,7 +2239,7 @@ namespace ClassicUO.Game.UI.Gumps
                 _addButton = new Button((int)Buttons.NewMacro, 0x99C, 0x99D, 0x99E)
                 {
                     X = MAIN_X + 220,
-                    Y = MAIN_Y + 100,
+                    Y = MAIN_Y + 70,
                     ButtonAction = ButtonAction.Activate
                 }
             );
@@ -2251,7 +2252,7 @@ namespace ClassicUO.Game.UI.Gumps
                 _delButton = new Button((int)Buttons.DeleteMacro, 0x99F, 0x9A0, 0x9A1)
                 {
                     X = MAIN_X + 275,
-                    Y = MAIN_Y + 100,
+                    Y = MAIN_Y + 70,
                     ButtonAction = ButtonAction.Activate
                 }
             );
@@ -2263,7 +2264,7 @@ namespace ClassicUO.Game.UI.Gumps
                 _prevButton = new Button((int)Buttons.PrevMacroButton, 0x9A2, 0x9A3, 0x9A4)
                 {
                     X = MAIN_X + 345,
-                    Y = MAIN_Y + 100,
+                    Y = MAIN_Y + 70,
                     ButtonAction = ButtonAction.Activate
                 }
             );
@@ -2275,7 +2276,7 @@ namespace ClassicUO.Game.UI.Gumps
                 _nextButton = new Button((int)Buttons.NextMacroButton, 0x9A5, 0x9A6, 0x9A7)
                 {
                     X = MAIN_X + 430,
-                    Y = MAIN_Y + 100,
+                    Y = MAIN_Y + 70,
                     ButtonAction = ButtonAction.Activate
                 }
             );
@@ -2284,13 +2285,22 @@ namespace ClassicUO.Game.UI.Gumps
             Add(_nextButton, PAGE);
 
 
-            Add(_alldelButton = new NiceButton(100, 405, 90, 20, ButtonAction.Activate, "Hepsini sil", 0, TEXT_ALIGN_TYPE.TS_CENTER, 0x28)
+            Add(_alldelButton = new NiceButton(100, 20, 90, 20, ButtonAction.Activate, "Hepsini sil", 0, TEXT_ALIGN_TYPE.TS_CENTER, 0x28)
             {
                 IsSelectable = false,
                 ButtonParameter = (int)Buttons.AllDeleteMacro
             });
 
             Add(_alldelButton, PAGE);
+            
+
+            Add(_builddefaultmacroButton = new NiceButton(325, 30, 120, 20, ButtonAction.Activate, "Varsayılanı yükle", 0, TEXT_ALIGN_TYPE.TS_CENTER, 946)
+            {
+                IsSelectable = false,
+                ButtonParameter = (int)Buttons.BuildDefaultMacro
+            });
+
+            Add(_builddefaultmacroButton, PAGE);
 
 
             Add(_convertMacro = new NiceButton(450, 30, 90, 20, ButtonAction.Activate, "Macro aktar", 0, TEXT_ALIGN_TYPE.TS_CENTER, 0x44)
@@ -2316,8 +2326,6 @@ namespace ClassicUO.Game.UI.Gumps
             DataBox databox = new DataBox(startX, startY, 1, 1);
             databox.WantUpdateSize = true;
             rightArea.Add(databox);
-
-
 
             _addButton.MouseUp += (sender, e) =>
             {
@@ -2367,7 +2375,7 @@ namespace ClassicUO.Game.UI.Gumps
                 _macroControl = new MacroControl(this, name)
                 {
                     X = 270,
-                    Y = 130
+                    Y = 100
                 };
 
 
@@ -2435,6 +2443,21 @@ namespace ClassicUO.Game.UI.Gumps
                 }
 
             };
+
+
+            _builddefaultmacroButton.MouseUp += (ss, ee) =>
+            {
+                World.Macros.Clear();
+                World.Macros.Load(true);
+                _macroControl?.Dispose();
+                databox.ReArrangeChildren();
+
+                UIManager.GetGump<OptionsGumpOld>()?.Dispose();
+                GameActions.OpenSettings(World, 4);
+
+                GameActions.Print(World, "Ultima Online varsayılan macroları yüklendi.", 946, MessageType.System, 1, true);
+            };
+
 
             _convertMacro.MouseUp += (ss, ee) =>
             {
@@ -5662,6 +5685,7 @@ namespace ClassicUO.Game.UI.Gumps
             PrevMacroButton,
             NextMacroButton,
             ProfileManagerButton,
+            BuildDefaultMacro,
             Last = NextMacroButton
 
             //Last = ConvertMacro

@@ -40,7 +40,7 @@ namespace ClassicUO
             }
             else
             {
-                MessageBox.Show("Dosya seçilmedi!");
+                MessageBox.Show("Ultima Online dosya yolu seçilmedi!\nSisteminizde kurulu Ultima Online sürümü bulunmuyorsa oyuna giriş yapılmamaktadır. Lütfen bir Ultima Online sürümü yükleyiniz.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
 
         }

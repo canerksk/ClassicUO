@@ -1272,13 +1272,13 @@ Min. Skill: {1}</value>
     <value>Key combination already exists.</value>
   </data>
   <data name="Delete" xml:space="preserve">
-    <value>Delete</value>
+    <value>Sil</value>
   </data>
   <data name="CreateMacroButton" xml:space="preserve">
-    <value>+ Create macro button</value>
+    <value>+ Kısayol oluştur</value>
   </data>
   <data name="Add" xml:space="preserve">
-    <value>Add</value>
+    <value>Ekle</value>
   </data>
   <data name="ThisKeyCombinationAlreadyExists" xml:space="preserve">
     <value>This key combination

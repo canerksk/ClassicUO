@@ -301,7 +301,7 @@ namespace ClassicUO.Configuration
 
         public bool ReduceFPSWhenInactive { get; set; } = false;
 
-        public bool OverrideAllFonts { get; set; } = true;
+        public bool OverrideAllFonts { get; set; } = false;
         public bool OverrideAllFontsIsUnicode { get; set; } = true;
 
         public bool SallosEasyGrab { get; set; }
@@ -358,9 +358,6 @@ namespace ClassicUO.Configuration
 
         public bool ClientNotifyBalloonActive { get; set; } = true;
         public bool InputAutoFocused { get; set; } = true;
-
-
-
         public static uint GumpsVersion { get; private set; }
 
         public void Save(World world, string path)
