@@ -51,7 +51,7 @@ namespace ClassicUO.Game
 
         public const string EXTCMDKEY = "MythicUO";
         public const string TIMEHASHKEY = "MytH";
-#if DEBUG
+#if NIGHLY
         public static string SPHERE_IP { get; set; } = "127.0.0.1";
         public static ushort SPHERE_PORT { get; set; } = 2593;
 #else

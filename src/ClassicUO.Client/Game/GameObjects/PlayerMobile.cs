@@ -1567,7 +1567,7 @@ namespace ClassicUO.Game.GameObjects
                 x = walkStep.X;
                 y = walkStep.Y;
                 z = walkStep.Z;
-                oldDirection = (Direction) walkStep.Direction;
+                oldDirection = (Direction)walkStep.Direction;
             }
 
             sbyte oldZ = z;
@@ -1596,7 +1596,7 @@ namespace ClassicUO.Game.GameObjects
                     y = newY;
                     z = newZ;
 
-                    walkTime = (ushort) MovementSpeed.TimeToCompleteMovement(run, IsMounted || SpeedMode == CharacterSpeedType.FastUnmount || SpeedMode == CharacterSpeedType.FastUnmountAndCantRun || IsFlying);
+                    walkTime = (ushort)MovementSpeed.TimeToCompleteMovement(run, IsMounted || SpeedMode == CharacterSpeedType.FastUnmount || SpeedMode == CharacterSpeedType.FastUnmountAndCantRun || IsFlying);
                 }
             }
             else
@@ -1619,23 +1619,12 @@ namespace ClassicUO.Game.GameObjects
                     x = newX;
                     y = newY;
                     z = newZ;
-                    walkTime = (ushort) MovementSpeed.TimeToCompleteMovement(run, IsMounted || SpeedMode == CharacterSpeedType.FastUnmount || SpeedMode == CharacterSpeedType.FastUnmountAndCantRun || IsFlying);
-                }
-                else
-                {
-                    if (Walker.LastStepRequestTime == 0)  // karakter yürümüyorsa
-                    {
-                        // x = newX;
-                        // y = newY;
-                       /// z = newZ;
-                        // walkTime = (ushort)MovementSpeed.TimeToCompleteMovement(run, IsMounted || SpeedMode == CharacterSpeedType.FastUnmount || SpeedMode == CharacterSpeedType.FastUnmountAndCantRun || IsFlying);
-                    }
+
+                    walkTime = (ushort)MovementSpeed.TimeToCompleteMovement(run, IsMounted || SpeedMode == CharacterSpeedType.FastUnmount || SpeedMode == CharacterSpeedType.FastUnmountAndCantRun || IsFlying);
                 }
 
                 direction = newDir;
             }
-
-            //System.Console.WriteLine();
 
             CloseBank();
 
@@ -1653,13 +1642,13 @@ namespace ClassicUO.Game.GameObjects
             step.Sequence = Walker.WalkSequence;
             step.Accepted = false;
             step.Running = run;
-            step.OldDirection = (byte) (oldDirection & Direction.Mask);
-            step.Direction = (byte) direction;
+            step.OldDirection = (byte)(oldDirection & Direction.Mask);
+            step.Direction = (byte)direction;
             step.Timer = Time.Ticks;
-            step.X = (ushort) x;
-            step.Y = (ushort) y;
+            step.X = (ushort)x;
+            step.Y = (ushort)y;
             step.Z = z;
-            step.NoRotation = step.OldDirection == (byte) direction && oldZ - z >= 11;
+            step.NoRotation = step.OldDirection == (byte)direction && oldZ - z >= 11;
 
             Walker.StepsCount++;
 
@@ -1670,7 +1659,7 @@ namespace ClassicUO.Game.GameObjects
                     X = x,
                     Y = y,
                     Z = z,
-                    Direction = (byte) direction,
+                    Direction = (byte)direction,
                     Run = run
                 }
             );
@@ -1716,5 +1705,6 @@ namespace ClassicUO.Game.GameObjects
 
             return true;
         }
+
     }
 }
