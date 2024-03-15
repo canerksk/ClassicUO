@@ -137,8 +137,8 @@ namespace ClassicUO.Game.Scenes
 
             Client.Game.UO.GameCursor.ItemHold.Clear();
 
-            //_world.Macros.Clear();
-            //_world.Macros.Load();
+            _world.Macros.Clear();
+            _world.Macros.Load(false);
 
             _animatedStaticsManager = new AnimatedStaticsManager();
             _animatedStaticsManager.Initialize();
@@ -297,8 +297,19 @@ namespace ClassicUO.Game.Scenes
 
             if (!string.IsNullOrEmpty(text))
             {
-                _world.Journal.Add(text, hue, name, e.TextType, e.IsUnicode);
+                if (e.Type == MessageType.Spell)
+                {
+                    if (e.Font != 8)
+                    {
+                        _world.Journal.Add(text, hue, name, e.TextType, e.IsUnicode);
+                    }
+                }
+                else
+                {
+                    _world.Journal.Add(text, hue, name, e.TextType, e.IsUnicode);
+                }
             }
+
         }
 
         public override void Unload()
