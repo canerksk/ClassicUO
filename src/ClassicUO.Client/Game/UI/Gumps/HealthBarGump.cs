@@ -1566,27 +1566,12 @@ namespace ClassicUO.Game.UI.Gumps
                     Add(_background = new GumpPic(0, 0, CustomUIGump0804, barColor) { ContainsByBounds = true });
                     Add(_hpLineRed = new GumpPic(34, 38, LINE_RED, hitsColor));
 
-                    int barW = 109;
-
-                    int hitsPercent = CalculatePercents(entity.HitsMax, entity.Hits, entity.HitsMax);
+                    int hitsPercent = CalculatePercents(entity.HitsMax, entity.Hits, 100);
 
                     if (hitsPercent > 100)
                     {
                         hitsPercent = 100;
                     }
-
-                    Add(
-                        _hppercentlabel = new Label(
-                            "%" + hitsPercent.ToString(), 
-                            true, 
-                            0x0, 
-                            barW
-                            )
-                        {
-                            X = 101,
-                            Y = 13
-                        }
-                        );
 
                     Add
                     (
@@ -1602,6 +1587,14 @@ namespace ClassicUO.Game.UI.Gumps
 
                     Width = _background.Width;
                     Height = _background.Height;
+
+                    Add(
+                    _hppercentlabel = new Label("%" + hitsPercent.ToString(), false, 0x0, 109, 1, FontStyle.None, TEXT_ALIGN_TYPE.TS_CENTER, false)
+                        {
+                            X = 30,
+                            Y = 37
+                        }
+                    );
 
                     Add
                     (
@@ -1894,6 +1887,7 @@ namespace ClassicUO.Game.UI.Gumps
                 int barW = inparty ? 96 : 109;
 
                 int hits = CalculatePercents(entity.HitsMax, entity.Hits, barW);
+                int hitsPercentNative = CalculatePercents(entity.HitsMax, entity.Hits, 100);
 
                 if (hits != _oldHits)
                 {
@@ -1901,20 +1895,24 @@ namespace ClassicUO.Game.UI.Gumps
 
                     _oldHits = hits;
                 }
-                if (mobile.Serial == World.Player.Serial)
-                {
-                    _bars[0].SetTooltip("Hits/Str: " + World.Player.Hits + "/" + World.Player.Strength);
-                }
-                else
-                {
-                    _bars[0].SetTooltip("Hits: " + mobile.Hits);
-                }
+
+                //if (mobile.Serial == World.Player.Serial)
+                //{
+                    _bars[0].SetTooltip($"Hits: %{hitsPercentNative}");
+                //}
+                //else
+                //{
+                //    _bars[0].SetTooltip("Hits: " + mobile.Hits);
+                //}
 
 
                 if ((inparty || LocalSerial == World.Player) && mobile != null)
                 {
                     int mana = CalculatePercents(mobile.ManaMax, mobile.Mana, barW);
+                    int manaPercentNative = CalculatePercents(mobile.ManaMax, mobile.Mana, 100);
+
                     int stam = CalculatePercents(mobile.StaminaMax, mobile.Stamina, barW);
+                    int stamPercentNative = CalculatePercents(mobile.StaminaMax, mobile.Stamina, 100);
 
                     // int - mana
                     if (mana != _oldMana && _bars.Length >= 2 && _bars[1] != null)
@@ -1923,14 +1921,17 @@ namespace ClassicUO.Game.UI.Gumps
 
                         _oldMana = mana;
                     }
-                    if (mobile.Serial == World.Player.Serial)
-                    {
-                        _bars[1].SetTooltip("Mana/Int: " + World.Player.Mana + "/" + World.Player.Intelligence);
-                    }
-                    else
-                    {
-                        _bars[1].SetTooltip("Mana: " + mobile.Mana);
-                    }
+
+                    _bars[1].SetTooltip($"Mana: %{manaPercentNative}");
+
+                    //if (mobile.Serial == World.Player.Serial)
+                    //{
+                    // _bars[1].SetTooltip("Mana/Int: " + World.Player.Mana + "/" + World.Player.Intelligence);
+                    //}
+                    //else
+                    //{
+                    //    _bars[1].SetTooltip("Mana: " + mobile.Mana);
+                    //}
 
                     // dex-stam
                     if (stam != _oldStam && _bars.Length >= 2 && _bars[2] != null)
@@ -1940,14 +1941,16 @@ namespace ClassicUO.Game.UI.Gumps
                         _oldStam = stam;
                     }
 
-                    if (mobile.Serial == World.Player.Serial)
-                    {
-                        _bars[1].SetTooltip("Stam/Dex: " + World.Player.Stamina + "/" + World.Player.Dexterity);
-                    }
-                    else
-                    {
-                        _bars[1].SetTooltip("Stam: " + mobile.Stamina);
-                    }
+                    //if (mobile.Serial == World.Player.Serial)
+                    //{
+                    //    _bars[1].SetTooltip("Stam/Dex: " + World.Player.Stamina + "/" + World.Player.Dexterity);
+                    //}
+                    //else
+                    //{
+                    //    _bars[1].SetTooltip("Stam: " + mobile.Stamina);
+                    //}
+
+                    _bars[2].SetTooltip($"Stam: %{stamPercentNative}");
                 }
 
                 if (UIManager.MouseOverControl != null && UIManager.MouseOverControl.RootParent == this)

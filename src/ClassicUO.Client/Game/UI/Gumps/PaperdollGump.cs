@@ -264,6 +264,7 @@ namespace ClassicUO.Game.UI.Gumps
                         ButtonAction = ButtonAction.Activate
                     }
                 );
+
                 if ( _isWarMode )
                 {
                     _warModeBtn.SetTooltip("Peace");
@@ -538,14 +539,18 @@ namespace ClassicUO.Game.UI.Gumps
                 return;
             }
 
-            if (_isWarMode)
+            if (mobile != null && !mobile.IsDestroyed && _warModeBtn != null)
             {
-                _warModeBtn.SetTooltip("<basefont color=\"#45db40\">Peace</basefont>");
+               if (_isWarMode)
+               {
+                   _warModeBtn.SetTooltip("<basefont color=\"#45db40\">Peace</basefont>");
+               }
+               else
+               {
+                   _warModeBtn.SetTooltip("<basefont color=\"#e03719\">War</basefont>");
+               }
             }
-            else
-            {
-                _warModeBtn.SetTooltip("<basefont color=\"#e03719\">War</basefont>");
-            }
+
 
             // This is to update the state of the war mode button.
             if (mobile != null && _isWarMode != mobile.InWarMode && LocalSerial == World.Player)
