@@ -129,24 +129,22 @@ namespace ClassicUO.Game.GameObjects
                 }
             }
 
-            if (
-                ProfileManager.CurrentProfile.HighlightGameObjects
-                && ReferenceEquals(SelectedObject.Object, this)
-            )
+            if (ProfileManager.CurrentProfile.HighlightGameObjects && ReferenceEquals(SelectedObject.Object, this))
             {
                 hue = Constants.HIGHLIGHT_CURRENT_OBJECT_HUE;
                 partial = false;
             }
-            else if (
-                ProfileManager.CurrentProfile.NoColorObjectsOutOfRange
-                && Distance > World.ClientViewRange
-            )
+            else if (ProfileManager.CurrentProfile.NoColorObjectsOutOfRange && Distance > World.ClientViewRange)
             {
                 hue = Constants.OUT_RANGE_COLOR;
             }
             else if (World.Player.IsDead && ProfileManager.CurrentProfile.EnableBlackWhiteEffect)
             {
                 hue = Constants.DEAD_RANGE_COLOR;
+            }
+            else if (World.Player.ScreenHue >= 0)
+            {
+                hue = World.Player.ScreenHue;
             }
             else
             {
@@ -390,26 +388,17 @@ namespace ClassicUO.Game.GameObjects
                     }
                 }
 
-                if (
-                    ProfileManager.CurrentProfile.NoColorObjectsOutOfRange
-                    && owner.Distance > World.ClientViewRange
-                )
+                if (ProfileManager.CurrentProfile.NoColorObjectsOutOfRange && owner.Distance > World.ClientViewRange)
                 {
-                    hueVec = ShaderHueTranslator.GetHueVector(
-                        Constants.OUT_RANGE_COLOR + 1,
-                        false,
-                        1
-                    );
+                    hueVec = ShaderHueTranslator.GetHueVector( Constants.OUT_RANGE_COLOR + 1,false,1);
                 }
-                else if (
-                    World.Player.IsDead && ProfileManager.CurrentProfile.EnableBlackWhiteEffect
-                )
+                else if (World.Player.IsDead && ProfileManager.CurrentProfile.EnableBlackWhiteEffect)
                 {
-                    hueVec = ShaderHueTranslator.GetHueVector(
-                        Constants.DEAD_RANGE_COLOR + 1,
-                        false,
-                        1
-                    );
+                    hueVec = ShaderHueTranslator.GetHueVector(Constants.DEAD_RANGE_COLOR + 1,false,1);
+                }
+                else if (World.Player.ScreenHue >= 0)
+                {
+                    hueVec = ShaderHueTranslator.GetHueVector(World.Player.ScreenHue + 1, false, 1);
                 }
                 else
                 {

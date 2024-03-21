@@ -44,6 +44,7 @@ using ClassicUO.Network;
 using ClassicUO.Renderer;
 using ClassicUO.Utility;
 using Microsoft.Xna.Framework;
+using ClassicUO.Renderer.Gumps;
 
 namespace ClassicUO.Game.UI.Gumps
 {
@@ -69,9 +70,12 @@ namespace ClassicUO.Game.UI.Gumps
 
         private Button _optionsButton, _helpbutton, _logoutbutton, _questsbutton, _journalbutton, _skillsbutton, _guildbutton, _warModeBtn, _statusbutton;
 
+        private RadioButton _lockButton;
+
 
         public PaperDollGump(World world) : base(world, 0, 0)
         {
+
             CanMove = true;
             CanCloseWithRightClick = true;
         }
@@ -159,6 +163,36 @@ namespace ClassicUO.Game.UI.Gumps
 
                 Add(_picBase = new GumpPic(0, 0, CustomUIGumpPaperDoll, 0));
                 _picBase.MouseDoubleClick += _picBase_MouseDoubleClick;
+
+                /*
+                Add
+                (
+                    _lockButton = new RadioButton
+                    (
+                        0,
+                        0x37,
+                        0x38,
+                        "",
+                        color: 0xFFFF
+                    )
+                    {
+                        X = 0,
+                        Y = 0,
+                    }
+                );
+
+                _lockButton.ValueChanged += (sender, e) =>
+                {
+                    if (_lockButton.IsChecked)
+                    {
+                        GameActions.Print(World, "Paperdoll sabitlendi.", 946, MessageType.Regular, 1 , true);
+                    }
+                    else
+                    {
+                        GameActions.Print(World, "Paperdoll sabitliði kaldýrýldý.", 946, MessageType.Regular, 1, true);
+                    }
+                };
+                */
 
                 //HELP BUTTON
                 Add(
@@ -507,18 +541,20 @@ namespace ClassicUO.Game.UI.Gumps
                 }
                 else
                 {
-                    PartyGump party = UIManager.GetGump<PartyGump>();
 
-                    if (party == null)
-                    {
-                        int x = Client.Game.Window.ClientBounds.Width / 2 - 272;
-                        int y = Client.Game.Window.ClientBounds.Height / 2 - 240;
-                        UIManager.Add(new PartyGump(World, x, y, World.Party.CanLoot));
-                    }
-                    else
-                    {
-                        party.BringOnTop();
-                    }
+                    World.CommandManager.Execute("party", null);
+
+                    //PartyGump party = UIManager.GetGump<PartyGump>();
+                    //if (party == null)
+                    //{
+                    //    int x = Client.Game.Window.ClientBounds.Width / 2 - 272;
+                    //    int y = Client.Game.Window.ClientBounds.Height / 2 - 240;
+                    //    UIManager.Add(new PartyGump(World, x, y, World.Party.CanLoot));
+                    //}
+                    //else
+                    //{
+                    //    party.BringOnTop();
+                    //}
                 }
             }
         }
@@ -920,6 +956,7 @@ namespace ClassicUO.Game.UI.Gumps
 
                     if ( (it_at_layer != null && _itemGump != null && _itemGump.LocalSerial != it_at_layer.Serial) || _itemGump == null)
                     {
+
                         if (_itemGump != null)
                         {
                             _itemGump.Dispose();
@@ -932,17 +969,34 @@ namespace ClassicUO.Game.UI.Gumps
                         {
                             LocalSerial = it_at_layer.Serial;
 
-                            Add(
-                                _itemGump = new ItemGumpFixed(_paperDollGump, item, 18, 18)
-                                {
-                                    X = 0,
-                                    Y = 0,
-                                    Width = 18,
-                                    Height = 18,
-                                    HighlightOnMouseOver = true,
-                                    CanPickUp =  _paperDollGump.World.InGame && ( _paperDollGump.World.Player.Serial == _paperDollGump.LocalSerial || _paperDollGump.CanLift)
-                                }
-                            );
+                            if (item.Layer == Layer.Mount)
+                            {
+                                Add(
+                                    _itemGump = new ItemGumpFixed(_paperDollGump, item, 18, 18)
+                                    {
+                                        X = 0,
+                                        Y = 0,
+                                        Width = 18,
+                                        Height = 18,
+                                        HighlightOnMouseOver = true,
+                                        CanPickUp = false
+                                    }
+                                );
+                            }
+                            else
+                            {
+                                Add(
+                                    _itemGump = new ItemGumpFixed(_paperDollGump, item, 18, 18)
+                                    {
+                                        X = 0,
+                                        Y = 0,
+                                        Width = 18,
+                                        Height = 18,
+                                        HighlightOnMouseOver = false,
+                                        CanPickUp = _paperDollGump.World.InGame && (_paperDollGump.World.Player.Serial == _paperDollGump.LocalSerial || _paperDollGump.CanLift)
+                                    }
+                                );
+                            }
                         }
                     }
                 }

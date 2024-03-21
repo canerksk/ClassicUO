@@ -34,6 +34,7 @@ using System;
 using System.Xml;
 using ClassicUO.Configuration;
 using ClassicUO.Game.GameObjects;
+using ClassicUO.Game.Managers;
 using ClassicUO.Game.Scenes;
 using ClassicUO.Game.UI.Controls;
 using ClassicUO.Input;
@@ -43,7 +44,7 @@ using Microsoft.Xna.Framework;
 
 namespace ClassicUO.Game.UI.Gumps
 {
-    internal class DebugGump : Gump
+    internal class DebugGump : AnchorableGump
     {
         private const string DEBUG_STRING_0 = "- FPS: {0} (Min={1}, Max={2}), Zoom: {3:0.00}, Total Objs: {4}\n";
         private const string DEBUG_STRING_1 = "- Mobiles: {0}   Items: {1}   Statics: {2}   Multi: {3}   Lands: {4}   Effects: {5}\n";
@@ -66,10 +67,22 @@ namespace ClassicUO.Game.UI.Gumps
             AcceptMouseInput = true;
             AcceptKeyboardInput = false;
 
+            GroupMatrixWidth = 100;
+            GroupMatrixHeight = 50;
+
+            AnchorType = ANCHOR_TYPE.UI;
+
             Width = 100;
             Height = 50;
             X = _last_position.X <= 0 ? x : _last_position.X;
             Y = _last_position.Y <= 0 ? y : _last_position.Y;
+
+
+            if (IsMinimized)
+            {
+                GroupMatrixWidth += 20;
+                GroupMatrixHeight += 20;
+            }
 
             Add
             (
@@ -95,6 +108,19 @@ namespace ClassicUO.Game.UI.Gumps
                 IsMinimized = !IsMinimized;
 
                 return true;
+            }
+
+            return false;
+        }
+
+        protected bool CheckIfAnchoredElseDispose()
+        {
+            if (UIManager.AnchorManager[this] == null && LocalSerial != World.Player)
+            {
+                Dispose();
+
+                //return true; // hpbarlarin birlesmesini kapat
+                return false;
             }
 
             return false;

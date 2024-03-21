@@ -35,6 +35,7 @@ using System.Collections.Generic;
 using ClassicUO.Game.GameObjects;
 using ClassicUO.Game.Scenes;
 using ClassicUO.Input;
+using ClassicUO.Network;
 using ClassicUO.Resources;
 using ClassicUO.Utility.Logging;
 
@@ -44,6 +45,7 @@ namespace ClassicUO.Game.Managers
     {
         private readonly Dictionary<string, Action<string[]>> _commands = new Dictionary<string, Action<string[]>>();
         private readonly World _world;
+        private long _commanddelay;
 
         public CommandManager(World world)
         {
@@ -52,6 +54,74 @@ namespace ClassicUO.Game.Managers
 
         public void Initialize()
         {
+
+            Register
+            (
+                "shopkeeper",
+                s =>
+                {
+                    if (_world.Player != null)
+                    {
+                        NetClient.Socket.Send_TextCommand(0x0F5, "1");
+                    }
+                }
+            );
+
+
+            Register
+            (
+                "potions",
+                s =>
+                {
+                    if (_world.Player != null)
+                    {
+                        NetClient.Socket.Send_TextCommand(0x0F5, "0");
+                    }
+                }
+            );
+
+
+            Register
+            (
+                "mbulettin",
+                s =>
+                {
+                    if (_world.Player != null)
+                    {
+                        NetClient.Socket.Send_TextCommand(0x0F5, "2");
+                    }
+                }
+            );
+
+            Register
+            (
+                "screen_hue",
+                s =>
+                {
+                    if (_world.Player != null)
+                    {
+                        if (s.Length > 1)
+                        {
+                            //Console.WriteLine(s[1]);
+                            //_world.Player.ScreenHue = ushort.Parse(s[1]);
+                            //_world.Update();
+                        }
+                    }
+                }
+            );
+
+            Register
+            (
+                "party",
+                s =>
+                {
+                    if (_world.Player != null)
+                    {
+                        NetClient.Socket.Send_TextCommand(0x0F5, "3");
+                    }
+                }
+            );
+
             Register
             (
                 "info",
@@ -73,7 +143,7 @@ namespace ClassicUO.Game.Managers
                 {
                     if (_world.Player != null)
                     {
-                        GameActions.Print(_world, string.Format(ResGeneral.CurrentDateTimeNowIs0, DateTime.Now));
+                        GameActions.Print(_world, string.Format(ResGeneral.CurrentDateTimeNowIs0, DateTime.Now), 946, Data.MessageType.Regular, 1, true);
                     }
                 }
             );
@@ -102,6 +172,7 @@ namespace ClassicUO.Game.Managers
 
                 }
             );
+
         }
 
 
@@ -136,14 +207,22 @@ namespace ClassicUO.Game.Managers
 
         public void Execute(string name, params string[] args)
         {
+            if (_commanddelay > Time.Ticks)
+            {
+                GameActions.Print(_world, "You must wait to perform another action.", 946, Data.MessageType.Regular, 1, true);
+                return;
+            }
+
             name = name.ToLower();
 
             if (_commands.TryGetValue(name, out Action<string[]> action))
             {
                 action.Invoke(args);
+                _commanddelay = Time.Ticks + 100;
             }
             else
             {
+                GameActions.Print(_world, $"Geçersiz komut: '{name}'", 38, Data.MessageType.System, 1, true);
                 Log.Warn($"Command: '{name}' not exists");
             }
         }

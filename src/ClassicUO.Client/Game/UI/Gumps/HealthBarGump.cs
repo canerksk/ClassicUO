@@ -1585,16 +1585,16 @@ namespace ClassicUO.Game.UI.Gumps
                         )
                     );
 
-                    Width = _background.Width;
-                    Height = _background.Height;
-
                     Add(
-                    _hppercentlabel = new Label("%" + hitsPercent.ToString(), false, 0x0, 109, 1, FontStyle.None, TEXT_ALIGN_TYPE.TS_CENTER, false)
+                        _hppercentlabel = new Label("%" + hitsPercent.ToString(), false, 0x0, 109, 1, FontStyle.None, TEXT_ALIGN_TYPE.TS_CENTER, false)
                         {
                             X = 30,
                             Y = 37
                         }
                     );
+
+                    Width = _background.Width;
+                    Height = _background.Height;
 
                     Add
                     (
@@ -1888,6 +1888,24 @@ namespace ClassicUO.Game.UI.Gumps
 
                 int hits = CalculatePercents(entity.HitsMax, entity.Hits, barW);
                 int hitsPercentNative = CalculatePercents(entity.HitsMax, entity.Hits, 100);
+
+                if (_hppercentlabel != null)
+                {
+                    _hppercentlabel.Dispose();
+                    int hitsPercent = CalculatePercents(entity.HitsMax, entity.Hits, 100);
+                    if (hitsPercent > 100)
+                    {
+                        hitsPercent = 100;
+                    }
+                    Add(
+                        _hppercentlabel = new Label("%" + hitsPercent.ToString(), false, 0x0, 109, 1, FontStyle.None, TEXT_ALIGN_TYPE.TS_CENTER, false)
+                        {
+                            X = 30,
+                            Y = 37
+                        }
+                    );
+
+                }
 
                 if (hits != _oldHits)
                 {

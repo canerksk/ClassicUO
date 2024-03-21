@@ -44,7 +44,8 @@ namespace ClassicUO.Game.UI.Gumps
     {
         NONE,
         SPELL,
-        HEALTHBAR
+        HEALTHBAR,
+        UI
     }
 
     internal abstract class AnchorableGump : Gump
@@ -232,10 +233,7 @@ namespace ClassicUO.Game.UI.Gumps
 
         protected override void CloseWithRightClick()
         {
-            if (
-                UIManager.AnchorManager[this] == null
-                || Keyboard.Alt
-                || !ProfileManager.CurrentProfile.HoldDownKeyAltToCloseAnchored
+            if (UIManager.AnchorManager[this] == null || Keyboard.Alt || !ProfileManager.CurrentProfile.HoldDownKeyAltToCloseAnchored
             )
             {
                 if (ProfileManager.CurrentProfile.CloseAllAnchoredGumpsInGroupWithRightClick)

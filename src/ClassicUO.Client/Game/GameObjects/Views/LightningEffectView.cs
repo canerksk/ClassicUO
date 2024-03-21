@@ -53,6 +53,10 @@ namespace ClassicUO.Game.GameObjects
             {
                 hue = Constants.DEAD_RANGE_COLOR;
             }
+            else if (World.Player.ScreenHue >= 0)
+            {
+                hue = World.Player.ScreenHue;
+            }
 
             Vector3 hueVec = ShaderHueTranslator.GetHueVector(hue, false, 1);
             hueVec.Y = hueVec.X > 1.0f ? ShaderHueTranslator.SHADER_LIGHTS : ShaderHueTranslator.SHADER_NONE;

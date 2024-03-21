@@ -138,6 +138,7 @@ namespace ClassicUO.Game.GameObjects
         public uint TithingPoints;
         public ushort Weight;
         public ushort WeightMax;
+        public ushort ScreenHue;
 
         public Item FindBandage()
         {

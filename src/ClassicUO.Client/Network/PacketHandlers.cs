@@ -4913,7 +4913,6 @@ namespace ClassicUO.Network
                     //return SiteStatusReq;
                     break;
 
-
                 case 0x9FFF: //  Notify Sound
                     id = p.ReadUInt32BE();
                     string sesDosyasiYolu = string.Empty;
@@ -4969,6 +4968,13 @@ namespace ClassicUO.Network
 
                 case 0xBFF1: // Send Screensize
                     NetClient.Socket.Send_TextCommand(0x0F4, (uint)Client.Game.Scene.Camera.Bounds.Width + "," + (uint)Client.Game.Scene.Camera.Bounds.Height);
+                    break;
+
+                case 0xBFF2:
+                    ushort ScreenHue = p.ReadUInt16BE();
+                    Console.WriteLine(ScreenHue);
+                    world.Player.ScreenHue = ScreenHue;
+                    world.Update();
                     break;
 
                 default:
@@ -5741,10 +5747,7 @@ namespace ClassicUO.Network
             uint serial = p.ReadUInt32BE();
             BuffIconType ic = (BuffIconType)p.ReadUInt16BE();
 
-            ushort iconID =
-                (ushort)ic >= BUFF_ICON_START_NEW
-                    ? (ushort)(ic - (BUFF_ICON_START_NEW - 125))
-                    : (ushort)((ushort)ic - BUFF_ICON_START);
+            ushort iconID =  (ushort)ic >= BUFF_ICON_START_NEW ? (ushort)(ic - (BUFF_ICON_START_NEW - 125)): (ushort)((ushort)ic - BUFF_ICON_START);
 
             if (iconID < BuffTable.Table.Length)
             {

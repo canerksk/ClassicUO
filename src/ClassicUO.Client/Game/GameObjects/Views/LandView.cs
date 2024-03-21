@@ -56,9 +56,7 @@ namespace ClassicUO.Game.GameObjects
             {
                 hue = Constants.HIGHLIGHT_CURRENT_OBJECT_HUE;
             }
-            else if (
-                ProfileManager.CurrentProfile.NoColorObjectsOutOfRange
-                && Distance > World.ClientViewRange
+            else if (ProfileManager.CurrentProfile.NoColorObjectsOutOfRange && Distance > World.ClientViewRange
             )
             {
                 hue = Constants.OUT_RANGE_COLOR;
@@ -66,6 +64,10 @@ namespace ClassicUO.Game.GameObjects
             else if (World.Player.IsDead && ProfileManager.CurrentProfile.EnableBlackWhiteEffect)
             {
                 hue = Constants.DEAD_RANGE_COLOR;
+            }
+            else if (World.Player.ScreenHue >= 0)
+            {
+                hue = World.Player.ScreenHue;
             }
 
             Vector3 hueVec;

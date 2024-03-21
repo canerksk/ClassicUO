@@ -136,26 +136,34 @@ namespace ClassicUO.Game.UI.Gumps
             (
                 _checkReal = new Checkbox
                 (
-                    0x938,
-                    0x939,
-                    ResGumps.ShowReal,
+                    0xD2,
+                    0xD3,
+                    "Show Real",
                     1,
-                    0x0386,
-                    false
-                ) { X = _newGroupButton.X + _newGroupButton.Width + 30, Y = _newGroupButton.Y - 6 }
+                    0x0,
+                    true
+                ) { 
+                    IsChecked = true,
+                    X = _newGroupButton.X + _newGroupButton.Width + 115,
+                    Y = _newGroupButton.Y - 3
+                }
             );
 
             Add
             (
                 _checkCaps = new Checkbox
                 (
-                    0x938,
-                    0x939,
-                    ResGumps.ShowCaps,
+                    0xD2,
+                    0xD3,
+                    "Show Caps",
                     1,
-                    0x0386,
-                    false
-                ) { X = _newGroupButton.X + _newGroupButton.Width + 30, Y = _newGroupButton.Y + 7 }
+                    0x0,
+                    true
+                ) { 
+                    IsChecked = false,
+                    X = _newGroupButton.X + _newGroupButton.Width + 25,
+                    Y = _newGroupButton.Y - 3
+                }
             );
 
             _checkReal.ValueChanged += UpdateSkillsValues;
@@ -317,8 +325,8 @@ namespace ClassicUO.Game.UI.Gumps
             _area.Height = _container.Height = Height - (150 + _diffY);
             _newGroupButton.Y = Height - 52;
             _skillsLabelSum.Y = _bottomComment.Y + 2;
-            _checkReal.Y = _newGroupButton.Y - 6;
-            _checkCaps.Y = _newGroupButton.Y + 7;
+            _checkReal.Y = _newGroupButton.Y - 3;
+            _checkCaps.Y = _newGroupButton.Y - 3;
 
 
             base.Update();

@@ -42,6 +42,10 @@ using ClassicUO.Assets;
 using ClassicUO.Renderer;
 using ClassicUO.Resources;
 using Microsoft.Xna.Framework;
+using ClassicUO.Input;
+using ClassicUO.Network;
+using System.Windows.Documents;
+using System.Drawing;
 
 namespace ClassicUO.Game.UI.Gumps
 {
@@ -248,6 +252,7 @@ namespace ClassicUO.Game.UI.Gumps
             private bool _decreaseAlpha;
             private readonly RenderedText _gText;
             private float _updateTooltipTime;
+            private readonly World _world;
 
             public BuffControlEntry(BuffIcon icon) : base(0, 0, icon.Graphic, 0)
             {
@@ -353,6 +358,26 @@ namespace ClassicUO.Game.UI.Gumps
                     }
                 }
             }
+
+
+
+            protected override bool OnMouseDoubleClick(int x, int y, MouseButtonType button)
+            {
+                if (button == MouseButtonType.Left)
+                {
+
+                    BuffIconType ic = (BuffIconType)Icon.Graphic;
+                    ushort iconID = (ushort)ic >= 0x466 ? (ushort)(ic - (0x466 - 125)) : (ushort)((ushort)ic - 0x03E9);
+                    //_world.Player.RemoveBuff(ic);
+                    //_world.Player.RemoveBuff(iconID);
+                    Console.WriteLine(Icon.Type);
+                    //Console.WriteLine(ic);
+                    NetClient.Socket.Send_TextCommand(0x0F6, Icon.Type.ToString());
+                }
+
+                return true;
+            }
+
 
             public override bool Draw(UltimaBatcher2D batcher, int x, int y)
             {

@@ -79,7 +79,7 @@ namespace ClassicUO
 
                         dialogResult =
                             MessageBox.Show(
-                                $@"There is new version {args.CurrentVersion} available. You are using version {args.InstalledVersion}. This is required update. Press Ok to begin updating the application.", @"Güncelleme",
+                                $@"Yeni sürüm yayınlandı! {args.CurrentVersion} sürümü kullanımda. Şu an {args.InstalledVersion} sürümünü kullanıyorsunuz. Bu gerekli bir güncellemedir. Uygulamayı güncellemeye başlamak için Tamam'a basın.", @"Güncelleme",
                                 MessageBoxButtons.OK,
                                 MessageBoxIcon.Information);
                     }
@@ -89,7 +89,7 @@ namespace ClassicUO
 
                         dialogResult =
                             MessageBox.Show(
-                                $@"There is new version {args.CurrentVersion} available. You are using version {args.InstalledVersion}. Do you want to update the application now?", @"Güncelleme",
+                                $@"eni sürüm yayınlandı! {args.CurrentVersion} sürümü kullanımda. Şu an {args.InstalledVersion} sürümünü kullanıyorsunuz. Şimdi güncellemek istediğinizden emin misiniz?", @"Güncelleme",
                                 MessageBoxButtons.YesNo,
                                 MessageBoxIcon.Information);
                     }
@@ -203,7 +203,7 @@ namespace ClassicUO
                             byte[] diffhex = Encoding.ASCII.GetBytes(new WebClient().DownloadString(new Uri(Constants.WEB_MAIN_URL + "client-dat/" + currenthash)));
                             
                             string diffhexstring = Encoding.ASCII.GetString(diffhex);
-                            string currhexstring = Launcher.HextoString(currenthash);
+                            string currhexstring = HextoString(currenthash);
 
                             Console.WriteLine("diffhexstring: " + Encoding.ASCII.GetString(diffhex).Trim());
                             Console.WriteLine("currhexstring: " + currhexstring.Trim());

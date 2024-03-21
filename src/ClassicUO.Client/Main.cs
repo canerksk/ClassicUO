@@ -57,6 +57,7 @@ using System.Xml.Serialization;
 using System.Xml;
 using System.Text.Json;
 using System.Drawing;
+using System.Speech.Recognition;
 
 namespace ClassicUO
 {
@@ -397,12 +398,38 @@ namespace ClassicUO
                     ArtMulBoyutu_Byte = ArtMulFileInfo.Length.ToString();
                 }
 
+                /*
+                SpeechRecognitionEngine recognizer = new SpeechRecognitionEngine();
+                Choices commands = new Choices();
+                commands.Add(new string[] { "uscuks" });
+                GrammarBuilder grammarBuilder = new GrammarBuilder();
+                grammarBuilder.Append(commands);
+                Grammar grammar = new Grammar(grammarBuilder);
+                recognizer.LoadGrammar(grammar);
+
+                recognizer.SpeechRecognized += (s, e) =>
+                {
+                    switch (e.Result.Text)
+                    {
+                        case "uscuks":
+                            GameActions.CastSpell(1);
+                            // Console.WriteLine("Merhaba! Nasılsınız?");
+                            break;
+                    }
+                };
+                recognizer.SetInputToDefaultAudioDevice();
+                recognizer.RecognizeAsync(RecognizeMode.Multiple);
+
+                Console.WriteLine("Sesli komutları bekle");
+                */
+
                 Application.Run(new Launcher());
                 //Client.Run(pluginHost);
             }
 
             Log.Trace("Closing...");
         }
+
 
         private static void ReadSettingsFromArgs(string[] args)
         {

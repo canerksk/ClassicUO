@@ -701,6 +701,7 @@ namespace ClassicUO.Configuration
                                 GumpType type = (GumpType) int.Parse(xml.GetAttribute("type"));
                                 int x = int.Parse(xml.GetAttribute("x"));
                                 int y = int.Parse(xml.GetAttribute("y"));
+
                                 uint serial = uint.Parse(xml.GetAttribute("serial"));
 
                                 int matrix_x = int.Parse(xml.GetAttribute("matrix_x"));

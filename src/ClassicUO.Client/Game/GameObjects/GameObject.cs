@@ -105,8 +105,7 @@ namespace ClassicUO.Game.GameObjects
         public short PriorityZ;
         public GameObject TNext;
         public GameObject TPrevious;
-        public ushort X,
-            Y;
+        public ushort X, Y;
         public sbyte Z;
         public GameObject RenderListNext;
 

@@ -98,6 +98,7 @@ namespace ClassicUO.Game.UI.Gumps
                 new[] { 1, (int)Buttons.Potions },
                 new[] { 0, (int)Buttons.Shopkeeper },
                 new[] { 1, (int)Buttons.Merchants },
+                //new[] { 0, (int)Buttons.RadiusSpeech },
                 //new[] { 0, (int)Buttons.Debug },
                 //new[] { 1, (int)Buttons.NetStats },
                // new[] { 1, (int)Buttons.UOStore },
@@ -119,7 +120,8 @@ namespace ClassicUO.Game.UI.Gumps
                 "Shop",
                 "Potion Refresh",
                 "Items",
-                "Merchants"
+                "Merchants",
+                //"Speech"
                 //cliloc.GetString(1042237, ResGumps.Debug),
                 //cliloc.GetString(3000169, ResGumps.NetStats),
                 //cliloc.GetString(1158008, ResGumps.UOStore),
@@ -384,8 +386,20 @@ namespace ClassicUO.Game.UI.Gumps
 
 
                 case Buttons.Info:
-                    DebugGump debugGumpInfo = UIManager.GetGump<DebugGump>();
+                    //DebugGumpCustom debugGumpCustomInfo = UIManager.GetGump<DebugGumpCustom>();
 
+                    //if (debugGumpCustomInfo == null)
+                    //{
+                    //    debugGumpCustomInfo = new DebugGumpCustom(World, 100, 100);
+                    //    UIManager.Add(debugGumpCustomInfo);
+                    //}
+                    //else
+                    //{
+                    //    debugGumpCustomInfo.IsVisible = !debugGumpCustomInfo.IsVisible;
+                    //    debugGumpCustomInfo.SetInScreen();
+                    //}
+
+                    DebugGump debugGumpInfo = UIManager.GetGump<DebugGump>();
                     if (debugGumpInfo == null)
                     {
                         debugGumpInfo = new DebugGump(World, 100, 100);
@@ -393,7 +407,8 @@ namespace ClassicUO.Game.UI.Gumps
                     }
                     else
                     {
-                        debugGumpInfo.IsVisible = !debugGumpInfo.IsVisible;
+                        //debugGumpInfo.IsVisible = !debugGumpInfo.IsVisible;
+                        debugGumpInfo.IsVisible = true;
                         debugGumpInfo.SetInScreen();
                     }
 
@@ -406,7 +421,8 @@ namespace ClassicUO.Game.UI.Gumps
                     }
                     else
                     {
-                        netstatsgumpInfo.IsVisible = !netstatsgumpInfo.IsVisible;
+                        //netstatsgumpInfo.IsVisible = !netstatsgumpInfo.IsVisible;
+                        netstatsgumpInfo.IsVisible = true;
                         netstatsgumpInfo.SetInScreen();
                     }
 
@@ -430,16 +446,20 @@ namespace ClassicUO.Game.UI.Gumps
 
                     break;
                 case Buttons.Potions:
-                    NetClient.Socket.Send_TextCommand(0x0F5, "0");
+                    World.CommandManager.Execute("potions", null);
 
                     break;
 
                 case Buttons.Shopkeeper:
-                    NetClient.Socket.Send_TextCommand(0x0F5, "1");
+                    World.CommandManager.Execute("shopkeeper", null);
                     break;
                     
                 case Buttons.Merchants:
-                    NetClient.Socket.Send_TextCommand(0x0F5, "2");
+                    World.CommandManager.Execute("mbulettin", null);
+                    break;       
+                    
+                case Buttons.RadiusSpeech:
+                    GameActions.Print(World, "Etraf dinleme/konuşma açıldı.", 946, MessageType.Regular, 1, true);
                     break;
 
                 case Buttons.Debug:
@@ -499,7 +519,8 @@ namespace ClassicUO.Game.UI.Gumps
             Shop,
             Potions,
             Shopkeeper,
-            Merchants
+            Merchants,
+            RadiusSpeech
         }
 
         private class RighClickableButton : Button

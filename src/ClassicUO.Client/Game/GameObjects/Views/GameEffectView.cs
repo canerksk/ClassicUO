@@ -114,6 +114,10 @@ namespace ClassicUO.Game.GameObjects
             {
                 hue = Constants.DEAD_RANGE_COLOR;
             }
+            else if (World.Player.ScreenHue >= 0)
+            {
+                hue = World.Player.ScreenHue;
+            }
 
             Vector3 hueVec = ShaderHueTranslator.GetHueVector(hue, data.IsPartialHue, data.IsTranslucent ? .5f : 1f, effect: true);
 

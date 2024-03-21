@@ -4845,6 +4845,8 @@ namespace ClassicUO.Game.UI.Gumps
             _currentProfile.CorpseOpenOptions = _autoOpenCorpseOptions.SelectedIndex;
             _currentProfile.SkipEmptyCorpse = _skipEmptyCorpse.IsChecked;
 
+            _currentProfile.InputAutoFocused = _inputautofocused.IsChecked;
+
             _currentProfile.EnableDragSelect = _enableDragSelect.IsChecked;
             _currentProfile.DragSelectModifierKey = _dragSelectModifierKey.SelectedIndex;
             _currentProfile.DragSelectHumanoidsOnly = _dragSelectHumanoidsOnly.IsChecked;

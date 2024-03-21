@@ -76,10 +76,7 @@ namespace ClassicUO.Game.GameObjects
                 hue = Constants.HIGHLIGHT_CURRENT_OBJECT_HUE;
                 partial = false;
             }
-            else if (
-                ProfileManager.CurrentProfile.NoColorObjectsOutOfRange
-                && Distance > World.ClientViewRange
-            )
+            else if (ProfileManager.CurrentProfile.NoColorObjectsOutOfRange && Distance > World.ClientViewRange)
             {
                 hue = Constants.OUT_RANGE_COLOR;
                 partial = false;
@@ -87,6 +84,11 @@ namespace ClassicUO.Game.GameObjects
             else if (World.Player.IsDead && ProfileManager.CurrentProfile.EnableBlackWhiteEffect)
             {
                 hue = Constants.DEAD_RANGE_COLOR;
+                partial = false;
+            }
+            else if (World.Player.ScreenHue >= 0)
+            {
+                hue = World.Player.ScreenHue;
                 partial = false;
             }
 

@@ -41,6 +41,7 @@ using ClassicUO.Resources;
 using ClassicUO.Utility;
 using Microsoft.Xna.Framework;
 using SDL2;
+using System;
 
 namespace ClassicUO.Game.UI.Gumps.Login
 {
@@ -53,8 +54,10 @@ namespace ClassicUO.Game.UI.Gumps.Login
         private readonly Button _nextArrow0;
         private static PasswordStbTextBox _passwordFake;
         private readonly StbTextBox _textboxAccount;
+        private readonly GumpPic _lightningGump;
 
         private float _time;
+        private float _LightningEffectTime;
 
         public LoginGumpCustom(World world, LoginScene scene) : base(world, 0, 0)
         {
@@ -66,6 +69,8 @@ namespace ClassicUO.Game.UI.Gumps.Login
             byte font;
             ushort hue;
 
+
+
             if (Client.Game.UO.Version < ClientVersion.CV_706400)
             {
                 _buttonNormal = 0x15A4;
@@ -74,7 +79,19 @@ namespace ClassicUO.Game.UI.Gumps.Login
 
                 if (Client.Game.UO.Version >= ClientVersion.CV_500A)
                 {
-                    Add(new GumpPic(0, 0, 0x2329, 0));
+                    //Add(new GumpPic(0, 0, 0x2329, 0));
+                    Add(new GumpPicTiled(0, 0, 640, 480, 0xA40));
+
+
+                    _lightningGump = new GumpPic(45, -200, 0x0C2AE, 0)
+                    {
+                        IsVisible = true,
+                    };
+
+                    Add(_lightningGump);
+
+                    Add(new GumpPic(0, 0, 0x2336, 0));
+
                 }
 
                 //UO Flag
@@ -91,7 +108,9 @@ namespace ClassicUO.Game.UI.Gumps.Login
                     }
                 );
 
+
                 //Login Panel
+
                 Add
                 (
                     new ResizePic(0x13BE)
@@ -279,6 +298,7 @@ namespace ClassicUO.Game.UI.Gumps.Login
             }
 
 
+
             // Account Text Input Background
             Add
             (
@@ -460,6 +480,21 @@ namespace ClassicUO.Game.UI.Gumps.Login
                 _time = (float)Time.Ticks + 1000;
 
                 _nextArrow0.ButtonGraphicNormal = _nextArrow0.ButtonGraphicNormal == _buttonNormal ? _buttonOver : _buttonNormal;
+            }
+
+            if (_LightningEffectTime < Time.Ticks)
+            {
+                _LightningEffectTime = (float)Time.Ticks + 80;
+                if (_lightningGump.Graphic >= 49914)
+                {
+                    _lightningGump.Graphic = 49838;
+                    _lightningGump.Graphic += 1;
+                }
+                else
+                {
+                    _lightningGump.Graphic += 1;
+                }
+
             }
 
             if (_passwordFake.HasKeyboardFocus)

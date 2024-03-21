@@ -618,6 +618,7 @@ namespace ClassicUO.Game.GameObjects
                     if (frames.Length != 0)
                     {
                         int fc = frames.Length;
+                        //Console.WriteLine(fc);
 
                         int frameIndex =
                             AnimIndex

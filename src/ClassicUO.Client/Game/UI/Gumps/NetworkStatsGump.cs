@@ -42,7 +42,7 @@ using Microsoft.Xna.Framework;
 
 namespace ClassicUO.Game.UI.Gumps
 {
-    internal class NetworkStatsGump : Gump
+    internal class NetworkStatsGump : AnchorableGump
     {
         private static Point _last_position = new Point(-1, -1);
 
@@ -60,12 +60,25 @@ namespace ClassicUO.Game.UI.Gumps
             AcceptMouseInput = true;
             AcceptKeyboardInput = false;
 
+
+            GroupMatrixWidth = 100;
+            GroupMatrixHeight = 30;
+
+
+            AnchorType = ANCHOR_TYPE.UI;
+
             _ping = _deltaBytesReceived = _deltaBytesSent = 0;
 
             X = _last_position.X <= 0 ? x : _last_position.X;
             Y = _last_position.Y <= 0 ? y : _last_position.Y;
             Width = 100;
             Height = 30;
+
+            if (IsMinimized)
+            {
+                GroupMatrixWidth += 20;
+                GroupMatrixHeight += 20;
+            }
 
             Add
             (
@@ -84,7 +97,7 @@ namespace ClassicUO.Game.UI.Gumps
 
         public override GumpType GumpType => GumpType.NetStats;
 
-        public bool IsMinimized { get; set; }
+        public bool IsMinimized { get; set; } = true;
 
         protected override bool OnMouseDoubleClick(int x, int y, MouseButtonType button)
         {
