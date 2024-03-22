@@ -156,14 +156,14 @@ namespace ClassicUO.Game.UI.Gumps
             }
             else if (ProfileManager.CurrentProfile.UseStatusGump == 3)
             {
-                if (!CUOEnviroment.IsOutlands)
-                {
-                    gump = UIManager.GetGump<StatusGumpOutlands>();
-                }
-                else
-                {
+                //if (!CUOEnviroment.IsOutlands)
+                //{
+                   // gump = UIManager.GetGump<StatusGumpOutlands>();
+                //}
+                //else
+                //{
                     gump = UIManager.GetGump<StatusGumpOld>();
-                }
+                //}
             }
             else
             {
@@ -196,14 +196,14 @@ namespace ClassicUO.Game.UI.Gumps
             }
             else if (ProfileManager.CurrentProfile.UseStatusGump == 3)
             {
-                if (!CUOEnviroment.IsOutlands)
-                {
-                    gump = new StatusGumpOutlands(world);
-                }
-                else
-                {
+                //if (!CUOEnviroment.IsOutlands)
+                //{
+                    //gump = new StatusGumpOutlands(world);
+                //}
+                //else
+                //{
                     gump = new StatusGumpOld(world);
-                }
+                //}
             }
             else
             {
@@ -2200,12 +2200,12 @@ namespace ClassicUO.Game.UI.Gumps
         private Label _int_label;
         private Label _gold_label;
         private Label _armor_label;
-        private Label _weight_label;
+        //private Label _weight_label;
         private Label _hits_label;
         private Label _stam_label;
         private Label _mana_label;
         private Label _dam_label;
-        private Label _kg_label;
+        private readonly Label _kg_label;
 
         public StatusGumpExtended(World world) : base(world)
         {
@@ -2520,6 +2520,7 @@ namespace ClassicUO.Game.UI.Gumps
                 40,
                 alignment: TEXT_ALIGN_TYPE.TS_CENTER
             );
+
             Add(_kg_label = new Label("kg", true, 0x0)
             {
                 X = 198,
@@ -2528,7 +2529,6 @@ namespace ClassicUO.Game.UI.Gumps
 
 
             // Kill/Death
-
             AddStatTextLabel
             (
                 $"{World.Player.Followers}/{World.Player.FollowersMax}",

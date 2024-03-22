@@ -142,7 +142,7 @@ namespace ClassicUO.Game.GameObjects
             {
                 hue = Constants.DEAD_RANGE_COLOR;
             }
-            else if (World.Player.ScreenHue >= 0)
+            else if (World.Player.ScreenHue > 0)
             {
                 hue = World.Player.ScreenHue;
             }
@@ -396,7 +396,7 @@ namespace ClassicUO.Game.GameObjects
                 {
                     hueVec = ShaderHueTranslator.GetHueVector(Constants.DEAD_RANGE_COLOR + 1,false,1);
                 }
-                else if (World.Player.ScreenHue >= 0)
+                else if (World.Player.ScreenHue > 0)
                 {
                     hueVec = ShaderHueTranslator.GetHueVector(World.Player.ScreenHue + 1, false, 1);
                 }

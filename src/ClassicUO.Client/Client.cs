@@ -282,7 +282,7 @@ namespace ClassicUO
         public static GameController Game { get; private set; }
 
         public static System.Timers.Timer ProgramCloseTimer;
-        private static World _world;
+        //private static World _world;
 
         public static void Run(IPluginHost pluginHost)
         {

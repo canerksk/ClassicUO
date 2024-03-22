@@ -32,12 +32,15 @@
 
 using System;
 using System.Collections.Generic;
+using System.Windows.Forms;
 using ClassicUO.Game.GameObjects;
 using ClassicUO.Game.Scenes;
 using ClassicUO.Input;
 using ClassicUO.Network;
+using ClassicUO.Renderer;
 using ClassicUO.Resources;
 using ClassicUO.Utility.Logging;
+using Microsoft.Xna.Framework;
 
 namespace ClassicUO.Game.Managers
 {
@@ -46,7 +49,7 @@ namespace ClassicUO.Game.Managers
         private readonly Dictionary<string, Action<string[]>> _commands = new Dictionary<string, Action<string[]>>();
         private readonly World _world;
         private long _commanddelay;
-
+        public Camera Camera { get; } = new Camera(0.5f, 2.5f, 0.1f);
         public CommandManager(World world)
         {
             _world = world;
@@ -54,125 +57,121 @@ namespace ClassicUO.Game.Managers
 
         public void Initialize()
         {
+            if (CUOEnviroment.IsMythic)
+            {
 
-            Register
-            (
-                "shopkeeper",
-                s =>
-                {
-                    if (_world.Player != null)
+                Register
+                (
+                    "shopkeeper",
+                    s =>
                     {
-                        NetClient.Socket.Send_TextCommand(0x0F5, "1");
-                    }
-                }
-            );
-
-
-            Register
-            (
-                "potions",
-                s =>
-                {
-                    if (_world.Player != null)
-                    {
-                        NetClient.Socket.Send_TextCommand(0x0F5, "0");
-                    }
-                }
-            );
-
-
-            Register
-            (
-                "mbulettin",
-                s =>
-                {
-                    if (_world.Player != null)
-                    {
-                        NetClient.Socket.Send_TextCommand(0x0F5, "2");
-                    }
-                }
-            );
-
-            Register
-            (
-                "screen_hue",
-                s =>
-                {
-                    if (_world.Player != null)
-                    {
-                        if (s.Length > 1)
+                        if (_world.Player != null)
                         {
-                            //Console.WriteLine(s[1]);
-                            //_world.Player.ScreenHue = ushort.Parse(s[1]);
-                            //_world.Update();
+                            NetClient.Socket.Send_TextCommand(0x0F5, "1");
                         }
                     }
-                }
-            );
+                );
 
-            Register
-            (
-                "party",
-                s =>
-                {
-                    if (_world.Player != null)
+
+                Register
+                (
+                    "potions",
+                    s =>
                     {
-                        NetClient.Socket.Send_TextCommand(0x0F5, "3");
+                        if (_world.Player != null)
+                        {
+                            NetClient.Socket.Send_TextCommand(0x0F5, "0");
+                        }
                     }
-                }
-            );
+                );
 
-            Register
-            (
-                "info",
-                s =>
-                {
-                    if (_world.TargetManager.IsTargeting)
+
+                Register
+                (
+                    "mbulettin",
+                    s =>
                     {
-                        _world.TargetManager.CancelTarget();
+                        if (_world.Player != null)
+                        {
+                            NetClient.Socket.Send_TextCommand(0x0F5, "2");
+                        }
                     }
+                );
 
-                    _world.TargetManager.SetTargeting(CursorTarget.SetTargetClientSide, CursorType.Target, TargetType.Neutral);
-                }
-            );
-
-            Register
-            (
-                "datetime",
-                s =>
-                {
-                    if (_world.Player != null)
+                Register
+                (
+                    "shaker",
+                    s =>
                     {
-                        GameActions.Print(_world, string.Format(ResGeneral.CurrentDateTimeNowIs0, DateTime.Now), 946, Data.MessageType.Regular, 1, true);
+                        if (_world.Player != null)
+                        {
+                        }
                     }
-                }
-            );
+                );
 
-            Register
-            (
-                "hue",
-                s =>
-                {
-                    if (_world.TargetManager.IsTargeting)
+                Register
+                (
+                    "party",
+                    s =>
                     {
-                        _world.TargetManager.CancelTarget();
+                        if (_world.Player != null)
+                        {
+                            NetClient.Socket.Send_TextCommand(0x0F5, "3");
+                        }
                     }
+                );
 
-                    _world.TargetManager.SetTargeting(CursorTarget.HueCommandTarget, CursorType.Target, TargetType.Neutral);
-                }
-            );
+                Register
+                (
+                    "info",
+                    s =>
+                    {
+                        if (_world.TargetManager.IsTargeting)
+                        {
+                            _world.TargetManager.CancelTarget();
+                        }
+
+                        _world.TargetManager.SetTargeting(CursorTarget.SetTargetClientSide, CursorType.Target, TargetType.Neutral);
+                    }
+                );
+
+                Register
+                (
+                    "datetime",
+                    s =>
+                    {
+                        if (_world.Player != null)
+                        {
+                            GameActions.Print(_world, string.Format(ResGeneral.CurrentDateTimeNowIs0, DateTime.Now), 946, Data.MessageType.Regular, 1, true);
+                        }
+                    }
+                );
+
+                Register
+                (
+                    "hue",
+                    s =>
+                    {
+                        if (_world.TargetManager.IsTargeting)
+                        {
+                            _world.TargetManager.CancelTarget();
+                        }
+
+                        _world.TargetManager.SetTargeting(CursorTarget.HueCommandTarget, CursorType.Target, TargetType.Neutral);
+                    }
+                );
 
 
-            Register
-            (
-                "debug",
-                s =>
-                {
-                    CUOEnviroment.Debug = !CUOEnviroment.Debug;
+                Register
+                (
+                    "debug",
+                    s =>
+                    {
+                        CUOEnviroment.Debug = !CUOEnviroment.Debug;
 
-                }
-            );
-
+                    }
+                );
+            }
         }
 
 
@@ -237,5 +236,6 @@ namespace ClassicUO.Game.Managers
             Mouse.LastLeftButtonClickTime = 0;
             GameActions.Print(_world, string.Format(ResGeneral.ItemID0Hue1, entity.Graphic, entity.Hue));
         }
+
     }
 }

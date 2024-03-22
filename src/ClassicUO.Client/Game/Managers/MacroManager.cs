@@ -1140,12 +1140,12 @@ namespace ClassicUO.Game.Managers
                             _world.TargetManager.Target(_world.TargetManager.LastTargetInfo.Graphic, _world.TargetManager.LastTargetInfo.X, _world.TargetManager.LastTargetInfo.Y, _world.TargetManager.LastTargetInfo.Z);
                         }
 
-                        WaitForTargetTimer = 0;
+                        //WaitForTargetTimer = 0;
                     }
-                    else if (WaitForTargetTimer < Time.Ticks)
-                    {
-                        WaitForTargetTimer = 0;
-                    }
+                    //else if (WaitForTargetTimer < Time.Ticks)
+                    //{
+                    //    WaitForTargetTimer = 0;
+                    //}
                     else
                     {
                         result = 1;
@@ -1161,12 +1161,12 @@ namespace ClassicUO.Game.Managers
                     if (_world.TargetManager.IsTargeting)
                     {
                         _world.TargetManager.Target(_world.Player);
-                        WaitForTargetTimer = 0;
+                        //WaitForTargetTimer = 0;
                     }
-                    else if (WaitForTargetTimer < Time.Ticks)
-                    {
-                        WaitForTargetTimer = 0;
-                    }
+                    //else if (WaitForTargetTimer < Time.Ticks)
+                    //{
+                    //    WaitForTargetTimer = 0;
+                    //}
                     else
                     {
                         result = 1;

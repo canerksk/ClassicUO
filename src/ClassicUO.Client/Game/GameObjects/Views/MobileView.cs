@@ -125,7 +125,7 @@ namespace ClassicUO.Game.GameObjects
             {
                 overridedHue = 0x038E;
             }
-            else if (World.Player.ScreenHue >= 0)
+            else if (World.Player.ScreenHue > 0)
             {
                 overridedHue = World.Player.ScreenHue;
                 hueVec.Y = 1;

@@ -1004,6 +1004,7 @@ namespace ClassicUO.Network
             string name = p.ReadASCII(30);
             string text;
 
+
             if (p.Length > 44)
             {
                 p.Seek(44);
@@ -1014,28 +1015,15 @@ namespace ClassicUO.Network
                 text = string.Empty;
             }
 
-            if (
-                serial == 0
-                && graphic == 0
-                && type == MessageType.Regular
-                && font == 0xFFFF
-                && hue == 0xFFFF
-                && name.StartsWith("SYSTEM")
-            )
+            if (serial == 0  && graphic == 0 && type == MessageType.Regular  && font == 0xFFFF && hue == 0xFFFF && name.StartsWith("SYSTEM"))
             {
                 NetClient.Socket.Send_ACKTalk();
-
                 return;
             }
 
             TextType text_type = TextType.SYSTEM;
 
-            if (
-                type == MessageType.System
-                || serial == 0xFFFF_FFFF
-                || serial == 0
-                || name.ToLower() == "system" && entity == null
-            )
+            if (type == MessageType.System || serial == 0xFFFF_FFFF || serial == 0 || name.ToLower() == "system" && entity == null)
             {
                 // do nothing
             }
@@ -4975,6 +4963,19 @@ namespace ClassicUO.Network
                     Console.WriteLine(ScreenHue);
                     world.Player.ScreenHue = ScreenHue;
                     world.Update();
+                    break;
+
+                case 0xBFF3:
+                    byte TakeMouseAllowPos = p.ReadUInt8();
+                    //Console.WriteLine(TakeMouseAllowPos);
+                    if (TakeMouseAllowPos >= 1)
+                    {
+                        world.Player.TakeMouseAllowPos = true;
+                    }
+                    else
+                    {
+                        world.Player.TakeMouseAllowPos = false;
+                    }
                     break;
 
                 default:

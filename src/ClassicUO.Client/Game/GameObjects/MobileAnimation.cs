@@ -1052,7 +1052,9 @@ namespace ClassicUO.Game.GameObjects
                 }
 
                 // LABEL_188
+#pragma warning disable CS0162 // Ulaşılamayan kod algılandı
                 v13 = 2;
+#pragma warning restore CS0162 // Ulaşılamayan kod algılandı
 
                 LABEL_190(flags, ref v13);
 

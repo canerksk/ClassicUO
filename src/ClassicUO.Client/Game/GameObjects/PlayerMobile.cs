@@ -139,6 +139,7 @@ namespace ClassicUO.Game.GameObjects
         public ushort Weight;
         public ushort WeightMax;
         public ushort ScreenHue;
+        public bool TakeMouseAllowPos;
 
         public Item FindBandage()
         {

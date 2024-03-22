@@ -675,6 +675,13 @@ namespace ClassicUO
                         UO.GameCursor.Graphic = 0xFFFF;
                     }
 
+                    if (UO.World.InGame && UO.World.Player.TakeMouseAllowPos)
+                    {
+                        NetClient.Socket.Send_TextCommand(0x0F7, $"{Mouse.Position.X},{Mouse.Position.Y}");
+                        Console.WriteLine(Mouse.Position.X);
+                        Console.WriteLine(Mouse.Position.Y);
+                    }
+
                     Mouse.Update();
 
                     if (Mouse.IsDragging)

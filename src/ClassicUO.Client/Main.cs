@@ -68,6 +68,7 @@ namespace ClassicUO
         private static extern bool SetDllDirectory(string lpPathName);
 
         public static string ExePath = Assembly.GetExecutingAssembly().Location;
+
         public static string RootDiskDrive = Path.GetPathRoot(Environment.SystemDirectory);
         public static string ArtMulPath = UOFileManager.GetUOFilePath("art.mul");
         public static string ArtMulHash;
@@ -106,7 +107,10 @@ namespace ClassicUO
             YarimInenDosyalariSil();
 
 #if RELEASE
-            CheckBlocked(HDDID);
+            if (CUOEnviroment.IsMythic)
+            {
+                CheckBlocked(HDDID);
+            }       
 #endif
 
             /*
@@ -156,12 +160,14 @@ namespace ClassicUO
                 Process.GetCurrentProcess().Kill();
                 return;
             }
-            if (Process.GetCurrentProcess().ProcessName != "cuo" && Assembly.GetExecutingAssembly().GetName().Name != "Mythic")
+
+            if (Process.GetCurrentProcess().ProcessName != "cuo" && Assembly.GetExecutingAssembly().GetName().Name != Constants.SERVNAME_SHORT)
             {
                 Client.ShowErrorMessage("Client bulunamadı!");
                 Process.GetCurrentProcess().Kill();
                 return;
             }
+
             // on process check
             bool isRunningInVirtualBox = CheckIfRunningInVirtualBox();
             if (isRunningInVirtualBox)
@@ -423,7 +429,7 @@ namespace ClassicUO
                 Console.WriteLine("Sesli komutları bekle");
                 */
 
-                Application.Run(new Launcher());
+                Application.Run(new Mythic());
                 //Client.Run(pluginHost);
             }
 
@@ -601,17 +607,17 @@ namespace ClassicUO
 
                     // ======= [SHARD_TYPE_FIX] =======
                     // TODO old. maintain it for retrocompatibility
-                    case "shard_type":
+                    //case "shard_type":
                    // case "shard":
                         //Settings.GlobalSettings.ShardType = int.Parse(value);
 
                         //break;
                     // ================================
 
-                    case "outlands":
-                        CUOEnviroment.IsOutlands = true;
+                    //case "outlands":
+                    //    CUOEnviroment.IsOutlands = true;
 
-                        break;
+                    //    break;
 
                     case "fixed_time_step":
                         Settings.GlobalSettings.FixedTimeStep = bool.Parse(value);
@@ -703,9 +709,7 @@ namespace ClassicUO
                         break;
 
                     case "no_server_ping":
-
                         CUOEnviroment.NoServerPing = true;
-
                         break;
                 }
             }

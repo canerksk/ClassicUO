@@ -112,6 +112,7 @@ namespace ClassicUO.Game.GameObjects
             }
 
             ushort hue;
+
             if (ProfileManager.CurrentProfile.NoColorObjectsOutOfRange && Distance > World.ClientViewRange)
             {
                 hue = Constants.OUT_RANGE_COLOR;
@@ -120,7 +121,7 @@ namespace ClassicUO.Game.GameObjects
             {
                 hue = Constants.DEAD_RANGE_COLOR;
             }
-            else if (World.Player.ScreenHue >= 0)
+            else if (World.Player.ScreenHue > 0)
             {
                 hue = World.Player.ScreenHue;
             }

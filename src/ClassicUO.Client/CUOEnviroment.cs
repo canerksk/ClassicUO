@@ -30,6 +30,7 @@
 
 #endregion
 
+using ClassicUO.Game;
 using System;
 using System.IO;
 using System.Reflection;
@@ -48,7 +49,12 @@ namespace ClassicUO
         public static bool IsHighDPI;
         public static uint CurrentRefreshRate;
         public static bool SkipLoginScreen;
-        public static bool IsOutlands;
+
+        //public static bool IsOutlands;
+
+        public static bool IsMythic = Assembly.GetExecutingAssembly().GetName().Name == "Mythic" ? true : false;
+
+
         public static bool NoServerPing;
 
         public static readonly bool IsUnix = Environment.OSVersion.Platform != PlatformID.Win32NT && Environment.OSVersion.Platform != PlatformID.Win32Windows && Environment.OSVersion.Platform != PlatformID.Win32S && Environment.OSVersion.Platform != PlatformID.WinCE;

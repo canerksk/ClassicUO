@@ -574,7 +574,9 @@ namespace ClassicUO.Network.Encryption
         private static readonly int ROUNDS_192 = 16;    /* default number of rounds for 192-bit keys*/
         private static readonly int ROUNDS_256 = 16;    /* default number of rounds for 256-bit keys*/
         private static readonly int MAX_KEY_BITS = 256; /* max number of bits of key */
+#pragma warning disable CS0414 // 'TwofishBase.MIN_KEY_BITS' alanı atanır ancak değeri hiçbir zaman kullanılmaz
         private static readonly int MIN_KEY_BITS = 128; /* min number of bits of key (zero pad) */
+#pragma warning restore CS0414 // 'TwofishBase.MIN_KEY_BITS' alanı atanır ancak değeri hiçbir zaman kullanılmaz
 
         //#define		VALID_SIG	 0x48534946	/* initialization signature ('FISH') */
         //#define		MCT_OUTER			400	/* MCT outer loop */

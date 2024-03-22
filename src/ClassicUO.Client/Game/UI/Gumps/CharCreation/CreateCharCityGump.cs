@@ -133,10 +133,10 @@ namespace ClassicUO.Game.UI.Gumps.CharCreation
                 _facetName.IsVisible = false;
             }
 
-            if (CUOEnviroment.IsOutlands)
-            {
-                _facetName.IsVisible = false;
-            }
+            //if (CUOEnviroment.IsOutlands)
+            //{
+                //_facetName.IsVisible = false;
+            //}
 
             Add(_facetName);
 
@@ -176,10 +176,10 @@ namespace ClassicUO.Game.UI.Gumps.CharCreation
 
             Add(_htmlControl);
 
-            if (CUOEnviroment.IsOutlands)
-            {
-                _htmlControl.IsVisible = false;
-            }
+            //if (CUOEnviroment.IsOutlands)
+            //{
+                //_htmlControl.IsVisible = false;
+            //}
 
             for (int i = 0; i < scene.Cities.Length; i++)
             {
@@ -216,10 +216,10 @@ namespace ClassicUO.Game.UI.Gumps.CharCreation
                 Add(control);
                 _cityControls.Add(control);
 
-                if (CUOEnviroment.IsOutlands)
-                {
-                    control.IsVisible = false;
-                }
+                //if (CUOEnviroment.IsOutlands)
+                //{
+                    //control.IsVisible = false;
+                //}
             }
 
             SetCity(city);

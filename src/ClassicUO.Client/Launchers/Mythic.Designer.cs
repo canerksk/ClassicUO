@@ -1,6 +1,6 @@
 ﻿namespace ClassicUO
 {
-    partial class Launcher
+    partial class Mythic
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Launcher));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Mythic));
             listBox1 = new System.Windows.Forms.ListBox();
             progressBar1 = new System.Windows.Forms.ProgressBar();
             UpdaterBackgroundWorker = new System.ComponentModel.BackgroundWorker();

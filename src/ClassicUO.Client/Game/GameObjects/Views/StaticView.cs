@@ -86,7 +86,7 @@ namespace ClassicUO.Game.GameObjects
                 hue = Constants.DEAD_RANGE_COLOR;
                 partial = false;
             }
-            else if (World.Player.ScreenHue >= 0)
+            else if (World.Player.ScreenHue > 0)
             {
                 hue = World.Player.ScreenHue;
                 partial = false;

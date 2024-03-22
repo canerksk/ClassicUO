@@ -252,7 +252,7 @@ namespace ClassicUO.Game.UI.Gumps
             private bool _decreaseAlpha;
             private readonly RenderedText _gText;
             private float _updateTooltipTime;
-            private readonly World _world;
+            //private readonly World _world;
 
             public BuffControlEntry(BuffIcon icon) : base(0, 0, icon.Graphic, 0)
             {

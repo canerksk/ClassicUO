@@ -98,7 +98,6 @@ namespace ClassicUO.Game.UI.Gumps
                 new[] { 1, (int)Buttons.Potions },
                 new[] { 0, (int)Buttons.Shopkeeper },
                 new[] { 1, (int)Buttons.Merchants },
-                //new[] { 0, (int)Buttons.RadiusSpeech },
                 //new[] { 0, (int)Buttons.Debug },
                 //new[] { 1, (int)Buttons.NetStats },
                // new[] { 1, (int)Buttons.UOStore },
@@ -109,26 +108,20 @@ namespace ClassicUO.Game.UI.Gumps
 
             string[] texts =
             {
-                cliloc.GetString(3000430, ResGumps.Map),
-                //cliloc.GetString(3000133, ResGumps.Paperdoll),
-                cliloc.GetString(3000431, ResGumps.Inventory),
-                cliloc.GetString(3000129, ResGumps.Journal),
-                cliloc.GetString(3000131, ResGumps.Chat),
-                cliloc.GetString(3000134, ResGumps.Help),
-                StringHelper.CapitalizeAllWords(cliloc.GetString(1015233, ResGumps.WorldMap)),
-                cliloc.GetString(1079449, ResGumps.Info),
+                "Overview",
+                "Inventory",
+                "Journal",
+                "Chat",
+                "Help",
+                "WorldMap",
+                "Info",
                 "Shop",
                 "Potion Refresh",
                 "Items",
                 "Merchants",
-                //"Speech"
-                //cliloc.GetString(1042237, ResGumps.Debug),
-                //cliloc.GetString(3000169, ResGumps.NetStats),
-                //cliloc.GetString(1158008, ResGumps.UOStore),
-                //cliloc.GetString(1158390, ResGumps.GlobalChat)
             };
 
-            bool hasUOStore = Client.Game.UO.Version >= ClientVersion.CV_706400;
+            //bool hasUOStore = Client.Game.UO.Version >= ClientVersion.CV_706400;
 
             ResizePic background;
 
@@ -152,33 +145,9 @@ namespace ClassicUO.Game.UI.Gumps
                 //{
                     //break;
                 //}
-
                 ushort graphic = (ushort)(textTable[i][0] != 0 ? 0x98D : 0x98B);
                 ushort graphichover = (ushort)(textTable[i][0] != 0 ? 0x98D : 0x98C);
                 ushort maxwidth = (ushort)(textTable[i][0] != 0 ? 108 : 63);
-
-                /*
-                Add(
-                    new RighClickableButton(
-                        textTable[i][1],
-                        graphic,
-                        graphic,
-                        graphic,
-                        texts[i],
-                        1,
-                        true,
-                        0x481,
-                        0x036
-                    )
-                    {
-                        ButtonAction = ButtonAction.Activate,
-                        X = startX,
-                        Y = 1,
-                        FontCenter = true
-                    },
-                    1
-                );
-                */
 
                 Add(
                     new RighClickableButton(
@@ -200,92 +169,10 @@ namespace ClassicUO.Game.UI.Gumps
                     },
                     1
                 );
-
-                /*
-                Add(
-                    new HoveredLabel(texts[i], true, 0x0481, 0x036, 0x036, maxwidth, 1, FontStyle.BlackBorder, TEXT_ALIGN_TYPE.TS_CENTER)
-                    {
-                        X = startX - 4,
-                        Y = 3,
-                    }
-                 );
-                */
-
-                /*
-                Add(new GumpPic(startX, 1, graphic,0));
-                Add
-                (
-                    new NiceButton
-                    (
-                        startX,
-                        1,
-                        maxwidth,
-                        25,
-                        ButtonAction.Activate,
-                        texts[i],
-                        0,
-                        TEXT_ALIGN_TYPE.TS_CENTER,
-                        0x0481,
-                        true,
-                        1
-                    )
-                    {
-                        ButtonParameter = textTable[i][1]
-                    }
-                );
-                */
-                /*
-                Add
-                (
-                    new Button(textTable[i][1], graphic, graphic, graphichover)
-                    {
-                        X = startX,
-                        Y = 1,
-                        ButtonAction = ButtonAction.Activate,
-                        FontCenter = true
-                    }
-                );
-                */
-
-                /*
-                Add
-                (
-                    new NiceButton
-                    (
-                        startX,
-                        1,
-                        maxwidth,
-                        25,
-                        ButtonAction.Activate,
-                        texts[i],
-                        0,
-                        TEXT_ALIGN_TYPE.TS_CENTER,
-                        0x0,
-                        true,
-                        1
-                    )
-                    {
-                        ButtonParameter = textTable[i][1]
-                    }
-                );
-                */
-
-                /*
-                Add(
-                    new HoveredLabel(texts[i], true, 0x0, 0x036, 0x036, maxwidth, 1, FontStyle.BlackBorder, TEXT_ALIGN_TYPE.TS_CENTER)
-                    {
-                        X = startX,
-                        Y = 1,
-                    }
-                 );*/
-
-
                 startX += (textTable[i][0] != 0 ? largeWidth : smallWidth) + 1;
                 background.Width = startX;
             }
-
             background.Width = startX + 1;
-
             //layer
             LayerOrder = UILayer.Over;
         }
@@ -457,10 +344,6 @@ namespace ClassicUO.Game.UI.Gumps
                 case Buttons.Merchants:
                     World.CommandManager.Execute("mbulettin", null);
                     break;       
-                    
-                case Buttons.RadiusSpeech:
-                    GameActions.Print(World, "Etraf dinleme/konuşma açıldı.", 946, MessageType.Regular, 1, true);
-                    break;
 
                 case Buttons.Debug:
 
@@ -519,8 +402,7 @@ namespace ClassicUO.Game.UI.Gumps
             Shop,
             Potions,
             Shopkeeper,
-            Merchants,
-            RadiusSpeech
+            Merchants
         }
 
         private class RighClickableButton : Button

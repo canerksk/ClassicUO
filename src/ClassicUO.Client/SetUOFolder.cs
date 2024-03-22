@@ -34,7 +34,7 @@ namespace ClassicUO
                 textBox1.Text = folderPath;
                 Settings.GlobalSettings.UltimaOnlineDirectory = folderPath;
                 Settings.GlobalSettings.Save();
-                Launcher launcherForm = new Launcher();
+                Mythic launcherForm = new Mythic();
                 launcherForm.Show();
                 Hide();
             }

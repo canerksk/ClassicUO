@@ -48,7 +48,7 @@ namespace ClassicUO.Game.UI.Controls
         private readonly Label _label;
         private readonly int _maxHeight;
         private int _selectedIndex;
-        private bool _hasBackGround;
+        //private bool _hasBackGround;
 
         public Combobox
         (

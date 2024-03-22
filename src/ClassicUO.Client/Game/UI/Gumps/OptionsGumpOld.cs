@@ -50,6 +50,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using static SDL2.SDL;
 using System.Text;
+using System.Diagnostics.Eventing.Reader;
 
 namespace ClassicUO.Game.UI.Gumps
 {
@@ -1230,22 +1231,25 @@ namespace ClassicUO.Game.UI.Gumps
                 )
             );
 
-            section3.Add(AddLabel(null, "Healthbar Type", startX, startY));
-            section3.AddRight
-            (
-                _use_status_gump = AddCombobox
+            if (CUOEnviroment.IsMythic)
+            {
+                section3.Add(AddLabel(null, "Healthbar Type", startX, startY));
+                section3.AddRight
                 (
-                    null,
-                    new[]
-                    {
+                    _use_status_gump = AddCombobox
+                    (
+                        null,
+                        new[]
+                        {
                         "Default", "Extended"
-                    },
-                    _currentProfile.UseStatusGump,
-                    startX,
-                    startY,
-                    100
-                )
-            );
+                        },
+                        _currentProfile.UseStatusGump,
+                        startX,
+                        startY,
+                        100
+                    )
+                );
+            }
 
             section3.Add
             (
@@ -1339,22 +1343,25 @@ namespace ClassicUO.Game.UI.Gumps
                 2
             );
 
-            section3.Add(AddLabel(null, "UI Type", startX, startY));
+            if (CUOEnviroment.IsMythic)
+            {
+                section3.Add(AddLabel(null, "UI Type", startX, startY));
 
-            section3.AddRight
-            (
-                _uiType = AddCombobox
+                section3.AddRight
                 (
-                    null,
-                    new[] { "Default","Style-1" },
-                    _currentProfile.UIType,
-                    startX,
-                    startY,
-                    120,
-                    false
-                ),
-                2
-            );
+                    _uiType = AddCombobox
+                    (
+                        null,
+                        new[] { "Default", "Style-1" },
+                        _currentProfile.UIType,
+                        startX,
+                        startY,
+                        120,
+                        false
+                    ),
+                    2
+                );
+            }
 
             section3.Add
             (
@@ -4127,7 +4134,10 @@ namespace ClassicUO.Game.UI.Gumps
 
                 //_drawRoofs.IsChecked = false;
                 _drawRoofs.IsChecked = true;
-                _use_status_gump.SelectedIndex = 0;
+                if (CUOEnviroment.IsMythic)
+                {
+                    _use_status_gump.SelectedIndex = 0;
+                }
 
                 _enableCaveBorder.IsChecked = false;
                 _treeToStumps.IsChecked = false;
@@ -4142,7 +4152,11 @@ namespace ClassicUO.Game.UI.Gumps
                 _showCorpseNameIncoming.IsChecked = true;
                 _showMobileNameIncoming.IsChecked = true;
                 _gridLoot.SelectedIndex = 0;
-                _uiType.SelectedIndex = 0;
+                if (CUOEnviroment.IsMythic)
+                {
+                    _uiType.SelectedIndex = 0;                 // _uiType
+                }
+
                 _sallosEasyGrab.IsChecked = false;
                 _partyInviteGump.IsChecked = false;
                 _showHouseContent.IsChecked = false;
@@ -4605,7 +4619,15 @@ namespace ClassicUO.Game.UI.Gumps
             _currentProfile.RestoreScaleAfterUnpressCtrl = _restorezoomCheckbox.IsChecked;
 
            StatusGumpBase status = StatusGumpBase.GetStatusGump();
-           _currentProfile.UseStatusGump = _use_status_gump.SelectedIndex;
+            if (CUOEnviroment.IsMythic)
+            {
+                _currentProfile.UseStatusGump = _use_status_gump.SelectedIndex;
+            }
+            else
+            {
+                _currentProfile.UseStatusGump = 0;
+            }
+
            if (status != null)
            {
                status.Dispose();
@@ -4981,7 +5003,15 @@ namespace ClassicUO.Game.UI.Gumps
             _currentProfile.TooltipBackgroundOpacity = _tooltip_background_opacity.Value;
             _currentProfile.TooltipDisplayZoom = _tooltip_zoom.Value;
             _currentProfile.TooltipFont = _tooltip_font_selector.GetSelectedFont();
-            _currentProfile.UIType = _uiType.SelectedIndex;                 // _uiType
+            if (CUOEnviroment.IsMythic)
+            {
+                _currentProfile.UIType = _uiType.SelectedIndex;                 // _uiType
+            }
+            else
+            {
+                _currentProfile.UIType = 0;                 // _uiType
+            }
+               
 
 
             // Disabled Settings

@@ -45,6 +45,7 @@ using ClassicUO.Renderer;
 using ClassicUO.Utility;
 using Microsoft.Xna.Framework;
 using ClassicUO.Renderer.Gumps;
+using System.Diagnostics.Eventing.Reader;
 
 namespace ClassicUO.Game.UI.Gumps
 {
@@ -70,7 +71,7 @@ namespace ClassicUO.Game.UI.Gumps
 
         private Button _optionsButton, _helpbutton, _logoutbutton, _questsbutton, _journalbutton, _skillsbutton, _guildbutton, _warModeBtn, _statusbutton;
 
-        private RadioButton _lockButton;
+        //private RadioButton _lockButton;
 
 
         public PaperDollGump(World world) : base(world, 0, 0)
@@ -445,7 +446,8 @@ namespace ClassicUO.Game.UI.Gumps
                 if (CharLayer != null)
                 {
                     ushort CharLayerHue = CharLayer.Hue;
-                    if (CharLayerHue != null)
+
+                    if (CharLayerHue > 0)
                     {
 
                         if (ProfileManager.CurrentProfile.UIType == 1)
@@ -535,27 +537,43 @@ namespace ClassicUO.Game.UI.Gumps
         {
             if (args.Button == MouseButtonType.Left)
             {
-                if (CUOEnviroment.IsOutlands)
+                //if (CUOEnviroment.IsOutlands)
+                //{
+                // NetClient.Socket.Send_ASCIISpeechRequest("party", MessageType.Command, 0, 0);
+                // }
+                //else
+                //{
+                if (CUOEnviroment.IsMythic)
                 {
-                    NetClient.Socket.Send_ASCIISpeechRequest("party", MessageType.Command, 0, 0);
+                  World.CommandManager.Execute("party", null);
                 }
                 else
                 {
-
-                    World.CommandManager.Execute("party", null);
-
-                    //PartyGump party = UIManager.GetGump<PartyGump>();
-                    //if (party == null)
-                    //{
-                    //    int x = Client.Game.Window.ClientBounds.Width / 2 - 272;
-                    //    int y = Client.Game.Window.ClientBounds.Height / 2 - 240;
-                    //    UIManager.Add(new PartyGump(World, x, y, World.Party.CanLoot));
-                    //}
-                    //else
-                    //{
-                    //    party.BringOnTop();
-                    //}
+                    PartyGump party = UIManager.GetGump<PartyGump>();
+                    if (party == null)
+                    {
+                        int x = Client.Game.Window.ClientBounds.Width / 2 - 272;
+                        int y = Client.Game.Window.ClientBounds.Height / 2 - 240;
+                        UIManager.Add(new PartyGump(World, x, y, World.Party.CanLoot));
+                    }
+                    else
+                    {
+                        party.BringOnTop();
+                    }
                 }
+
+                //PartyGump party = UIManager.GetGump<PartyGump>();
+                //if (party == null)
+                //{
+                //    int x = Client.Game.Window.ClientBounds.Width / 2 - 272;
+                //    int y = Client.Game.Window.ClientBounds.Height / 2 - 240;
+                //    UIManager.Add(new PartyGump(World, x, y, World.Party.CanLoot));
+                //}
+                //else
+                //{
+                //    party.BringOnTop();
+                //}
+                //}
             }
         }
 
